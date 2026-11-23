@@ -21,12 +21,12 @@ from typing import Callable, Dict, List, Sequence, Tuple, Union
 import bpy
 from mathutils import Vector
 from mathutils.bvhtree import BVHTree
-from mathutils.kdtree import KDTree
 
 from character import Character
 from groom import FiberGroup
 import facial_controls
 import sculpted_face as sf
+import sculpted_hand
 from textile import finish_fabric, store_rest_positions
 
 
@@ -559,209 +559,16 @@ def build_arm(c, side: str, sign: int, skin) -> None:
     c.ring_mesh(f'Arm.{side}', rings, skin, [arm_weight(x, side) for x, *_ in ARM_RINGS], cap=False)
 
 
-class Geometry:
-    """Collects verts, faces and per-vertex weights to build one fused mesh."""
-
-    def __init__(self):
-        self.verts: List[Vector] = []
-        self.faces: List[Tuple[int, ...]] = []
-        self.weights: List[Dict[str, float]] = []
-
-    def rings(self, rings: List[List[Vector]], weights: List[Dict[str, float]], close: bool = True) -> None:
-        start = len(self.verts)
-        count = len(rings[0])
-        for ring, weight in zip(rings, weights):
-            self.verts.extend(ring)
-            self.weights.extend([weight]*count)
-        for r in range(len(rings)-1):
-            for j in range(count):
-                n = (j+1) % count
-                a = start+r*count
-                self.faces.append((a+j, a+n, a+count+n, a+count+j))
-        if close:
-            self.faces.append(tuple(reversed(range(start, start+count))))
-            last = start+(len(rings)-1)*count
-            self.faces.append(tuple(range(last, last+count)))
-
-
-def tube_rings(path: List[Vector], radii: List[Tuple[float, float]], up: Vector, count: int = 16) -> List[List[Vector]]:
-    rings = []
-    for i, point in enumerate(path):
-        tangent = (path[min(i+1,len(path)-1)] - path[max(i-1,0)]).normalized()
-        side = up.cross(tangent).normalized()
-        top = tangent.cross(side).normalized()
-        ry, rz = radii[i]
-        ring = []
-        for j in range(count):
-            a = math.tau*j/count
-            under = .9 if math.sin(a) < 0 else 1.0
-            ring.append(point + side*ry*math.cos(a) + top*rz*under*math.sin(a))
-        rings.append(ring)
-    return rings
-
-
-def sample_digit(joints: List[Vector], radius: float, inset: float, step: float = .0035):
-    """Points along a finger with radii that swell at the knuckles and round off at the tip."""
-    direction = (joints[1]-joints[0]).normalized()
-    lengths = [(joints[i+1]-joints[i]).length for i in range(3)]
-    total = sum(lengths)
-    knuckles = (lengths[0], lengths[0]+lengths[1])
-    tip_cap = radius*.92
-    distances = []
-    d = -inset
-    while d < total - tip_cap:
-        distances.append(d)
-        d += step
-    for k in range(1, 7):
-        distances.append(total - tip_cap + tip_cap*(1-math.cos(k/7*math.pi/2)))
-    distances.append(total - .0004)
-    points, radii, params = [], [], []
-    for d in distances:
-        # follow the joint polyline
-        remaining = max(0.0, d)
-        segment = 0
-        while segment < 2 and remaining > lengths[segment]:
-            remaining -= lengths[segment]
-            segment += 1
-        base = joints[segment]
-        seg_dir = (joints[segment+1]-joints[segment]).normalized()
-        point = base + seg_dir*min(remaining, lengths[segment]) if d >= 0 else joints[0] + direction*d
-        taper = 1 - .14*max(0.0, min(1.0, d/total))
-        bulge = 1 + .055*math.exp(-((d-knuckles[0])/.006)**2) + .04*math.exp(-((d-knuckles[1])/.005)**2)
-        r = radius*taper*bulge*(1.07 if d < 0 else 1)
-        cap = d - (total-tip_cap)
-        if cap > 0:
-            r *= math.sqrt(max(0.0, 1-(cap/tip_cap)**2))*.97 + .03
-        points.append(point)
-        radii.append((r, r*.86))
-        params.append(d)
-    return points, radii, params, knuckles, total
-
-
-def digit_weight(d: float, knuckles: Tuple[float, float], names: Tuple[str, str, str, str]) -> Dict[str, float]:
-    hand, proximal, middle, tip = names
-    w = {hand: 1-smooth(-.008, .004, d)}
-    w[proximal] = smooth(-.008,.004,d)*(1-smooth(knuckles[0]-.003, knuckles[0]+.003, d))
-    w[middle] = smooth(knuckles[0]-.003, knuckles[0]+.003, d)*(1-smooth(knuckles[1]-.0025, knuckles[1]+.0025, d))
-    w[tip] = smooth(knuckles[1]-.0025, knuckles[1]+.0025, d)
-    return normalise(w)
-
-
-def palm_rings(sign: int, side: str) -> Tuple[List[List[Vector]], List[Dict[str, float]]]:
-    sections = ((.752,.0300,.0205), (.772,.0305,.0205), (.790,.0335,.0202), (.810,.0390,.0199),
-                (.832,.0430,.0193), (.854,.0452,.0182), (.872,.0458,.0166), (.885,.0450,.0148),
-                (.894,.0420,.0118), (.899,.0360,.0080))
-    rings, weights = [], []
-    count = 32
-    for x, ry, rz in sections:
-        ring = []
-        for j in range(count):
-            a = math.tau*j/count
-            c, s = math.cos(a), math.sin(a)
-            # A superellipse: flat back of hand, rounder palm.
-            ey = math.copysign(abs(c)**(2/2.7), c)
-            ez = math.copysign(abs(s)**(2/2.7), s)
-            depth = rz*(.86 if s > 0 else 1.06)
-            y = ry*ey
-            z = depth*ez
-            if s < 0:   # thenar and hypothenar pads on the palm side
-                z -= .0055*math.exp(-((x-.818)/.022)**2)*math.exp(-((y+.024)/.012)**2)
-                z -= .0030*math.exp(-((x-.845)/.030)**2)*math.exp(-((y-.030)/.012)**2)
-            ring.append(Vector((sign*x, sign*y, ARM_Z-.001+z)))
-        rings.append(ring)
-        weights.append(normalise({f'forearm.{side}': 1-smooth(.762,.792,x), f'hand.{side}': smooth(.762,.792,x)}))
-    return rings, weights
-
-
-def build_hand(c, side: str, sign: int, skin, nail_material) -> None:
-    geometry = Geometry()
-    rings, weights = palm_rings(sign, side)
-    geometry.rings(rings, weights)
-    nails = Geometry()
-    up = Vector((0, 0, 1))
+def hand_spec() -> sculpted_hand.HandSpec:
+    """Her left hand's rest layout for the sculpted hand (the right hand mirrors it)."""
+    fingers = []
     for digit, mcp, spread, lengths, radius in FINGERS:
-        joints = [Vector(mirror(p, sign)) for p in finger_joints(spread, mcp, lengths)]
-        points, radii, params, knuckles, total = sample_digit(joints, radius, .013)
-        names = (f'hand.{side}', f'finger_{digit:02d}.{side}', f'finger_{digit:02d}_mid.{side}',
-                 f'finger_{digit:02d}_tip.{side}')
-        geometry.rings(tube_rings(points, radii, up), [digit_weight(d, knuckles, names) for d in params])
-        nail(nails, joints, radius, knuckles, total, names[3], up)
-    joints = [Vector(mirror(p, sign)) for p in thumb_joints()]
-    points, radii, params, knuckles, total = sample_digit(joints, .0112, .022)
-    radii = [(ry*(1+.45*(1-smooth(-.02,.02,d))), rz*(1+.35*(1-smooth(-.02,.02,d))))
-             for (ry, rz), d in zip(radii, params)]
-    thumb_up = Vector((0, -.62*1, .78)).normalized()
-    names = (f'hand.{side}', f'thumb.{side}', f'thumb_mid.{side}', f'thumb_tip.{side}')
-    geometry.rings(tube_rings(points, radii, thumb_up), [digit_weight(d, knuckles, names) for d in params])
-    nail(nails, joints, .0112, knuckles, total, names[3], thumb_up)
-
-    fused = remesh_with_weights(c, f'Hand.{side}', geometry, skin, voxel=.00062)
-    fused['Topology'] = 'Voxel-fused palm, fingers and thumb; weights interpolated from the digit rigs.'
-    obj = c.mesh(f'Fingernails.{side}', [tuple(v) for v in nails.verts], nails.faces, nail_material, nails.weights)
-    obj.data.materials[0] = nail_material
-
-
-def nail(geometry: Geometry, joints: List[Vector], radius: float, knuckles, total: float,
-         bone: str, up: Vector) -> None:
-    direction = (joints[3]-joints[2]).normalized()
-    side = up.cross(direction).normalized()
-    top = direction.cross(side).normalized()
-    length = (joints[3]-joints[2]).length
-    start = joints[2] + direction*length*.22
-    rows, columns = 7, 7
-    base = len(geometry.verts)
-    for r in range(rows):
-        v = r/(rows-1)
-        along = start + direction*(length*.50*v)
-        width = radius*.66*(.86 + .14*math.sin(math.pi*min(1, v*1.1)))
-        # follow the fingertip as it rounds off near the free edge
-        drop = radius*.22*max(0.0, v-.6)**2
-        for col in range(columns):
-            u = col/(columns-1)*2-1
-            curve = math.sqrt(max(0, 1-(u*.95)**2))
-            height = radius*.86*(.93 + .07*curve) - .0012*u*u - drop + .00012
-            geometry.verts.append(along + side*u*width + top*height)
-            geometry.weights.append({bone: 1.0})
-    geometry.faces.extend((base+f[0], base+f[1], base+f[2], base+f[3]) for f in grid_faces(rows, columns))
-
-
-def remesh_with_weights(c, name: str, geometry: Geometry, skin, voxel: float):
-    """Fuse overlapping parts into one watertight surface and carry the skin weights over."""
-    scale = c.scale
-    source = bpy.data.meshes.new(f'{c.name}_{name} source')
-    source.from_pydata([v*scale for v in geometry.verts], [], geometry.faces)
-    source.update()
-    temp = bpy.data.objects.new(source.name, source)
-    bpy.context.scene.collection.objects.link(temp)
-    remesh = temp.modifiers.new('Fuse', 'REMESH')
-    remesh.mode = 'VOXEL'
-    remesh.voxel_size = voxel*scale
-    remesh.adaptivity = 0
-    soften = temp.modifiers.new('Soften', 'SMOOTH')
-    soften.factor, soften.iterations = .5, 4
-    decimate = temp.modifiers.new('Budget', 'DECIMATE')
-    decimate.ratio = .30
-    depsgraph = bpy.context.evaluated_depsgraph_get()
-    fused = bpy.data.meshes.new_from_object(temp.evaluated_get(depsgraph))
-    bpy.data.objects.remove(temp, do_unlink=True)
-    bpy.data.meshes.remove(source)
-
-    tree = KDTree(len(geometry.verts))
-    for index, vertex in enumerate(geometry.verts):
-        tree.insert(vertex*scale, index)
-    tree.balance()
-    verts = [tuple(v.co/scale) for v in fused.vertices]
-    faces = [tuple(p.vertices) for p in fused.polygons]
-    weights = []
-    for vertex in fused.vertices:
-        blend: Dict[str, float] = {}
-        for _, index, distance in tree.find_n(vertex.co, 6):
-            share = 1/(distance*distance + 1e-9)
-            for bone, value in geometry.weights[index].items():
-                blend[bone] = blend.get(bone, 0) + value*share
-        weights.append(normalise(blend))
-    bpy.data.meshes.remove(fused)
-    return c.mesh(name, verts, faces, skin, weights)
+        joints = tuple(tuple(p) for p in finger_joints(spread, mcp, lengths))
+        fingers.append(sculpted_hand.Digit(joints, radius, (f'finger_{digit:02d}', f'finger_{digit:02d}_mid',
+                                                            f'finger_{digit:02d}_tip')))
+    thumb = sculpted_hand.Digit(tuple(tuple(p) for p in thumb_joints()), .0112, ('thumb', 'thumb_mid', 'thumb_tip'),
+                                tuple(Vector((0, -.62, .78)).normalized()))
+    return sculpted_hand.HandSpec(tuple(fingers), thumb, wrist_x=.780, z=ARM_Z - .001)
 
 
 # ------------------------------------------------------------ body assembly
@@ -776,10 +583,10 @@ def body(c) -> None:
         bpy.data.objects.remove(obj, do_unlink=True)
         bpy.data.meshes.remove(mesh)
     skin = c.m['skin']
-    nails = material(c, 'Fingernail', (.40,.25,.20), .30)
+    spec = hand_spec()
     for side, sign in (('L',1), ('R',-1)):
         build_arm(c, side, sign, skin)
-        build_hand(c, side, sign, skin, nails)
+        sculpted_hand.build_hand(c, spec, side, sign, skin)
     # Skin of the upper chest and shoulders under the kurti neckline.
     rows, columns = 14, 48
     verts, weights = [], []
@@ -1359,8 +1166,28 @@ def hood_radius(tree: BVHTree, phi: float, z: float) -> float:
     return r
 
 
+def ear_bumps(c, tree: BVHTree) -> List[Tuple[float, float, float]]:
+    """(azimuth, height, extra radius) for each ear: how far the hood must swell to pass over it."""
+    bumps = []
+    for side in ('L', 'R'):
+        ear = next((p for p in c.parts if p.name == f'{c.name}_Ear.{side}'), None)
+        if ear is None:
+            continue
+        points = [v.co/c.scale for v in ear.data.vertices]
+        centre = sum(points, Vector())/len(points)
+        reach = max(Vector((q.x, q.y - HEAD_CENTRE.y, 0)).length for q in points)
+        phi = math.atan2(centre.x, centre.y - HEAD_CENTRE.y)
+        bumps.append((phi, centre.z, max(0.0, reach + .007 - hood_radius(tree, phi, centre.z))))
+    return bumps
+
+
 def odhni(c, cloth, edge) -> None:
     tree = head_tree(c)
+    bumps = ear_bumps(c, tree)
+
+    def over_ears(phi: float, z: float) -> float:
+        """A smooth swell of the hood over each ear (an abrupt one tears the cloth relaxation apart)."""
+        return sum(extra*math.exp(-((phi - a)/.42)**2 - ((z - h)/.040)**2) for a, h, extra in bumps)
     top = HEAD_TOP + .006
     z_jaw = vertical(1.585)
     z_shoulder = 1.468
@@ -1393,11 +1220,11 @@ def odhni(c, cloth, edge) -> None:
             u = k/(columns-1)
             outward = Vector((math.sin(phi), math.cos(phi), 0))
             if r <= jaw_index:
-                rad = hood_radius(tree, phi, z)
+                rad = hood_radius(tree, phi, z) + over_ears(phi, z)
                 p = Vector((outward.x*rad, HEAD_CENTRE.y + outward.y*rad, z))
             else:
                 # a curtain falling straight from the head, resting on the shoulders
-                rad = hood_radius(tree, phi, z_jaw) + .004*smooth(z_jaw, z_shoulder, z)
+                rad = hood_radius(tree, phi, z_jaw) + over_ears(phi, z_jaw) + .004*smooth(z_jaw, z_shoulder, z)
                 p = Vector((outward.x*rad, HEAD_CENTRE.y + outward.y*rad, z))
                 if z < 1.50:
                     angle = math.atan2(p.y, p.x)
@@ -1414,7 +1241,7 @@ def odhni(c, cloth, edge) -> None:
             uvs.append((u, 1 - r/(rows-1)*.45))
     faces = grid_faces(rows, columns)
     crown = len(verts)
-    verts.append((0, HEAD_CENTRE.y + .012, HEAD_TOP + .013))
+    verts.append((0, HEAD_CENTRE.y + .012, HEAD_TOP + .007))     # low crown: rounded, not a tent
     weights.append({'head': 1.0})
     uvs.append((.5, 1.0))
     faces.extend((crown, k+1, k) for k in range(columns-1))

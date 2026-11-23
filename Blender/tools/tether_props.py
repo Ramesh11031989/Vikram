@@ -305,10 +305,19 @@ def knot_path(at: Vector, along: Vector, up: Vector, size: float) -> List[Vector
     return points
 
 
-def lead_path(start: Vector, peg: Vector, sag: float = .10) -> List[Vector]:
-    """The lead from the knot to the peg: a catenary-like sag, then two turns and a hitch round the peg."""
+def lead_path(start: Vector, peg: Vector, sag: float = .10, via: Optional[Vector] = None) -> List[Vector]:
+    """The lead from the knot to the peg: a catenary-like sag, then two turns and a hitch round the peg.
+
+    via: a point the lead is held up through (her fist); it runs nearly taut from the knot to there."""
     top = peg + Vector((0, 0, PEG_TOP - .10))
     points = []
+    if via is not None:
+        for k in range(16):
+            t = k/16
+            p = start.lerp(via, t)
+            p.z -= .012*4*t*(1 - t)                    # held taut: barely sags
+            points.append(p)
+        start = via
     for k in range(25):
         t = k/24
         p = start.lerp(top, t)
@@ -325,8 +334,11 @@ def lead_path(start: Vector, peg: Vector, sag: float = .10) -> List[Vector]:
     return points
 
 
-def build_tether(cow, collection, cut: bool = False, peg: Vector = PEG_AT) -> dict:
-    """The tether on the sculpted cow. Returns the parts and the cut point (for her hands and the blade)."""
+def build_tether(cow, collection, cut: bool = False, peg: Vector = PEG_AT, via: Optional[Vector] = None,
+                 cut_from_knot: float = CUT_FROM_KNOT) -> dict:
+    """The tether on the sculpted cow. Returns the parts and the cut point (for her hands and the blade).
+
+    via: where her fist holds the lead up; cut_from_knot: length along the lead from the knot to the cut."""
     import cattle
     rand = random.Random(7)
     jute = jute_material()
@@ -334,18 +346,18 @@ def build_tether(cow, collection, cut: bool = False, peg: Vector = PEG_AT) -> di
     lowest = min(range(len(loop)), key=lambda i: loop[i].z - .3*loop[i].x)   # under the throat, toward the peg (cow's left)
     loop = loop[lowest:] + loop[:lowest]
     knot_at = loop[0] + Vector((.010, -.006, -.020))
-    out = (peg - knot_at)
+    out = ((via if via is not None else peg) - knot_at)
     out.z = 0
     knot = knot_path(knot_at, out, Vector((0, 0, 1)), ROPE_DIAMETER*1.5)   # turns just touch (1.5 cm apart), about 6 cm across
     loop_path = loop + [loop[0]] + knot
-    lead = lead_path(knot[-1], peg)
+    lead = lead_path(knot[-1], peg, via=via)
     whole = resample(loop_path + lead[1:], .0025)
     # where the sickle parts the lead: CUT_FROM_KNOT along the lead from the knot
     lengths = [0.0]
     for a, b in zip(whole, whole[1:]):
         lengths.append(lengths[-1] + (b - a).length)
     knot_end = len(resample(loop_path, .0025))
-    target = lengths[min(knot_end, len(lengths) - 1)] + CUT_FROM_KNOT
+    target = lengths[min(knot_end, len(lengths) - 1)] + cut_from_knot
     cut_index = next(i for i, s in enumerate(lengths) if s >= target)
     cut_point = whole[cut_index]
     cut_dir = (whole[cut_index + 1] - whole[cut_index - 1]).normalized()
@@ -454,7 +466,15 @@ def build_sickle(collection, name: str = 'Sickle') -> bpy.types.Object:
     collection.objects.link(root)
     for obj in (blade, handle, ferrule, tang):
         obj.parent = root
-    root['Usage'] = 'Origin at the centre of the grip; parent to the hand bone and rotate to taste.'
+    root['Usage'] = ('Origin at the ferrule; the fist closes round grip_point. edge_point is the middle of '
+                     'the cutting edge, edge_normal the way the edge faces (toward the inside of the crescent).')
+    t = .45
+    a = a0 + (a1 - a0)*t
+    inner = outer_r - (.032*(1 - t)**.65 + .002)
+    edge = centre + Vector((math.cos(a)*inner, math.sin(a)*inner, 0)) + shift
+    root['edge_point'] = tuple(edge)
+    root['edge_normal'] = (-math.cos(a), -math.sin(a), 0.0)
+    root['grip_point'] = (0.0, -.052, 0.0)
     return root
 
 

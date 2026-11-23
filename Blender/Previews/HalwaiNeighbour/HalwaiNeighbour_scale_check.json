@@ -1,0 +1,27 @@
+{
+  "neighbour_stature_m": 1.54,
+  "hand_length_wrist_to_middle_tip_m": 0.1767,
+  "hand_breadth_m": 0.0747,
+  "finger_width_m": 0.0168,
+  "rope_diameter_m": 0.014,
+  "rope_to_finger_width": 0.83,
+  "fist_closes_round_rope": true,
+  "sickle_overall_m": 0.336,
+  "sickle_handle_m": 0.122,
+  "sickle_handle_diameter_m": 0.03,
+  "handle_to_hand_breadth": 1.63,
+  "cow_withers_m": 1.18,
+  "cow_neck_girth_at_rope_m": 1.31,
+  "knot_height_m": 0.577,
+  "cut_height_m": 0.698,
+  "cut_from_knot_m": 0.264,
+  "left_fist_reach_miss_m": 0.0,
+  "right_fist_reach_miss_m": 0.0,
+  "neighbour_to_withers": 1.31,
+  "checks": {
+    "hand_length_ok": true,
+    "hand_breadth_ok": true,
+    "hands_reach_their_grips": true,
+    "handle_fits_the_fist": true
+  }
+}
