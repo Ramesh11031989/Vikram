@@ -1,0 +1,62 @@
+{
+  "character": "Nandu",
+  "rig_bones": 39,
+  "shared_bones_with_Gopal": 34,
+  "skinned_meshes": 133,
+  "head_top_cm": 170.3,
+  "gopal_head_top_cm": 181.2,
+  "daughter_height_cm_placeholder": 110.00000000000001,
+  "boat_length_cm": 13.2,
+  "boat_beam_cm": 4.8,
+  "boat_height_cm": 3.3,
+  "child_palm_width_cm": 6.0,
+  "child_hand_length_cm": 11.0,
+  "nandu_palm_plus_finger_cm": 16.9,
+  "nandu_palm_width_cm": 9.8,
+  "mouth_shapes": [
+    "Basis",
+    "Mouth_Ah",
+    "Mouth_O",
+    "Mouth_Ee",
+    "Mouth_MBP",
+    "Mouth_FV",
+    "Mouth_U",
+    "Mouth_L",
+    "Mouth_Consonant",
+    "Worry",
+    "Smile",
+    "Expr_Fear",
+    "Expr_Pleading",
+    "Expr_Relief",
+    "Expr_Tenderness"
+  ],
+  "grip_poses": [
+    "Reach",
+    "Take toy boat",
+    "Hold",
+    "Return toy boat"
+  ],
+  "expressions": [
+    "expr_fear",
+    "expr_pleading",
+    "expr_relief",
+    "expr_tenderness"
+  ],
+  "red_cloth": {
+    "object": "Nandu_Red gamchha",
+    "constraint": "Child Of → chest, influence from \"attached\"",
+    "cloth_modifier": "Gamchha cotton (disabled until baked per shot)"
+  },
+  "boat_fits_child_palm": true,
+  "boat_fits_nandu_grip": true,
+  "fbx": "CH_Nandu.fbx",
+  "previews": [
+    "Nandu_Chauki_RedCloth_Test.png",
+    "Nandu_Expressions.png",
+    "Nandu_Lineup.png",
+    "Nandu_Tied_Hands_Test.mp4",
+    "Nandu_Tied_Hands_Test.png",
+    "Nandu_Turntable.mp4",
+    "Nandu_Turntable_Sheet.png"
+  ]
+}
