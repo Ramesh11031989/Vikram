@@ -146,7 +146,7 @@ def build_timeline() -> None:
     (EPISODE / 'E01_SC04_Animatic_Timeline.json').write_text(
         json.dumps(timeline, ensure_ascii=False, indent=2), encoding='utf-8')
     with (EPISODE / 'E01_SC04_Dialogue_Timed.csv').open('w', encoding='utf-8', newline='') as stream:
-        writer = csv.DictWriter(stream, fieldnames=list(timed[0]))
+        writer = csv.DictWriter(stream, fieldnames=list(timed[0]), lineterminator='\n')
         writer.writeheader()
         writer.writerows(timed)
     subtitles = [f"{index}\n{timestamp(int(cue['start_frame']))} --> "
