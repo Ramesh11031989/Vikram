@@ -21,10 +21,12 @@ def main(proof_frames,step,samples,scale):
     scene=next(scene for scene in bpy.data.scenes if scene.name.startswith('E01_SC04 | Performance'))
     bpy.context.window.scene=scene
     timeline=json.loads((EPISODE/'E01_SC04_Animatic_Timeline.json').read_text(encoding='utf-8'))
-    scene.render.engine='BLENDER_EEVEE_NEXT'
     scene.render.resolution_x*=scale
     scene.render.resolution_y*=scale
-    scene.eevee.taa_render_samples=samples
+    if scene.render.engine.startswith('BLENDER_EEVEE'):
+        scene.eevee.taa_render_samples=samples
+    elif scene.render.engine=='CYCLES':
+        scene.cycles.samples=samples
     scene.render.image_settings.file_format='PNG'
     scene.render.image_settings.color_mode='RGB'
     scene.render.image_settings.compression=20

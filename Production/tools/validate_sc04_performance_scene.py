@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 import math
 from pathlib import Path
 import struct
+import sys
 
 import bpy
 from mathutils import Vector
@@ -16,8 +18,12 @@ ROOT=Path(__file__).resolve().parents[2]
 EPISODE=ROOT/'Production/E01'
 
 
-def main():
-    manifest=json.loads((EPISODE/'E01_SC04_Performance_Manifest.json').read_text())
+def main(manifest_path=None, report_path=None):
+    if manifest_path is None:
+        manifest_path=EPISODE/'E01_SC04_Performance_Manifest.json'
+        if report_path is None:
+            report_path=EPISODE/'E01_SC04_Performance_Scene_Check.json'
+    manifest=json.loads(manifest_path.read_text(encoding='utf-8'))
     timeline=json.loads((EPISODE/'E01_SC04_Animatic_Timeline.json').read_text(encoding='utf-8'))
     scene=next(scene for scene in bpy.data.scenes if scene.name.startswith('E01_SC04 | Performance'))
     bpy.context.window.scene=scene
@@ -119,9 +125,15 @@ def main():
             'anonymous_face_hidden':True,'court_river_isolation':True,'relative_audio':True,
             'grounded_foot_samples':foot_checks,
             'lip_sync_limit':'Automatic acoustic viseme estimates; no claim of verified Hindi phoneme accuracy'}
-    (EPISODE/'E01_SC04_Performance_Scene_Check.json').write_text(json.dumps(report,indent=2)+'\n')
+    if report_path is not None:
+        report_path.write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')
     print(json.dumps(report,indent=2),flush=True)
 
 
 if __name__=='__main__':
-    main()
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--manifest',type=Path)
+    parser.add_argument('--report',type=Path)
+    arguments=sys.argv[sys.argv.index('--')+1:] if '--' in sys.argv else []
+    args=parser.parse_args(arguments)
+    main(args.manifest,args.report)

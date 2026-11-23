@@ -9,8 +9,11 @@ performance. The original dialogue and 1,484-frame / 61.833-second edit are kept
 | --- | --- |
 | `Performance/E01_SC04_Performance_v0_3.mp4` | Full motion review with Hindi captions and synthetic voices |
 | `Performance/E01_SC04_Performance_v0_3.blend` | Editable scene, grounded acting, facial/costume artwork, prop animation and relative dialogue link |
+| `Performance/E01_SC04_Performance_Current_Cast.blend` | Working scene with the v0.3 cut and acting rebuilt from the current cast artwork |
+| `Performance/E01_SC04_Current_Cast_Manifest.json` | Rest-mesh and animation inputs for validating the working scene |
 | `Performance/LipSync/` | Twelve acoustic viseme analyses and source-audio hashes |
 | `Performance/Exports/` | Four neutral FBX characters with deformation rigs and facial blend shapes |
+| `Performance/Exports/Current_Cast/` | Neutral facial FBXs for the working scene's cast |
 | `Performance/Proofs/` | Representative scene compositions |
 | `Audio/E01_SC04_Performance_Mix.wav` | Dialogue plus locally synthesized room, river and foley cues |
 | `Audio/E01_SC04_Ambience_Foley.wav` | Separate ambience/foley stem |
@@ -26,10 +29,10 @@ way to open the same deliverables: extract it at the repository root, keeping
 `Production/E01/Performance` beside `Production/E01/Audio`. Temporary frame/video
 caches and the intermediate v0.2 scene are ignored.
 
-The included v0.3 scene and movie keep the cast geometry used for this performance
-pass. The separate cast library also contains later surface and groom work.
-Rebuilding the performance uses the current cast generator; render the rebuilt
-scene and export its FBX assets together to refresh those deliverables.
+Use the Current Cast scene to continue production and the v0.3 movie to review
+the existing cut and sound. The working scene brings the current cast library's
+geometry, grooms, skin and textile shaders into the keyed shots. The v0.3 scene
+corresponds to the earlier cast look seen in the existing review movie.
 
 ## What changed
 
@@ -78,7 +81,7 @@ than a fluid simulation.
 
 ## Blender controls
 
-Open the main scene `E01_SC04 | Performance v0.3`. Character rigs expose speech
+Open `E01_SC04_Performance_Current_Cast.blend` and select `E01_SC04 | Performance v0.3`. Character rigs expose speech
 and expression controls in Custom Properties. The separate `Library | ...`
 scenes retain the four reusable characters, including Betal, who is absent from
 the interrogation shot itself.
@@ -105,8 +108,11 @@ embroidery and facial blend shapes are included in the exported geometry.
 
 ## Build and resume
 
-The workflow was run in Blender 4.3.2. The original Blender 5.2.2 cast library is
-not overwritten. Run from the repository root:
+The committed performance was built in Blender 4.3.2. The rebuild uses the
+current cast generator, retains its skin and textile shader links, and adds
+the performance artwork and animation over it. Use Blender 5.2.2 for the
+current cast rebuild. Work in a separate checkout when keeping the shipped
+review and its matching manifests. Run these commands from the repository root.
 
 ```powershell
 python -m pip install -r Production/requirements.txt
@@ -145,6 +151,12 @@ performance pass.
 For 1080p review stills, append `-- --proof 1031 1249 --step 1 --samples 8 --scale 2`
 to the render command. These higher-resolution proofs are saved with an `_2x`
 suffix under `Performance/Proofs`.
+
+Verify the working scene with its corresponding manifest.
+
+```powershell
+blender --background Production/E01/Performance/E01_SC04_Performance_Current_Cast.blend --python-exit-code 1 --python Production/tools/validate_sc04_performance_scene.py -- --manifest Production/E01/Performance/E01_SC04_Current_Cast_Manifest.json
+```
 
 ## Editorial review
 

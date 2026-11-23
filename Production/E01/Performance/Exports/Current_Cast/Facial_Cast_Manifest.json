@@ -1,0 +1,348 @@
+{
+  "status": "PASS",
+  "version": "0.3",
+  "mode": "Neutral rest pose, no baked performance clips",
+  "exports": [
+    {
+      "character": "Vikram",
+      "file": "CHR_Vikram_Facial_v0_3.fbx",
+      "bytes": 8530220,
+      "deform_bones": 34,
+      "shape_meshes": {
+        "Vikram_Eye.L": [
+          "Basis",
+          "Blink"
+        ],
+        "Vikram_Eyelids.L": [
+          "Basis",
+          "Blink"
+        ],
+        "Vikram_Iris.L": [
+          "Basis",
+          "Blink"
+        ],
+        "Vikram_Brow.L": [
+          "Basis",
+          "Raise",
+          "Frown"
+        ],
+        "Vikram_Eye.R": [
+          "Basis",
+          "Blink"
+        ],
+        "Vikram_Eyelids.R": [
+          "Basis",
+          "Blink"
+        ],
+        "Vikram_Iris.R": [
+          "Basis",
+          "Blink"
+        ],
+        "Vikram_Brow.R": [
+          "Basis",
+          "Raise",
+          "Frown"
+        ],
+        "Vikram_Mouth": [
+          "Basis",
+          "Mouth_Ah",
+          "Mouth_O",
+          "Mouth_Ee",
+          "Mouth_MBP",
+          "Mouth_FV",
+          "Mouth_U",
+          "Mouth_L",
+          "Mouth_Consonant",
+          "Worry",
+          "Smile"
+        ],
+        "Vikram_Diagonal teal court sash": [
+          "Basis",
+          "Cloth settle"
+        ],
+        "Vikram_Diagonal teal court sash outer braid": [
+          "Basis",
+          "Cloth settle"
+        ],
+        "Vikram_Diagonal teal court sash inner braid": [
+          "Basis",
+          "Cloth settle"
+        ],
+        "Vikram_Sash across back": [
+          "Basis",
+          "Cloth settle"
+        ],
+        "Vikram_Sash across back outer braid": [
+          "Basis",
+          "Cloth settle"
+        ],
+        "Vikram_Sash across back inner braid": [
+          "Basis",
+          "Cloth settle"
+        ],
+        "Vikram_Tucked sash end": [
+          "Basis",
+          "Cloth settle"
+        ],
+        "Vikram_Tucked sash end outer braid": [
+          "Basis",
+          "Cloth settle"
+        ],
+        "Vikram_Tucked sash end inner braid": [
+          "Basis",
+          "Cloth settle"
+        ],
+        "Vikram_Upper teeth": [
+          "Basis",
+          "Show"
+        ],
+        "Vikram_Tongue": [
+          "Basis",
+          "Show"
+        ],
+        "Vikram_Fine seam stitchwork": [
+          "Basis",
+          "Cloth settle"
+        ],
+        "Vikram_Embroidered sash diamonds": [
+          "Basis",
+          "Cloth settle"
+        ],
+        "Vikram_Expression forehead crease": [
+          "Basis",
+          "Expression crease"
+        ]
+      }
+    },
+    {
+      "character": "Gopal",
+      "file": "CHR_Gopal_Facial_v0_3.fbx",
+      "bytes": 7437804,
+      "deform_bones": 34,
+      "shape_meshes": {
+        "Gopal_Eye.L": [
+          "Basis",
+          "Blink"
+        ],
+        "Gopal_Eyelids.L": [
+          "Basis",
+          "Blink"
+        ],
+        "Gopal_Iris.L": [
+          "Basis",
+          "Blink"
+        ],
+        "Gopal_Brow.L": [
+          "Basis",
+          "Raise",
+          "Frown"
+        ],
+        "Gopal_Eye.R": [
+          "Basis",
+          "Blink"
+        ],
+        "Gopal_Eyelids.R": [
+          "Basis",
+          "Blink"
+        ],
+        "Gopal_Iris.R": [
+          "Basis",
+          "Blink"
+        ],
+        "Gopal_Brow.R": [
+          "Basis",
+          "Raise",
+          "Frown"
+        ],
+        "Gopal_Mouth": [
+          "Basis",
+          "Mouth_Ah",
+          "Mouth_O",
+          "Mouth_Ee",
+          "Mouth_MBP",
+          "Mouth_FV",
+          "Mouth_U",
+          "Mouth_L",
+          "Mouth_Consonant",
+          "Worry",
+          "Smile"
+        ],
+        "Gopal_Working shoulder cloth": [
+          "Basis",
+          "Cloth settle"
+        ],
+        "Gopal_Shoulder cloth woven edge inner": [
+          "Basis",
+          "Cloth settle"
+        ],
+        "Gopal_Shoulder cloth woven edge outer": [
+          "Basis",
+          "Cloth settle"
+        ],
+        "Gopal_Upper teeth": [
+          "Basis",
+          "Show"
+        ],
+        "Gopal_Tongue": [
+          "Basis",
+          "Show"
+        ],
+        "Gopal_Fine seam stitchwork": [
+          "Basis",
+          "Cloth settle"
+        ],
+        "Gopal_Expression forehead crease": [
+          "Basis",
+          "Expression crease"
+        ]
+      }
+    },
+    {
+      "character": "Betal",
+      "file": "CHR_Betal_Facial_v0_3.fbx",
+      "bytes": 6406028,
+      "deform_bones": 34,
+      "shape_meshes": {
+        "Betal_Eye.L": [
+          "Basis",
+          "Blink"
+        ],
+        "Betal_Eyelids.L": [
+          "Basis",
+          "Blink"
+        ],
+        "Betal_Iris.L": [
+          "Basis",
+          "Blink"
+        ],
+        "Betal_Brow.L": [
+          "Basis",
+          "Raise",
+          "Frown"
+        ],
+        "Betal_Eye.R": [
+          "Basis",
+          "Blink"
+        ],
+        "Betal_Eyelids.R": [
+          "Basis",
+          "Blink"
+        ],
+        "Betal_Iris.R": [
+          "Basis",
+          "Blink"
+        ],
+        "Betal_Brow.R": [
+          "Basis",
+          "Raise",
+          "Frown"
+        ],
+        "Betal_Mouth": [
+          "Basis",
+          "Mouth_Ah",
+          "Mouth_O",
+          "Mouth_Ee",
+          "Mouth_MBP",
+          "Mouth_FV",
+          "Mouth_U",
+          "Mouth_L",
+          "Mouth_Consonant",
+          "Worry",
+          "Smile"
+        ],
+        "Betal_Shawl | continuous shoulder drape": [
+          "Basis",
+          "Cloth settle"
+        ],
+        "Betal_Shawl | uneven sash tail": [
+          "Basis",
+          "Cloth settle"
+        ],
+        "Betal_Upper teeth": [
+          "Basis",
+          "Show"
+        ],
+        "Betal_Tongue": [
+          "Basis",
+          "Show"
+        ],
+        "Betal_Fine seam stitchwork": [
+          "Basis",
+          "Cloth settle"
+        ],
+        "Betal_Expression forehead crease": [
+          "Basis",
+          "Expression crease"
+        ]
+      }
+    },
+    {
+      "character": "CourtClerk",
+      "file": "CHR_CourtClerk_Facial_v0_3.fbx",
+      "bytes": 3811804,
+      "deform_bones": 34,
+      "shape_meshes": {
+        "CourtClerk_Eye.L": [
+          "Basis",
+          "Blink"
+        ],
+        "CourtClerk_Eyelids.L": [
+          "Basis",
+          "Blink"
+        ],
+        "CourtClerk_Iris.L": [
+          "Basis",
+          "Blink"
+        ],
+        "CourtClerk_Brow.L": [
+          "Basis",
+          "Raise",
+          "Frown"
+        ],
+        "CourtClerk_Eye.R": [
+          "Basis",
+          "Blink"
+        ],
+        "CourtClerk_Eyelids.R": [
+          "Basis",
+          "Blink"
+        ],
+        "CourtClerk_Iris.R": [
+          "Basis",
+          "Blink"
+        ],
+        "CourtClerk_Brow.R": [
+          "Basis",
+          "Raise",
+          "Frown"
+        ],
+        "CourtClerk_Mouth": [
+          "Basis",
+          "Mouth_Ah",
+          "Mouth_O",
+          "Mouth_Ee",
+          "Mouth_MBP",
+          "Mouth_FV",
+          "Mouth_U",
+          "Mouth_L",
+          "Mouth_Consonant",
+          "Worry",
+          "Smile"
+        ],
+        "CourtClerk_Upper teeth": [
+          "Basis",
+          "Show"
+        ],
+        "CourtClerk_Tongue": [
+          "Basis",
+          "Show"
+        ],
+        "CourtClerk_Expression forehead crease": [
+          "Basis",
+          "Expression crease"
+        ]
+      }
+    }
+  ],
+  "limits": "FBX retains the deformation rig, mesh details and blend shapes. Blender custom-property drivers and IK require rebinding or baking. Procedural woven/skin materials must be recreated or baked in the destination."
+}

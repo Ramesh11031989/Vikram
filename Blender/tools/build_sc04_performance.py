@@ -265,13 +265,17 @@ def main():
         character.scene.name=f'Library | {character.name}'
     animate_cameras(scene,timeline)
     isolate_sets(scene,timeline,court_objects,river_objects)
-    scene.render.engine='BLENDER_EEVEE_NEXT'
+    try:
+        scene.render.engine='BLENDER_EEVEE'
+    except TypeError:
+        scene.render.engine='BLENDER_EEVEE_NEXT'
     scene.eevee.taa_render_samples=4
     scene.eevee.shadow_resolution_scale=.25
     scene.eevee.use_fast_gi=False
     scene.eevee.use_raytracing=False
-    scene.eevee.use_gtao=True
-    scene.eevee.gtao_distance=.20
+    if hasattr(scene.eevee,'use_gtao'):
+        scene.eevee.use_gtao=True
+        scene.eevee.gtao_distance=.20
     scene.render.resolution_x=960
     scene.render.resolution_y=540
     scene.render.resolution_percentage=100

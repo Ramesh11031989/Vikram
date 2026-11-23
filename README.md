@@ -11,9 +11,11 @@ Hindi animated series made with Blender and Unity. The first chapter is **सा
 | [Interrogation animatic](Production/E01/ANIMATIC_README.md) | Eleven staged shots, synthetic Hindi scratch dialogue, audio-measured timing and editable Blender scene |
 | [Interrogation performance](Production/E01/PERFORMANCE_README.md) | Grounded acting, facial/costume detail, acoustic lip sync, rigged clerk and animated river inserts |
 | [Performance review video](Production/E01/Performance/E01_SC04_Performance_v0_3.mp4) | Completed v0.3 motion review with Hindi captions and synthetic scratch voices |
-| [Editable performance scene](Production/E01/Performance/E01_SC04_Performance_v0_3.blend) | Polished scene with four reusable facial rigs, planted-foot acting and costume artwork |
+| [Current cast performance scene](Production/E01/Performance/E01_SC04_Performance_Current_Cast.blend) | Working interrogation scene with the merged acting and latest hair, skin and fabric art |
+| [v0.3 review scene](Production/E01/Performance/E01_SC04_Performance_v0_3.blend) | Editable scene used for the existing review video |
 | [Blender cast library](Blender/Vikram_Betal_Cast.blend) | Editable Vikram, Betal and Gopal models and rigs |
-| [FBX exports](Blender/Exports/) | Rest-pose models with skeletons, skinning and mouth shapes |
+| [Current cast facial FBX exports](Production/E01/Performance/Exports/Current_Cast/) | Neutral models for Vikram, Gopal, Betal and the court clerk, with extended speech and expression shapes |
+| [Cast-library FBX exports](Blender/Exports/) | Latest strand-groom geometry for Vikram, Gopal and Betal, with five speech shapes |
 | [Surface detail](Blender/Previews/Cast_Detail.png) | Close-up of the strand grooms, skin, eyes, lips and woven cloth |
 | [Betal sash motion](Blender/Previews/Betal_Cloth_Wind.mp4) | Three-second wind test at 24 fps |
 
@@ -27,7 +29,9 @@ Use the `Surface Detail` scene to inspect the eye contour, iris, lip shapes, hai
 
 Open `Betal • Cloth Wind Test` and scrub frames 1–72 to see the baked sash motion. The panel is pinned at the knot and responds to an animated gust. It has self-collision and collision surfaces on the waist wrap and dhoti. The cloth's custom properties show the sampled peak and its frame. Free the bake in the cloth cache before changing the wind or the garment and baking again.
 
-The FBX files are the starting point for Unity import. Match the Unity materials and cloth setup to the Blender close-up and wind review. The character scenes use the same bone names and 24 fps timebase so later episodes can reuse clips. Add episode-specific material, shots and audio under `Production/E02` and the corresponding episode folder in the Unity project as production progresses.
+Continue the interrogation from the Current Cast performance scene. It contains the 11-shot edit, keyed acting and lip sync, and a relative link to the dialogue mix in `Production/E01/Audio`. The [performance rebuild](Production/E01/PERFORMANCE_README.md#build-and-resume) describes how to regenerate it from the current cast artwork.
+
+Import the Current Cast facial FBXs into Unity with **Animation Type** set to **Generic**, **Avatar Definition** set to **Create From This Model**, and blend shapes enabled. The scene's body animation and speech curves live in Blender and need baking or rebinding for the Unity cut. Recreate the Blender shader and cloth settings for the Unity materials and simulation. The character scenes use the same bone names and 24 fps timebase so later episodes can reuse clips. Add episode-specific material, shots and audio under `Production/E02` and the corresponding episode folder in the Unity project as production progresses.
 
 The editable `.blend` is the working asset. `Blender/tools/build_cast.py` recreates the initial library and exports as kept in this repository. Run it in a separate checkout when testing changes to the generator, since it writes the same output filenames.
 

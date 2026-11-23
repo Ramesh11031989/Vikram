@@ -26,6 +26,8 @@ ROOT=Path(__file__).resolve().parents[2]
 EPISODE=ROOT/'Production/E01'
 OUTPUT=EPISODE/'Performance'
 SCENE_FILE=OUTPUT/'E01_SC04_Performance_v0_3.blend'
+DRAPED_PANELS=('shoulder cloth','diagonal teal court sash','sash across back',
+               'tucked sash end','shawl | across','shawl | loose','shawl | continuous')
 
 
 def adapter(module):
@@ -42,51 +44,66 @@ def adapter(module):
 def noise_layer(material,cloth):
     nodes,links=material.node_tree.nodes,material.node_tree.links
     shader=nodes.get('Principled BSDF')
-    original=shader.inputs['Base Color'].default_value[:]
+    colour=shader.inputs['Base Color']
+    rough=shader.inputs['Roughness']
+    normal=shader.inputs['Normal']
+    if all(socket.is_linked for socket in (colour,rough,normal)):
+        return False
+
     coordinates=nodes.new('ShaderNodeTexCoord')
-    fine=nodes.new('ShaderNodeTexNoise')
-    fine.inputs['Scale'].default_value=175 if cloth else 210
-    fine.inputs['Detail'].default_value=1.5
-    links.new(coordinates.outputs['Generated'],fine.inputs['Vector'])
-    bump=nodes.new('ShaderNodeBump')
-    bump.inputs['Strength'].default_value=.17 if cloth else .075
-    bump.inputs['Distance'].default_value=.00075 if cloth else .00030
-    links.new(fine.outputs['Fac'],bump.inputs['Height'])
-    links.new(bump.outputs['Normal'],shader.inputs['Normal'])
-    variation=nodes.new('ShaderNodeTexNoise')
-    variation.inputs['Scale'].default_value=9 if cloth else 5
-    variation.inputs['Detail'].default_value=1
-    links.new(coordinates.outputs['Generated'],variation.inputs['Vector'])
-    ramp=nodes.new('ShaderNodeValToRGB')
-    low,high=ramp.color_ramp.elements
-    low.color=tuple(min(1,value*.94) for value in original[:3])+(1,)
-    high.color=tuple(min(1,value*1.035) for value in original[:3])+(1,)
-    links.new(variation.outputs['Fac'],ramp.inputs['Fac'])
-    links.new(ramp.outputs['Color'],shader.inputs['Base Color'])
-    roughness=nodes.new('ShaderNodeMapRange')
-    roughness.inputs['To Min'].default_value=.73 if cloth else .51
-    roughness.inputs['To Max'].default_value=.94 if cloth else .65
-    links.new(fine.outputs['Fac'],roughness.inputs['Value'])
-    links.new(roughness.outputs['Result'],shader.inputs['Roughness'])
-    if cloth:
-        weave=nodes.new('ShaderNodeTexWave')
-        weave.wave_type='BANDS'
-        weave.bands_direction='X'
-        weave.inputs['Scale'].default_value=120
-        weave.inputs['Distortion'].default_value=.12
-        links.new(coordinates.outputs['Generated'],weave.inputs['Vector'])
-        product=nodes.new('ShaderNodeMath')
-        product.operation='MULTIPLY'
-        links.new(weave.outputs['Fac'],product.inputs[0])
-        links.new(fine.outputs['Fac'],product.inputs[1])
-        links.new(product.outputs[0],bump.inputs['Height'])
+    if not normal.is_linked or not rough.is_linked:
+        fine=nodes.new('ShaderNodeTexNoise')
+        fine.inputs['Scale'].default_value=175 if cloth else 210
+        fine.inputs['Detail'].default_value=1.5
+        links.new(coordinates.outputs['Generated'],fine.inputs['Vector'])
+
+    if not normal.is_linked:
+        height=fine.outputs['Fac']
+        if cloth:
+            weave=nodes.new('ShaderNodeTexWave')
+            weave.wave_type='BANDS'
+            weave.bands_direction='X'
+            weave.inputs['Scale'].default_value=120
+            weave.inputs['Distortion'].default_value=.12
+            links.new(coordinates.outputs['Generated'],weave.inputs['Vector'])
+            product=nodes.new('ShaderNodeMath')
+            product.operation='MULTIPLY'
+            links.new(weave.outputs['Fac'],product.inputs[0])
+            links.new(height,product.inputs[1])
+            height=product.outputs[0]
+        bump=nodes.new('ShaderNodeBump')
+        bump.inputs['Strength'].default_value=.17 if cloth else .075
+        bump.inputs['Distance'].default_value=.00075 if cloth else .00030
+        links.new(height,bump.inputs['Height'])
+        links.new(bump.outputs['Normal'],normal)
+
+    if not colour.is_linked:
+        original=colour.default_value[:]
+        variation=nodes.new('ShaderNodeTexNoise')
+        variation.inputs['Scale'].default_value=9 if cloth else 5
+        variation.inputs['Detail'].default_value=1
+        links.new(coordinates.outputs['Generated'],variation.inputs['Vector'])
+        ramp=nodes.new('ShaderNodeValToRGB')
+        low,high=ramp.color_ramp.elements
+        low.color=tuple(min(1,value*.94) for value in original[:3])+(1,)
+        high.color=tuple(min(1,value*1.035) for value in original[:3])+(1,)
+        links.new(variation.outputs['Fac'],ramp.inputs['Fac'])
+        links.new(ramp.outputs['Color'],colour)
+
+    if not rough.is_linked:
+        roughness=nodes.new('ShaderNodeMapRange')
+        roughness.inputs['To Min'].default_value=.73 if cloth else .51
+        roughness.inputs['To Max'].default_value=.94 if cloth else .65
+        links.new(fine.outputs['Fac'],roughness.inputs['Value'])
+        links.new(roughness.outputs['Result'],rough)
     material['Detail pass']='Subtle woven surface/colour variation' if cloth else 'Subtle skin roughness/colour variation; original base palette retained'
+    return True
 
 
 def stitch_panels(character):
     vertices,faces,weights=[],[],[]
     for obj in list(character.parts):
-        if not any(token in obj.name.lower() for token in ('shoulder cloth','diagonal teal court sash','sash across back','tucked sash end','shawl | across','shawl | loose')):
+        if not any(token in obj.name.lower() for token in DRAPED_PANELS):
             continue
         counts=Counter(tuple(sorted(edge)) for polygon in obj.data.polygons for edge in polygon.edge_keys)
         for (a,b),count in counts.items():
@@ -194,9 +211,9 @@ def sash_embroidery(character):
 
 def cloth_secondary(character):
     count=0
+    secondary_panels=DRAPED_PANELS+('shawl | uneven','fine seam stitchwork','embroidered sash')
     for obj in list(character.parts):
-        if not any(token in obj.name.lower() for token in ('shoulder cloth','diagonal teal court sash','sash across back',
-                       'tucked sash end','shawl | across','shawl | loose','shawl | uneven','fine seam stitchwork','embroidered sash')):
+        if not any(token in obj.name.lower() for token in secondary_panels):
             continue
         def settle(point):
             weight=max(0,min(1,(1.22*character.scale-point.z)/(.55*character.scale)))
@@ -325,11 +342,9 @@ def main():
         if not material.use_nodes or ' • ' not in material.name:
             continue
         if material.name.endswith(' • Skin'):
-            noise_layer(material,False)
-            stats['skin_materials']+=1
+            stats['skin_materials']+=int(noise_layer(material,False))
         elif any(word in material.name.lower() for word in words) and material.node_tree.nodes.get('Principled BSDF'):
-            noise_layer(material,True)
-            stats['cloth_materials']+=1
+            stats['cloth_materials']+=int(noise_layer(material,True))
     for module in (vikram,gopal,betal,court_clerk):
         character=adapter(module)
         stats['characters'][character.name]={'stitches':stitch_panels(character),
