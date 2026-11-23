@@ -9,6 +9,9 @@ from mathutils import Quaternion, Vector
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from character import Character
+from cloth_motion import attach_motion, bake_and_verify
+from groom import groom
+from textile import apply_textiles, store_rest_positions
 import betal
 import gopal
 import vikram
@@ -29,6 +32,8 @@ def make_character(module):
     character.body()
     character.face()
     module.dress(character)
+    groom(character)
+    apply_textiles(character)
     character.validate()
     select_rig(character)
     print(f'{character.name}: {len(character.parts)} skinned meshes, '
@@ -100,13 +105,16 @@ def showcase_character(scene, character, x, yaw):
         clone.modifiers['Character Skinning'].object = rig
     rig.location.x = x
     rig.rotation_euler.z = math.radians(yaw)
-    for side, sign in (('L',1),('R',-1)):
-        turn(rig, f'upper_arm.{side}', (0,1,0), sign*(77 if character.name=='Vikram' else 75))
-        turn(rig,f'forearm.{side}', (0,0,1), sign*(-9 if character.name=='Gopal' else -5))
+    gestures = {'Vikram': ((78,-7),(77,-31)), 'Betal': ((79,-19),(82,-7)),
+                'Gopal': ((79,-9),(72,-54))}
+    for (side, sign), (arm_angle, elbow_angle) in zip((('L',1),('R',-1)), gestures[character.name]):
+        turn(rig, f'upper_arm.{side}', (0,1,0), sign*arm_angle)
+        turn(rig, f'forearm.{side}', (0,0,1), sign*elbow_angle)
         for digit in range(1,5):
-            turn(rig,f'finger_{digit:02d}.{side}', (0,1,0), sign*(12+digit*2))
-    turn(rig,'head',(0,0,1),-yaw*.35)
-    turn(rig,'chest',(0,1,0),-2 if character.name=='Betal' else 1)
+            turn(rig, f'finger_{digit:02d}.{side}', (0,1,0), sign*(16+digit*3))
+    turn(rig, 'head', (0,0,1), {'Vikram':-3,'Betal':7,'Gopal':-8}[character.name]-yaw*.35)
+    turn(rig, 'neck', (1,0,0), {'Vikram':-2,'Betal':4,'Gopal':-3}[character.name])
+    turn(rig, 'chest', (0,1,0), {'Vikram':-1,'Betal':-4,'Gopal':3}[character.name])
     return rig
 
 
@@ -138,59 +146,115 @@ def configure_view(scene, camera=False):
             view.region_3d.view_perspective = 'CAMERA' if camera else 'ORTHO'
 
 
-def studio(scene, cast):
+def setup_stage(scene, width, height, samples, world_strength):
     bpy.context.window.scene = scene
-    for obj in list(scene.objects):
-        bpy.data.objects.remove(obj, do_unlink=True)
-    scene.name = 'Cast Preview'
     scene.render.fps = 24
     scene.unit_settings.system = 'METRIC'
-    scene.world = bpy.data.worlds.new('Studio Ambient')
+    scene.world = bpy.data.worlds.new(f'{scene.name} • Ambient')
     scene.world.use_nodes = True
     background = scene.world.node_tree.nodes.get('Background')
-    background.inputs['Color'].default_value = (.26,.31,.37,1)
-    background.inputs['Strength'].default_value = .26
+    background.inputs['Color'].default_value = (.28,.35,.45,1)
+    background.inputs['Strength'].default_value = world_strength
     scene.view_settings.view_transform = 'AgX'
     scene.render.engine = 'CYCLES'
-    scene.cycles.samples = 24
+    scene.cycles.samples = samples
+    scene.cycles.adaptive_threshold = .035
     scene.cycles.use_denoising = True
-    scene.render.resolution_x = 1500
-    scene.render.resolution_y = 1120
+    scene.render.resolution_x = width
+    scene.render.resolution_y = height
     scene.render.resolution_percentage = 100
     scene.render.image_settings.file_format = 'PNG'
 
-    baked_clay = studio_material('Backdrop • River clay',(.16,.112,.075))
-    platform = studio_material('Pedestal • Warm sandstone',(.33,.253,.17))
-    lettering = studio_material('Labels • Charcoal',(.055,.027,.016))
-    bpy.ops.mesh.primitive_plane_add(size=200, location=(0,0,-.25))
-    floor = prop_material(bpy.context.object, baked_clay)
+def stage_camera(scene, name, location, target, width):
+    cam_data = bpy.data.cameras.new(name)
+    cam_data.type = 'ORTHO'
+    cam_data.ortho_scale = width
+    camera = bpy.data.objects.new(name,cam_data)
+    scene.collection.objects.link(camera)
+    camera.location = location
+    aim(camera,target)
+    scene.camera = camera
+    return camera
+
+
+def review_floor(color):
+    bpy.ops.mesh.primitive_plane_add(size=100, location=(0,0,-.008))
+    floor = prop_material(bpy.context.object, studio_material('Backdrop • Slate',color))
     floor.name = 'Studio floor'
 
-    cam_data = bpy.data.cameras.new('Cast camera')
-    cam_data.type = 'ORTHO'
-    cam_data.ortho_scale = 3.45
-    camera = bpy.data.objects.new('Cast camera',cam_data)
-    scene.collection.objects.link(camera)
-    camera.location = (0,-7,2.35)
-    aim(camera,(0,0,.95))
-    scene.camera = camera
-    light(scene,'Soft daylight key',(-3,-4,6), (0,0,1), (1,.86,.68), 510,4.0)
-    light(scene,'Cool fill',(3,-3,3),(0,0,1), (.61,.78,1), 280,3.3)
-    light(scene,'Warm rim',(1.2,3,5),(0,0,1), (1,.72,.47), 620,3.0)
 
-    for character, x, yaw, role in zip(cast,(-1.04,0,1.04),(10,-7,-12),('THE KING','THE CLERK','THE BOATMAN')):
+def studio(scene, cast):
+    for obj in list(scene.objects):
+        bpy.data.objects.remove(obj, do_unlink=True)
+    scene.name = 'Cast Preview'
+    setup_stage(scene, 1440, 1050, 24, .22)
+    review_floor((.041,.055,.061))
+    lettering = studio_material('Labels • Warm sandstone',(.55,.47,.34))
+    camera = stage_camera(scene, 'Cast camera', (0,-7,2.07), (0,0,.955), 3.43)
+    light(scene, 'Angled daylight', (-2.9,-3.9,5.3), (0,0,1.1), (1,.84,.70), 490,2.2)
+    light(scene, 'Cool fill', (2.3,-2.4,3.1), (0,0,1), (.70,.82,1), 132,3.2)
+    light(scene, 'Warm rim', (2.3,2.6,4.3), (0,0,1.25), (1,.77,.54), 480,2.1)
+    light(scene, 'Blue rim', (-2.4,1.1,2.8), (0,0,1.05), (.53,.71,1), 180,2.3)
+    for character, x, yaw in zip(cast,(-1.04,0,1.04),(13,-7,9)):
         showcase_character(scene,character,x,yaw)
-        bpy.ops.mesh.primitive_cylinder_add(vertices=96, radius=.449, depth=.21, location=(x,0,-.109))
-        pedestal = prop_material(bpy.context.object,platform)
-        pedestal.name = f'{character.name} • Sandstone plinth'
-        bevel = pedestal.modifiers.new('Stone bevel','BEVEL')
-        bevel.width = .026
-        bevel.segments = 4
-        pedestal.modifiers.new('Surface normals','WEIGHTED_NORMAL')
-        label(scene, f'{character.name} Label', character.name.upper(), x, -.117, .086, lettering, camera, -.492)
-        label(scene, f'{character.name} Role', role, x, -.181, .040, lettering, camera, -.501)
+        label(scene, f'{character.name} Label', character.name.upper(), x, .034, .073, lettering, camera, -.85)
     bpy.ops.object.select_all(action='DESELECT')
-    configure_view(scene, camera=True)
+    scene.render.filepath = '//Previews/Cast_Lineup.png'
+
+
+def surface_review(cast):
+    scene = bpy.data.scenes.new('Surface Detail')
+    setup_stage(scene, 1600, 735, 32, .18)
+    review_floor((.027,.039,.048))
+    stage_camera(scene, 'Portrait camera', (0,-5,1.83), (0,0,1.57), 1.85)
+    light(scene, 'Portrait key', (-1.7,-2.0,3.3), (0,0,1.53), (1,.84,.71), 168,1.45)
+    light(scene, 'Portrait fill', (1.8,-2.2,2.2), (0,0,1.54), (.65,.79,1), 68,2.0)
+    light(scene, 'Gold hair rim', (1.2,1.8,2.6), (0,0,1.62), (1,.78,.56), 195,1.45)
+    light(scene, 'Cool hair rim', (-1.6,1.0,2.4), (0,0,1.62), (.63,.80,1), 130,1.45)
+    for character, x, yaw, z in zip(cast,(-.61,0,.61),(15,0,-10),(-.12,.048,-.018)):
+        rig = showcase_character(scene,character,x,yaw)
+        rig.location.z = z
+    scene.render.filepath = '//Previews/Cast_Detail.png'
+    return scene
+
+
+def wind_review(character):
+    scene = bpy.data.scenes.new('Betal • Cloth Wind Test')
+    setup_stage(scene, 720, 480, 16, .24)
+    review_floor((.092,.083,.073))
+    stage_camera(scene, 'Sash camera', (1.65,-4,1.34), (.19,-.08,.82), 1.30)
+    light(scene, 'Sash key', (-2,-3,3.8), (0,0,.85), (1,.87,.71), 350,2.1)
+    light(scene, 'Sash fill', (2.5,-1.4,2.2), (0,0,.86), (.64,.79,1), 109,1.95)
+    light(scene, 'Sash rim', (1.5,1.8,3.4), (0,0,.85), (1,.76,.56), 275,1.9)
+    rig = showcase_character(scene, character, 0, 0)
+    cloth = attach_motion(scene, character, rig)
+    store_rest_positions(cloth.data)
+    return scene, cloth
+
+
+def render_still(scene):
+    bpy.context.window.scene = scene
+    bpy.ops.render.render(write_still=True)
+
+
+def render_wind_video():
+    scene = bpy.data.scenes['Betal • Cloth Wind Test']
+    bpy.context.window.scene = scene
+    scene.frame_set(scene.frame_start)
+    scene.render.engine = 'BLENDER_EEVEE'
+    scene.eevee.taa_render_samples = 32
+    scene.render.resolution_x = 624
+    scene.render.resolution_y = 416
+    scene.render.image_settings.media_type = 'VIDEO'
+    scene.render.ffmpeg.format = 'MPEG4'
+    scene.render.ffmpeg.codec = 'H264'
+    scene.render.ffmpeg.constant_rate_factor = 'HIGH'
+    target = ROOT/'Previews'/'Betal_Cloth_Wind.mp4'
+    scene.render.filepath = str(target)
+    scene.render.use_file_extension = False
+    bpy.ops.render.render(animation=True)
+    if not target.is_file() or target.stat().st_size < 1024:
+        raise RuntimeError(f'Could not render cloth review video: {target}')
 
 
 def main():
@@ -201,13 +265,20 @@ def main():
     for character in cast:
         export_fbx(character)
     studio(preview,cast)
+    detail = surface_review(cast)
+    wind, cloth = wind_review(cast[1])
+    bake_and_verify(wind, cloth)
+    configure_view(preview, camera=True)
     bpy.context.preferences.filepaths.save_version = 0
-    preview.render.filepath = '//Previews/Cast_Lineup.png'
     result = bpy.ops.wm.save_as_mainfile(filepath=str(ROOT/'Vikram_Betal_Cast.blend'),compress=True)
     if 'FINISHED' not in result:
         raise RuntimeError('Could not save the character library')
-    bpy.ops.render.render(write_still=True)
+    render_still(detail)
+    render_still(preview)
 
 
 if __name__ == '__main__':
-    main()
+    if '--wind-video' in sys.argv:
+        render_wind_video()
+    else:
+        main()
