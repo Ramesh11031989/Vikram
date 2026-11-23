@@ -846,8 +846,12 @@ def forecourt(p: Palace) -> None:
         b.sweep(kit.rect_path(gx0, gx1, ya, yb), kit.cornice_profile(0.3, 0.4), 0, True, 9.0)
         b.merge(kit.merlons(yb - ya, 0.95, 0.52, 0.6, 0.5), Matrix.Translation((gx1 - 0.25, ya, 9.4)) @
                 Matrix.Rotation(math.radians(90), 4, 'Z'))
-    b.box_between((gx0, -3.6, 6.0), (gx1, 3.6, 7.8))
+    # Bridge over the gate passage, built up to the tower tops so the canopy pillars stand on it.
+    b.box_between((gx0, -3.6, 6.0), (gx1, 3.6, 9.0))
     b.sweep([(gx1, -3.6), (gx1, 3.6)], kit.cornice_profile(0.25, 0.3), 0, False, 7.8)
+    b.sweep([(gx0, 3.6), (gx0, -3.6)], kit.cornice_profile(0.25, 0.3), 0, False, 7.8)
+    b.sweep([(gx1, -3.6), (gx1, 3.6)], kit.cornice_profile(0.3, 0.4), 0, False, 9.0)
+    b.sweep([(gx0, 3.6), (gx0, -3.6)], kit.cornice_profile(0.3, 0.4), 0, False, 9.0)
     p.add('Public gatehouse towers', b, [m.stone], c)
     # Dress the towers: pilastered bays with shrine niches below the chhajja, a blind arcade above,
     # and a carved red lintel panel with lotus medallions over the gate.
@@ -871,6 +875,10 @@ def forecourt(p: Palace) -> None:
         flank = (Matrix.Translation((gx1 - 0.15, far, upper_z)) @ Matrix.Rotation(math.radians(180), 4, 'Z')
                  if sy > 0 else Matrix.Translation((gx0 + 0.15, far, upper_z)))
         d.merge(kit.blind_arcade(gx1 - gx0 - 0.3, upper_h), flank)
+    for face, yaw in ((gx1, 90.0), (gx0, -90.0)):
+        start = -3.45 if yaw > 0 else 3.45
+        d.merge(kit.blind_arcade(6.9, 0.78, 0.86), Matrix.Translation((face, start, 8.12)) @
+                Matrix.Rotation(math.radians(yaw), 4, 'Z'))
     d.box_between((gx1, -3.3, 6.62), (gx1 + 0.07, 3.3, 7.62), 2)
     d.box_between((gx1, -3.4, 6.54), (gx1 + 0.12, 3.4, 6.62))
     d.box_between((gx1, -3.4, 7.62), (gx1 + 0.12, 3.4, 7.72))
