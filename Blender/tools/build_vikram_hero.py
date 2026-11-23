@@ -51,7 +51,11 @@ def gaussian(value, center, width):
     return math.exp(-((value-center)/width)**2)
 
 
-class VikramHero(Character):
+class AdultHero(Character):
+    appearance = HERO
+    display_name = 'Vikram'
+    description = 'Adult Vikram. Original court costume on Blender Studio CC0 anatomy.'
+
     def __init__(self, source):
         self.landmarks = {'head_top':1.84, 'chin':(0,-.129,1.592),
                           'mouth':(0,-.149,1.648), 'nose_tip':(0,-.179,1.677),
@@ -59,14 +63,14 @@ class VikramHero(Character):
                                            for z,width,front,back in TORSO]}
         for side, sign in (('L',1),('R',-1)):
             self.landmarks.update({f'{name}.{side}':mirrored(point,sign) for name,point in LIMB.items()})
-        super().__init__(HERO)
-        self.scene.name = 'Vikram | Model and rig'
-        self.collection.asset_data.description = 'Adult Vikram. Original court costume on Blender Studio CC0 anatomy.'
+        super().__init__(self.appearance)
+        self.scene.name = f'{self.display_name} | Model and rig'
+        self.collection.asset_data.description = self.description
         self.load_anatomy(source)
 
     def make_rig(self):
-        bones = bpy.data.armatures.new('VikramHero_Skeleton')
-        rig = bpy.data.objects.new('VikramHero_Rig', bones)
+        bones = bpy.data.armatures.new(f'{self.name}_Skeleton')
+        rig = bpy.data.objects.new(f'{self.name}_Rig', bones)
         self.collection.objects.link(rig)
         bones.display_type = 'STICK'
         bpy.context.view_layer.objects.active = rig
@@ -136,16 +140,9 @@ class VikramHero(Character):
                 polygon.use_smooth = True
             obj.data.materials.clear()
 
-        body.name = 'VikramHero_Anatomy'
-        body.data.name = 'VikramHero_AnatomyMesh'
-        for vertex in body.data.vertices:
-            x,y,z = vertex.co
-            # Localized tweaks preserve the eyelid seam and modeled mouth cavity.
-            jaw = gaussian(z,1.621,.031)*gaussian(abs(x),.066,.035)
-            vertex.co.x += x*.055*jaw
-            ridge = gaussian(z,1.682,.017)*gaussian(y,-.169,.022)*gaussian(x,0,.024)
-            vertex.co.x += .0016*ridge
-            vertex.co.y -= .004*ridge*gaussian(abs(x),.013,.017)
+        body.name = f'{self.name}_Anatomy'
+        body.data.name = f'{self.name}_AnatomyMesh'
+        self.sculpt_anatomy(body)
         body.data.update()
         self.skin_mesh = body
         self.skin_bvh = bvh(body.data)
@@ -165,6 +162,7 @@ class VikramHero(Character):
         pigment = mesh.color_attributes.new(name='Skin pigment',type='FLOAT_COLOR',domain='POINT')
         rest = mesh.attributes.new(name='Skin rest coordinates',type='FLOAT_VECTOR',domain='POINT')
         rest.data.foreach_set('vector',[component for vertex in mesh.vertices for component in vertex.co])
+        red,green,blue = self.spec['skin']
         for index,vertex in enumerate(mesh.vertices):
             x,y,z = vertex.co
             frontal = min(1, max(0,(-y-.065)/.052))
@@ -175,9 +173,9 @@ class VikramHero(Character):
             lips = gaussian(x,0,.020)*gaussian(z,lip_pitch,.0067)*frontal
             chin = gaussian(z,1.621,.027)*frontal
             tone = 1 + .023*math.sin(53*x+18*z)*math.cos(33*y-24*z) - .15*socket - .07*temple - .07*chin
-            pigment.data[index].color = (.384*tone+.029*cheeks-.041*lips,
-                                         .179*tone-.009*cheeks-.040*lips,
-                                         .100*tone-.004*cheeks-.019*lips,1)
+            pigment.data[index].color = (red*tone+.029*cheeks-.041*lips,
+                                         green*tone-.009*cheeks-.040*lips,
+                                         blue*tone-.004*cheeks-.019*lips,1)
         nodes,links = mat.node_tree.nodes,mat.node_tree.links
         shader = nodes.get('Principled BSDF')
         shader.inputs['Subsurface Weight'].default_value = .10
@@ -259,40 +257,29 @@ class VikramHero(Character):
         smooth.render_levels = 2
         self.parts.append(body)
 
-    def fit_dressed_skin(self):
+    def fit_covered_skin(self, cuts, visible, refine=None):
         """Keep a full sculpt backup and remove hidden skin from the export mesh."""
         body = self.skin_mesh
         reference = body.copy()
-        reference.name = 'VikramHero_FullAnatomy'
-        anatomy = bpy.data.collections.new('Vikram | Full anatomy reference')
+        reference.name = f'{self.name}_FullAnatomy'
+        anatomy = bpy.data.collections.new(f'{self.display_name} | Full anatomy reference')
         self.scene.collection.children.link(anatomy)
         anatomy.objects.link(reference)
         anatomy.hide_render = True
         anatomy.hide_viewport = True
         body.data = body.data.copy()
-        body.data.name = 'VikramHero_DressedSkinMesh'
+        body.data.name = f'{self.name}_DressedSkinMesh'
 
         editable = bmesh.new()
         editable.from_mesh(body.data)
-        for height in (.064,.150,.985,1.525):
+        for height in cuts:
             bmesh.ops.bisect_plane(editable,geom=[*editable.verts,*editable.edges,*editable.faces],
                                   dist=1e-5,plane_co=(0,0,height),plane_no=(0,0,1))
-        hidden = []
-        for face in editable.faces:
-            x,_,z = face.calc_center_median()
-            collar = z >= 1.525
-            hands = abs(x)>.363 and z<.985
-            ankles = abs(x)>.11 and .064<z<.150
-            if not (collar or hands or ankles):
-                hidden.append(face)
+        hidden = [face for face in editable.faces if not visible(face.calc_center_median())]
         bmesh.ops.delete(editable,geom=hidden,context='FACES')
-        for vertex in editable.verts:
-            z = vertex.co.z
-            if 1.524 <= z < 1.578:
-                t = min(1,(z-1.524)/.054)
-                taper = .50+.50*t*t*(3-2*t)
-                vertex.co.x *= taper
-                vertex.co.y = -.025+(vertex.co.y+.025)*taper
+        if refine is not None:
+            for vertex in editable.verts:
+                refine(vertex.co)
         editable.to_mesh(body.data)
         editable.free()
         body.data.update()
@@ -300,7 +287,7 @@ class VikramHero(Character):
 
     def make_eye(self, obj, side):
         eye_bone = f'eye.{side}'
-        obj.name = f'VikramHero_Eyeball.{side}'
+        obj.name = f'{self.name}_Eyeball.{side}'
         obj.parent = self.rig
         mesh = obj.data
         sclera = self.mat('Warm sclera',(.57,.46,.40),.27)
@@ -341,19 +328,45 @@ class VikramHero(Character):
         material.node_tree.links.new(node.outputs['Color'],material.node_tree.nodes.get('Principled BSDF').inputs['Base Color'])
 
 
-def export_fbx(hero):
+class VikramHero(AdultHero):
+    def sculpt_anatomy(self, body):
+        for vertex in body.data.vertices:
+            x,y,z = vertex.co
+            # Localized tweaks preserve the eyelid seam and modeled mouth cavity.
+            jaw = gaussian(z,1.621,.031)*gaussian(abs(x),.066,.035)
+            vertex.co.x += x*.055*jaw
+            ridge = gaussian(z,1.682,.017)*gaussian(y,-.169,.022)*gaussian(x,0,.024)
+            vertex.co.x += .0016*ridge
+            vertex.co.y -= .004*ridge*gaussian(abs(x),.013,.017)
+
+    def fit_dressed_skin(self):
+        def visible(point):
+            x,_,z = point
+            return z>=1.525 or abs(x)>.363 and z<.985 or abs(x)>.11 and .064<z<.150
+
+        def refine(point):
+            if 1.524 <= point.z < 1.578:
+                t = min(1,(point.z-1.524)/.054)
+                taper = .50+.50*t*t*(3-2*t)
+                point.x *= taper
+                point.y = -.025+(point.y+.025)*taper
+
+        self.fit_covered_skin((.064,.150,.985,1.525),visible,refine)
+
+
+def export_fbx(hero, target=None):
     bpy.context.window.scene = hero.scene
     bpy.ops.object.select_all(action='DESELECT')
     hero.rig.select_set(True)
     bpy.context.view_layer.objects.active = hero.rig
     for obj in hero.parts:
         obj.select_set(True)
-    result = bpy.ops.export_scene.fbx(filepath=str(OUTPUT/'Vikram_Hero.fbx'), use_selection=True,
+    result = bpy.ops.export_scene.fbx(filepath=str(target or OUTPUT/'Vikram_Hero.fbx'), use_selection=True,
         object_types={'ARMATURE','MESH'}, axis_forward='-Z', axis_up='Y',
         apply_scale_options='FBX_SCALE_UNITS', use_mesh_modifiers=False, add_leaf_bones=False,
         bake_anim=False, mesh_smooth_type='FACE')
     if 'FINISHED' not in result:
-        raise RuntimeError('Could not export Vikram hero')
+        raise RuntimeError(f'Could not export {hero.display_name} hero')
 
 
 def copy_model(scene, hero, label, x, yaw):
