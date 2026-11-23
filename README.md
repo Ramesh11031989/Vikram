@@ -4,6 +4,8 @@ Hindi animated series made with Blender and Unity. The first chapter is **सा
 
 | File | Use |
 | --- | --- |
+| [Vikram hero model](Blender/Characters/Vikram/README.md) | Adult character model with an anatomical bind pose, layered court costume and Blender review renders |
+| [Art production gates](Production/ART_PASSES.md) | Modeling, palace kit, performance, reusable effects and export checks |
 | [Chapter 1](अध्याय%2001%20-%20सात%20गवाह,%20एक%20आवाज़.md) | Original Hindi story |
 | [Chapter 2](अध्याय%2002%20-%20जिस%20मुहल्ले%20में%20कोई%20नहीं%20मरा.md) | Original Hindi story |
 | [Pilot shooting script](Production/E01/E01_SC04_Pilot_Shooting_Script.md) | Gopal's testimony, 11 shots at 24 fps |
