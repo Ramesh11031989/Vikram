@@ -20,11 +20,11 @@ performance. The original dialogue and 1,484-frame / 61.833-second edit are kept
 | `E01_SC04_Performance_Media_Check.json` | Final frame count, duration and motion-sampling checks |
 | `E01_SC04_Cast_Export_Check.json` | Four FBX round-trip checks |
 
-Generated assets are distributed in the review package. Extract the package at
-the repository root, keeping `Production/E01/Performance` beside
-`Production/E01/Audio`. The `.blend` can also be opened directly in that extracted
-tree. Build tools and reports are tracked in Git; the generated media/cache are
-ignored.
+The completed scene, facial FBX assets, audio, high-resolution proofs and review
+video are versioned with the project. The downloadable review package is another
+way to open the same deliverables: extract it at the repository root, keeping
+`Production/E01/Performance` beside `Production/E01/Audio`. Temporary frame/video
+caches and the intermediate v0.2 scene are ignored.
 
 ## What changed
 

@@ -10,6 +10,8 @@ Hindi animated series made with Blender and Unity. The first chapter is **सा
 | [Dialogue cue sheet](Production/E01/E01_SC04_Dialogue_Cues.csv) | Hindi dialogue IDs, provisional timing, performance notes and WAV filenames |
 | [Interrogation animatic](Production/E01/ANIMATIC_README.md) | Eleven staged shots, synthetic Hindi scratch dialogue, audio-measured timing and editable Blender scene |
 | [Interrogation performance](Production/E01/PERFORMANCE_README.md) | Grounded acting, facial/costume detail, acoustic lip sync, rigged clerk and animated river inserts |
+| [Performance review video](Production/E01/Performance/E01_SC04_Performance_v0_3.mp4) | Completed v0.3 motion review with Hindi captions and synthetic scratch voices |
+| [Editable performance scene](Production/E01/Performance/E01_SC04_Performance_v0_3.blend) | Polished scene with four reusable facial rigs, planted-foot acting and costume artwork |
 | [Blender cast library](Blender/Vikram_Betal_Cast.blend) | Editable Vikram, Betal and Gopal models and rigs |
 | [FBX exports](Blender/Exports/) | Rest-pose models with skeletons, skinning and mouth shapes |
 

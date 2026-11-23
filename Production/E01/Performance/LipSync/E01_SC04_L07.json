@@ -1,0 +1,93 @@
+{
+  "metadata": {
+    "soundFile": "Audio/Scratch/E01_SC04_L07_Vikram.wav",
+    "duration": 1.85
+  },
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.13,
+      "value": "E"
+    },
+    {
+      "start": 0.13,
+      "end": 0.19,
+      "value": "A"
+    },
+    {
+      "start": 0.19,
+      "end": 0.25,
+      "value": "F"
+    },
+    {
+      "start": 0.25,
+      "end": 0.33,
+      "value": "A"
+    },
+    {
+      "start": 0.33,
+      "end": 0.62,
+      "value": "C"
+    },
+    {
+      "start": 0.62,
+      "end": 0.76,
+      "value": "F"
+    },
+    {
+      "start": 0.76,
+      "end": 0.83,
+      "value": "B"
+    },
+    {
+      "start": 0.83,
+      "end": 0.97,
+      "value": "D"
+    },
+    {
+      "start": 0.97,
+      "end": 1.18,
+      "value": "B"
+    },
+    {
+      "start": 1.18,
+      "end": 1.32,
+      "value": "G"
+    },
+    {
+      "start": 1.32,
+      "end": 1.39,
+      "value": "D"
+    },
+    {
+      "start": 1.39,
+      "end": 1.47,
+      "value": "A"
+    },
+    {
+      "start": 1.47,
+      "end": 1.52,
+      "value": "B"
+    },
+    {
+      "start": 1.52,
+      "end": 1.56,
+      "value": "C"
+    },
+    {
+      "start": 1.56,
+      "end": 1.77,
+      "value": "D"
+    },
+    {
+      "start": 1.77,
+      "end": 1.84,
+      "value": "B"
+    },
+    {
+      "start": 1.84,
+      "end": 1.85,
+      "value": "X"
+    }
+  ]
+}

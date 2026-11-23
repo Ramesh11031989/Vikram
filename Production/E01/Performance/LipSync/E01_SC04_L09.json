@@ -1,0 +1,228 @@
+{
+  "metadata": {
+    "soundFile": "Audio/Scratch/E01_SC04_L09_Gopal.wav",
+    "duration": 7.97
+  },
+  "mouthCues": [
+    {
+      "start": 0.0,
+      "end": 0.4,
+      "value": "B"
+    },
+    {
+      "start": 0.4,
+      "end": 0.47,
+      "value": "D"
+    },
+    {
+      "start": 0.47,
+      "end": 0.54,
+      "value": "B"
+    },
+    {
+      "start": 0.54,
+      "end": 0.89,
+      "value": "D"
+    },
+    {
+      "start": 0.89,
+      "end": 0.96,
+      "value": "C"
+    },
+    {
+      "start": 0.96,
+      "end": 1.1,
+      "value": "B"
+    },
+    {
+      "start": 1.1,
+      "end": 1.23,
+      "value": "G"
+    },
+    {
+      "start": 1.23,
+      "end": 1.27,
+      "value": "B"
+    },
+    {
+      "start": 1.27,
+      "end": 1.35,
+      "value": "A"
+    },
+    {
+      "start": 1.35,
+      "end": 1.49,
+      "value": "C"
+    },
+    {
+      "start": 1.49,
+      "end": 1.63,
+      "value": "B"
+    },
+    {
+      "start": 1.63,
+      "end": 1.77,
+      "value": "C"
+    },
+    {
+      "start": 1.77,
+      "end": 1.84,
+      "value": "H"
+    },
+    {
+      "start": 1.84,
+      "end": 1.91,
+      "value": "D"
+    },
+    {
+      "start": 1.91,
+      "end": 2.19,
+      "value": "C"
+    },
+    {
+      "start": 2.19,
+      "end": 2.33,
+      "value": "B"
+    },
+    {
+      "start": 2.33,
+      "end": 3.29,
+      "value": "X"
+    },
+    {
+      "start": 3.29,
+      "end": 3.33,
+      "value": "B"
+    },
+    {
+      "start": 3.33,
+      "end": 3.44,
+      "value": "C"
+    },
+    {
+      "start": 3.44,
+      "end": 3.51,
+      "value": "E"
+    },
+    {
+      "start": 3.51,
+      "end": 3.58,
+      "value": "H"
+    },
+    {
+      "start": 3.58,
+      "end": 3.79,
+      "value": "C"
+    },
+    {
+      "start": 3.79,
+      "end": 3.86,
+      "value": "B"
+    },
+    {
+      "start": 3.86,
+      "end": 3.95,
+      "value": "A"
+    },
+    {
+      "start": 3.95,
+      "end": 4.01,
+      "value": "C"
+    },
+    {
+      "start": 4.01,
+      "end": 4.13,
+      "value": "B"
+    },
+    {
+      "start": 4.13,
+      "end": 4.41,
+      "value": "C"
+    },
+    {
+      "start": 4.41,
+      "end": 5.11,
+      "value": "B"
+    },
+    {
+      "start": 5.11,
+      "end": 6.12,
+      "value": "X"
+    },
+    {
+      "start": 6.12,
+      "end": 6.27,
+      "value": "B"
+    },
+    {
+      "start": 6.27,
+      "end": 6.69,
+      "value": "D"
+    },
+    {
+      "start": 6.69,
+      "end": 6.76,
+      "value": "B"
+    },
+    {
+      "start": 6.76,
+      "end": 6.84,
+      "value": "A"
+    },
+    {
+      "start": 6.84,
+      "end": 6.98,
+      "value": "C"
+    },
+    {
+      "start": 6.98,
+      "end": 7.19,
+      "value": "B"
+    },
+    {
+      "start": 7.19,
+      "end": 7.33,
+      "value": "F"
+    },
+    {
+      "start": 7.33,
+      "end": 7.4,
+      "value": "E"
+    },
+    {
+      "start": 7.4,
+      "end": 7.47,
+      "value": "H"
+    },
+    {
+      "start": 7.47,
+      "end": 7.54,
+      "value": "C"
+    },
+    {
+      "start": 7.54,
+      "end": 7.61,
+      "value": "D"
+    },
+    {
+      "start": 7.61,
+      "end": 7.69,
+      "value": "A"
+    },
+    {
+      "start": 7.69,
+      "end": 7.89,
+      "value": "D"
+    },
+    {
+      "start": 7.89,
+      "end": 7.96,
+      "value": "B"
+    },
+    {
+      "start": 7.96,
+      "end": 7.97,
+      "value": "X"
+    }
+  ]
+}

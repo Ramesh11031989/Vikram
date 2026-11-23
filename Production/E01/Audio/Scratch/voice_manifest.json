@@ -1,0 +1,116 @@
+{
+  "status": "SYNTHETIC SCRATCH DIALOGUE — replace before final production",
+  "provider": "Microsoft Edge online TTS through edge-tts",
+  "note": "Both roles use a stock male Hindi voice with different pitch/rate settings.",
+  "sample_rate": 24000,
+  "cues": [
+    {
+      "cue_id": "E01_SC04_L01",
+      "speaker": "Gopal",
+      "file": "E01_SC04_L01_Gopal.wav",
+      "samples": 93593,
+      "voice": "hi-IN-MadhurNeural",
+      "rate": "+0%",
+      "pitch": "+4Hz"
+    },
+    {
+      "cue_id": "E01_SC04_L02",
+      "speaker": "Gopal",
+      "file": "E01_SC04_L02_Gopal.wav",
+      "samples": 78668,
+      "voice": "hi-IN-MadhurNeural",
+      "rate": "+0%",
+      "pitch": "+4Hz"
+    },
+    {
+      "cue_id": "E01_SC04_L03",
+      "speaker": "Gopal",
+      "file": "E01_SC04_L03_Gopal.wav",
+      "samples": 55477,
+      "voice": "hi-IN-MadhurNeural",
+      "rate": "+0%",
+      "pitch": "+4Hz"
+    },
+    {
+      "cue_id": "E01_SC04_L04",
+      "speaker": "Gopal",
+      "file": "E01_SC04_L04_Gopal.wav",
+      "samples": 60940,
+      "voice": "hi-IN-MadhurNeural",
+      "rate": "+0%",
+      "pitch": "+4Hz"
+    },
+    {
+      "cue_id": "E01_SC04_L05",
+      "speaker": "Vikram",
+      "file": "E01_SC04_L05_Vikram.wav",
+      "samples": 29145,
+      "voice": "hi-IN-MadhurNeural",
+      "rate": "-6%",
+      "pitch": "-10Hz"
+    },
+    {
+      "cue_id": "E01_SC04_L06",
+      "speaker": "Gopal",
+      "file": "E01_SC04_L06_Gopal.wav",
+      "samples": 75903,
+      "voice": "hi-IN-MadhurNeural",
+      "rate": "+0%",
+      "pitch": "+4Hz"
+    },
+    {
+      "cue_id": "E01_SC04_L07",
+      "speaker": "Vikram",
+      "file": "E01_SC04_L07_Vikram.wav",
+      "samples": 44442,
+      "voice": "hi-IN-MadhurNeural",
+      "rate": "-6%",
+      "pitch": "-10Hz"
+    },
+    {
+      "cue_id": "E01_SC04_L08",
+      "speaker": "Gopal",
+      "file": "E01_SC04_L08_Gopal.wav",
+      "samples": 43283,
+      "voice": "hi-IN-MadhurNeural",
+      "rate": "+0%",
+      "pitch": "+4Hz"
+    },
+    {
+      "cue_id": "E01_SC04_L09",
+      "speaker": "Gopal",
+      "file": "E01_SC04_L09_Gopal.wav",
+      "samples": 191417,
+      "voice": "hi-IN-MadhurNeural",
+      "rate": "+0%",
+      "pitch": "+4Hz"
+    },
+    {
+      "cue_id": "E01_SC04_L10",
+      "speaker": "Gopal",
+      "file": "E01_SC04_L10_Gopal.wav",
+      "samples": 74110,
+      "voice": "hi-IN-MadhurNeural",
+      "rate": "+0%",
+      "pitch": "+4Hz"
+    },
+    {
+      "cue_id": "E01_SC04_L11",
+      "speaker": "Vikram",
+      "file": "E01_SC04_L11_Vikram.wav",
+      "samples": 114398,
+      "voice": "hi-IN-MadhurNeural",
+      "rate": "-6%",
+      "pitch": "-10Hz"
+    },
+    {
+      "cue_id": "E01_SC04_L12",
+      "speaker": "Vikram",
+      "file": "E01_SC04_L12_Vikram.wav",
+      "samples": 134169,
+      "voice": "hi-IN-MadhurNeural",
+      "rate": "-6%",
+      "pitch": "-10Hz"
+    }
+  ]
+}
