@@ -37,8 +37,13 @@ def main():
             if obj.type in ('MESH','ARMATURE'):
                 obj.hide_render=False
                 obj.select_set(True)
+                if obj.type=='MESH' and obj.data.shape_keys:
+                    obj.data.shape_keys.animation_data_clear()
+                    for key in obj.data.shape_keys.key_blocks:
+                        key.value=0
         bpy.context.view_layer.objects.active=rig
-        output=OUTPUT/f'CHR_{name}_Facial_v0_2.fbx'
+        version='0_3' if bpy.data.scenes.get('E01_SC04 | Performance v0.3') else '0_2'
+        output=OUTPUT/f'CHR_{name}_Facial_v{version}.fbx'
         result=bpy.ops.export_scene.fbx(filepath=str(output),use_selection=True,
             object_types={'ARMATURE','MESH'},axis_forward='-Z',axis_up='Y',
             apply_scale_options='FBX_SCALE_UNITS',use_mesh_modifiers=False,
@@ -49,8 +54,8 @@ def main():
                         'deform_bones':len(rig.data.bones),
                         'shape_meshes':{obj.name:list(obj.data.shape_keys.key_blocks.keys()) for obj in scene.objects
                                         if obj.type=='MESH' and obj.data.shape_keys}})
-    report={'status':'PASS','mode':'Neutral rest pose, no baked performance clips',
-            'exports':exports,'limits':'FBX retains the deformation rig and blend shapes. Blender custom-property drivers and hand IK require rebinding or baking in the destination.'}
+    report={'status':'PASS','version':version.replace('_','.'),'mode':'Neutral rest pose, no baked performance clips',
+            'exports':exports,'limits':'FBX retains the deformation rig, mesh details and blend shapes. Blender custom-property drivers and IK require rebinding or baking. Procedural woven/skin materials must be recreated or baked in the destination.'}
     (OUTPUT/'Facial_Cast_Manifest.json').write_text(json.dumps(report,indent=2)+'\n')
     for item in exports:
         bpy.ops.wm.read_factory_settings(use_empty=True)

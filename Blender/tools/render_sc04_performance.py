@@ -17,11 +17,13 @@ EPISODE=ROOT/'Production/E01'
 OUTPUT=EPISODE/'Performance'
 
 
-def main(proof_frames,step,samples):
-    scene=bpy.data.scenes['E01_SC04 | Performance v0.2']
+def main(proof_frames,step,samples,scale):
+    scene=next(scene for scene in bpy.data.scenes if scene.name.startswith('E01_SC04 | Performance'))
     bpy.context.window.scene=scene
     timeline=json.loads((EPISODE/'E01_SC04_Animatic_Timeline.json').read_text(encoding='utf-8'))
     scene.render.engine='BLENDER_EEVEE_NEXT'
+    scene.render.resolution_x*=scale
+    scene.render.resolution_y*=scale
     scene.eevee.taa_render_samples=samples
     scene.render.image_settings.file_format='PNG'
     scene.render.image_settings.color_mode='RGB'
@@ -31,7 +33,8 @@ def main(proof_frames,step,samples):
     signature=hashlib.sha256(Path(bpy.data.filepath).read_bytes()+f'{step}/{samples}/{width}/{height}'.encode()).hexdigest()
     cache=OUTPUT/'RenderCache'/signature[:16]
     cache.mkdir(parents=True,exist_ok=True)
-    manifest={'scene_sha256':hashlib.sha256(Path(bpy.data.filepath).read_bytes()).hexdigest(),
+    manifest={'version':scene.get('Performance_version','0.2'),
+              'scene_sha256':hashlib.sha256(Path(bpy.data.filepath).read_bytes()).hexdigest(),
               'signature':signature,'step':step,'samples':samples,'resolution':[width,height],
               'fps':timeline['fps'],'total_frames':timeline['total_frames'],'shots':[]}
     started=time.monotonic()
@@ -45,7 +48,8 @@ def main(proof_frames,step,samples):
         for index,frame in enumerate(frame_numbers):
             if proof_frames and frame not in proof_frames:
                 continue
-            destination=(OUTPUT/'Proofs'/f'frame_{frame:05}.png') if proof_frames else directory/f'frame_{index:05}.png'
+            suffix='' if scale==1 else f'_{scale}x'
+            destination=(OUTPUT/'Proofs'/f'frame_{frame:05}{suffix}.png') if proof_frames else directory/f'frame_{index:05}.png'
             destination.parent.mkdir(exist_ok=True)
             if not proof_frames and destination.exists():
                 # A complete PNG ends with the IEND chunk, including its CRC.
@@ -67,6 +71,7 @@ if __name__=='__main__':
     parser.add_argument('--proof',nargs='+',type=int)
     parser.add_argument('--step',type=int,choices=(1,2),default=2)
     parser.add_argument('--samples',type=int,default=4)
+    parser.add_argument('--scale',type=int,choices=(1,2),default=1)
     arguments=sys.argv[sys.argv.index('--')+1:] if '--' in sys.argv else []
     args=parser.parse_args(arguments)
-    main(set(args.proof or []),args.step,args.samples)
+    main(set(args.proof or []),args.step,args.samples,args.scale)

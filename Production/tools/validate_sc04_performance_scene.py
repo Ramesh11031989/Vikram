@@ -19,7 +19,7 @@ EPISODE=ROOT/'Production/E01'
 def main():
     manifest=json.loads((EPISODE/'E01_SC04_Performance_Manifest.json').read_text())
     timeline=json.loads((EPISODE/'E01_SC04_Animatic_Timeline.json').read_text(encoding='utf-8'))
-    scene=bpy.data.scenes['E01_SC04 | Performance v0.2']
+    scene=next(scene for scene in bpy.data.scenes if scene.name.startswith('E01_SC04 | Performance'))
     bpy.context.window.scene=scene
     for name,expected in manifest['rest_geometry_sha256'].items():
         obj=bpy.data.objects[name]
@@ -61,10 +61,11 @@ def main():
         scene.frame_set(1031)
         if sum(abs(a-b) for row_a,row_b in zip(first,rig.pose.bones['head'].matrix) for a,b in zip(row_a,row_b))<.0001:
             raise ValueError(f'No head acting on {name}')
-    scene.frame_set(52)
+    polished=scene.get('Performance_version')=='0.3'
+    scene.frame_set(68 if polished else 52)
     if bpy.data.objects['Gopal_Rig']['blink_L']<.95:
         raise ValueError('Gopal blink control does not close')
-    scene.frame_set(60)
+    scene.frame_set(76 if polished else 60)
     if bpy.data.objects['Gopal_Rig']['blink_L']>.05:
         raise ValueError('Gopal blink does not reopen')
     clerk=bpy.data.objects['CourtClerk_Rig']
@@ -93,12 +94,30 @@ def main():
         if strip.type=='SOUND' and (not strip.sound.filepath.startswith('//') or
                                   not Path(bpy.path.abspath(strip.sound.filepath)).is_file()):
             raise ValueError('External audio link is not portable')
-    report={'status':'PASS','unchanged_original_meshes':len(manifest['rest_geometry_sha256']),
+    foot_checks=0
+    if polished:
+        for name in ('Vikram','Gopal'):
+            rig=bpy.data.objects[f'{name}_Rig']
+            for frame in (60,130,485,1031,1249):
+                scene.frame_set(frame)
+                for side in ('L','R'):
+                    actual=rig.matrix_world@rig.pose.bones[f'foot.{side}'].matrix.translation
+                    target=bpy.data.objects[f'{name}_Foot_{side}_Control'].matrix_world.translation
+                    if (actual-target).length>.008:
+                        raise ValueError(f'Foot contact target drift: {name}/{side}/{frame}')
+                    thigh=rig.pose.bones[f'thigh.{side}']
+                    rotation_error=thigh.matrix.to_quaternion().rotation_difference(thigh.bone.matrix_local.to_quaternion()).angle
+                    if min(rotation_error,abs(math.tau-rotation_error))>.4:
+                        raise ValueError(f'Planted leg rotation distorts clothing: {name}/{side}/{frame}')
+                    foot_checks+=1
+    report={'status':'PASS','version':scene.get('Performance_version','0.2'),
+            'unchanged_original_meshes':len(manifest['rest_geometry_sha256']),
             'camera_cuts':11,'facial_control_rigs':['Vikram','Gopal','Betal','CourtClerk'],
             'speech_viseme_segments':sum(item['visemes'] for item in manifest['characters'].values()),
             'valid_driver_samples':checked_drivers,'speech_shapes_closed_before_cues':True,
             'head_acting':True,'blink_close_reopen':True,'writing_ik':True,
             'anonymous_face_hidden':True,'court_river_isolation':True,'relative_audio':True,
+            'grounded_foot_samples':foot_checks,
             'lip_sync_limit':'Automatic acoustic viseme estimates; no claim of verified Hindi phoneme accuracy'}
     (EPISODE/'E01_SC04_Performance_Scene_Check.json').write_text(json.dumps(report,indent=2)+'\n')
     print(json.dumps(report,indent=2),flush=True)

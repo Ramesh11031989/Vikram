@@ -1,11 +1,12 @@
 {
   "status": "PASS",
+  "version": "0.3",
   "mode": "Neutral rest pose, no baked performance clips",
   "exports": [
     {
       "character": "Vikram",
-      "file": "CHR_Vikram_Facial_v0_2.fbx",
-      "bytes": 6898396,
+      "file": "CHR_Vikram_Facial_v0_3.fbx",
+      "bytes": 7142524,
       "deform_bones": 34,
       "shape_meshes": {
         "Vikram_Eye.L": [
@@ -71,6 +72,42 @@
           "Worry",
           "Smile"
         ],
+        "Vikram_Diagonal teal court sash": [
+          "Basis",
+          "Cloth settle"
+        ],
+        "Vikram_Diagonal teal court sash outer braid": [
+          "Basis",
+          "Cloth settle"
+        ],
+        "Vikram_Diagonal teal court sash inner braid": [
+          "Basis",
+          "Cloth settle"
+        ],
+        "Vikram_Sash across back": [
+          "Basis",
+          "Cloth settle"
+        ],
+        "Vikram_Sash across back outer braid": [
+          "Basis",
+          "Cloth settle"
+        ],
+        "Vikram_Sash across back inner braid": [
+          "Basis",
+          "Cloth settle"
+        ],
+        "Vikram_Tucked sash end": [
+          "Basis",
+          "Cloth settle"
+        ],
+        "Vikram_Tucked sash end outer braid": [
+          "Basis",
+          "Cloth settle"
+        ],
+        "Vikram_Tucked sash end inner braid": [
+          "Basis",
+          "Cloth settle"
+        ],
         "Vikram_Upper teeth": [
           "Basis",
           "Show"
@@ -78,14 +115,26 @@
         "Vikram_Tongue": [
           "Basis",
           "Show"
+        ],
+        "Vikram_Fine seam stitchwork": [
+          "Basis",
+          "Cloth settle"
+        ],
+        "Vikram_Embroidered sash diamonds": [
+          "Basis",
+          "Cloth settle"
+        ],
+        "Vikram_Expression forehead crease": [
+          "Basis",
+          "Expression crease"
         ]
       },
       "round_trip_import": "PASS"
     },
     {
       "character": "Gopal",
-      "file": "CHR_Gopal_Facial_v0_2.fbx",
-      "bytes": 5628620,
+      "file": "CHR_Gopal_Facial_v0_3.fbx",
+      "bytes": 5797260,
       "deform_bones": 34,
       "shape_meshes": {
         "Gopal_Eye.L": [
@@ -151,6 +200,18 @@
           "Worry",
           "Smile"
         ],
+        "Gopal_Working shoulder cloth": [
+          "Basis",
+          "Cloth settle"
+        ],
+        "Gopal_Shoulder cloth woven edge inner": [
+          "Basis",
+          "Cloth settle"
+        ],
+        "Gopal_Shoulder cloth woven edge outer": [
+          "Basis",
+          "Cloth settle"
+        ],
         "Gopal_Upper teeth": [
           "Basis",
           "Show"
@@ -158,14 +219,22 @@
         "Gopal_Tongue": [
           "Basis",
           "Show"
+        ],
+        "Gopal_Fine seam stitchwork": [
+          "Basis",
+          "Cloth settle"
+        ],
+        "Gopal_Expression forehead crease": [
+          "Basis",
+          "Expression crease"
         ]
       },
       "round_trip_import": "PASS"
     },
     {
       "character": "Betal",
-      "file": "CHR_Betal_Facial_v0_2.fbx",
-      "bytes": 4092892,
+      "file": "CHR_Betal_Facial_v0_3.fbx",
+      "bytes": 4262300,
       "deform_bones": 34,
       "shape_meshes": {
         "Betal_Eye.L": [
@@ -231,6 +300,18 @@
           "Worry",
           "Smile"
         ],
+        "Betal_Shawl | across the chest": [
+          "Basis",
+          "Cloth settle"
+        ],
+        "Betal_Shawl | loose cloth down the back": [
+          "Basis",
+          "Cloth settle"
+        ],
+        "Betal_Shawl | uneven sash tail": [
+          "Basis",
+          "Cloth settle"
+        ],
         "Betal_Upper teeth": [
           "Basis",
           "Show"
@@ -238,14 +319,22 @@
         "Betal_Tongue": [
           "Basis",
           "Show"
+        ],
+        "Betal_Fine seam stitchwork": [
+          "Basis",
+          "Cloth settle"
+        ],
+        "Betal_Expression forehead crease": [
+          "Basis",
+          "Expression crease"
         ]
       },
       "round_trip_import": "PASS"
     },
     {
       "character": "CourtClerk",
-      "file": "CHR_CourtClerk_Facial_v0_2.fbx",
-      "bytes": 3549100,
+      "file": "CHR_CourtClerk_Facial_v0_3.fbx",
+      "bytes": 3662268,
       "deform_bones": 34,
       "shape_meshes": {
         "CourtClerk_Eye.L": [
@@ -318,10 +407,14 @@
         "CourtClerk_Tongue": [
           "Basis",
           "Show"
+        ],
+        "CourtClerk_Expression forehead crease": [
+          "Basis",
+          "Expression crease"
         ]
       },
       "round_trip_import": "PASS"
     }
   ],
-  "limits": "FBX retains the deformation rig and blend shapes. Blender custom-property drivers and hand IK require rebinding or baking in the destination."
+  "limits": "FBX retains the deformation rig, mesh details and blend shapes. Blender custom-property drivers and IK require rebinding or baking. Procedural woven/skin materials must be recreated or baked in the destination."
 }

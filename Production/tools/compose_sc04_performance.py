@@ -89,12 +89,13 @@ def main() -> None:
          '-i',str(concat),'-c','copy',str(silent)])
     sound_mix(timeline)
     font=default_font().as_posix().replace(':','\\:')
+    version=render.get('version','0.2')
     filters=("drawbox=x=0:y=0:w=iw:h=33:color=black@0.5:t=fill,"
-             f"drawtext=fontfile='{font}':text='VIKRAM - BETAL  /  PERFORMANCE v0.2  /  SYNTHETIC VOICES':"
+             f"drawtext=fontfile='{font}':text='VIKRAM - BETAL  /  PERFORMANCE v{version}  /  SYNTHETIC VOICES':"
              "fontsize=13:fontcolor=white@0.85:x=14:y=10,"
              "subtitles=Production/E01/E01_SC04_Animatic.srt:"
              "force_style='Fontname=Noto Sans Devanagari,Fontsize=16,Outline=1,Shadow=0,MarginV=13'")
-    movie=OUTPUT/'E01_SC04_Performance_v0_2.mp4'
+    movie=OUTPUT/f"E01_SC04_Performance_v{version.replace('.','_')}.mp4"
     run(['ffmpeg','-hide_banner','-loglevel','error','-y','-i',str(silent),
          '-i',str(EPISODE/'Audio/E01_SC04_Performance_Mix.wav'),'-vf',filters,
          '-map','0:v:0','-map','1:a:0','-c:v','libx264','-crf','18','-preset','fast',
@@ -104,7 +105,7 @@ def main() -> None:
     audio=next(stream for stream in probe['streams'] if stream['codec_type']=='audio')
     if int(video['nb_frames'])!=timeline['total_frames'] or abs(float(audio['duration'])-timeline['duration_seconds'])>.1:
         raise ValueError('Encoded edit differs from the measured timeline')
-    report={'status':'PASS','output_frames':int(video['nb_frames']),
+    report={'status':'PASS','version':version,'output_frames':int(video['nb_frames']),
             'rendered_motion_samples':sum(len(shot['rendered_frames']) for shot in render['shots']),
             'motion_sample_fps':24/render['step'],'output_fps':24,'width':video['width'],'height':video['height'],
             'seconds':timeline['duration_seconds'],'dialogue_unchanged':True,

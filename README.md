@@ -9,7 +9,7 @@ Hindi animated series made with Blender and Unity. The first chapter is **सा
 | [Pilot shooting script](Production/E01/E01_SC04_Pilot_Shooting_Script.md) | Gopal's testimony, 11 shots at 24 fps |
 | [Dialogue cue sheet](Production/E01/E01_SC04_Dialogue_Cues.csv) | Hindi dialogue IDs, provisional timing, performance notes and WAV filenames |
 | [Interrogation animatic](Production/E01/ANIMATIC_README.md) | Eleven staged shots, synthetic Hindi scratch dialogue, audio-measured timing and editable Blender scene |
-| [Interrogation performance](Production/E01/PERFORMANCE_README.md) | Continuous body/facial animation, acoustic lip sync, rigged clerk, animated river inserts and reusable facial controls |
+| [Interrogation performance](Production/E01/PERFORMANCE_README.md) | Grounded acting, facial/costume detail, acoustic lip sync, rigged clerk and animated river inserts |
 | [Blender cast library](Blender/Vikram_Betal_Cast.blend) | Editable Vikram, Betal and Gopal models and rigs |
 | [FBX exports](Blender/Exports/) | Rest-pose models with skeletons, skinning and mouth shapes |
 
