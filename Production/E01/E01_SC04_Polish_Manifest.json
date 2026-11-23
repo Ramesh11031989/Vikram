@@ -1,0 +1,48 @@
+{
+  "version": "0.3",
+  "art": {
+    "skin_materials": 5,
+    "cloth_materials": 22,
+    "characters": {
+      "Vikram": {
+        "stitches": 377,
+        "embroidered_motifs": 13,
+        "face_creases": 3,
+        "cloth_secondary_shapes": 11,
+        "phrase_aware_blinks": 8
+      },
+      "Gopal": {
+        "stitches": 128,
+        "embroidered_motifs": 0,
+        "face_creases": 3,
+        "cloth_secondary_shapes": 4,
+        "phrase_aware_blinks": 9
+      },
+      "Betal": {
+        "stitches": 133,
+        "embroidered_motifs": 0,
+        "face_creases": 3,
+        "cloth_secondary_shapes": 4
+      },
+      "CourtClerk": {
+        "stitches": 0,
+        "embroidered_motifs": 0,
+        "face_creases": 3,
+        "cloth_secondary_shapes": 0
+      }
+    }
+  },
+  "natural_movement": [
+    "Ground-contact foot IK",
+    "Phrase-aware asymmetric blinks",
+    "Less periodic head motion",
+    "Small independent gaze and brow offsets",
+    "Subtle secondary cloth settling"
+  ],
+  "preserved": [
+    "Original head and body basis meshes",
+    "Original costume silhouettes and palette",
+    "Original Hindi dialogue and timing"
+  ],
+  "review_render": "960x540, on twos; source animation remains 24 fps"
+}

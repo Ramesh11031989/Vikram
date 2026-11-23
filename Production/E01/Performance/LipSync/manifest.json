@@ -1,0 +1,80 @@
+{
+  "tool": "Rhubarb Lip Sync version 1.14.0",
+  "recognizer": "phonetic",
+  "method": "Language-independent acoustic viseme recognition on the existing WAVs",
+  "limitation": "Automatic viseme estimates, not a linguist-verified Hindi phoneme alignment",
+  "cues": [
+    {
+      "cue_id": "E01_SC04_L01",
+      "segments": 22,
+      "audio_sha256": "51f85c63f76fc8d8bb2372d0c23df1a597f039f9ba9b1c68e5910f3d873595e6",
+      "duration": 3.8997083333333333
+    },
+    {
+      "cue_id": "E01_SC04_L02",
+      "segments": 24,
+      "audio_sha256": "aa173ce0cca4239effbb78d743a3932e187fc12a8837fd88311ac9779df97383",
+      "duration": 3.277833333333333
+    },
+    {
+      "cue_id": "E01_SC04_L03",
+      "segments": 16,
+      "audio_sha256": "7c41cf9c89004401e3d51a3fe3baf11e3586c39d90717f75659fa323ed68c4cb",
+      "duration": 2.311541666666667
+    },
+    {
+      "cue_id": "E01_SC04_L04",
+      "segments": 20,
+      "audio_sha256": "bec8edceac6c32dc85ce5f0f11c63abe87e429026ab1ac2eb67d76c2f125d492",
+      "duration": 2.5391666666666666
+    },
+    {
+      "cue_id": "E01_SC04_L05",
+      "segments": 12,
+      "audio_sha256": "d35aadf01d98dde47f8ec758b818871667a59db0eeccc989e955a8562d9de6f7",
+      "duration": 1.214375
+    },
+    {
+      "cue_id": "E01_SC04_L06",
+      "segments": 15,
+      "audio_sha256": "84a7b4c31000e9bd7432324adc1bc3cdd4d136c12a2e2289ba641bca0ff4fb16",
+      "duration": 3.162625
+    },
+    {
+      "cue_id": "E01_SC04_L07",
+      "segments": 17,
+      "audio_sha256": "6ac6458189ddf32b257eab0a14ce95b2f9210338993f70d861e165088d61a275",
+      "duration": 1.85175
+    },
+    {
+      "cue_id": "E01_SC04_L08",
+      "segments": 10,
+      "audio_sha256": "cf2cfb2f0dfbf604fe69da38874ac1f77c9db8cef215b6f8f9660cdf7a3e1d59",
+      "duration": 1.8034583333333334
+    },
+    {
+      "cue_id": "E01_SC04_L09",
+      "segments": 44,
+      "audio_sha256": "724df4b927e39af755919c563e02dacc5eebfcdb421173628b22ef4c8da30ef9",
+      "duration": 7.975708333333333
+    },
+    {
+      "cue_id": "E01_SC04_L10",
+      "segments": 28,
+      "audio_sha256": "17d101fc19051c7fd472a570ed84125892a849a8b5fbc32cb09b85a872815b5b",
+      "duration": 3.0879166666666666
+    },
+    {
+      "cue_id": "E01_SC04_L11",
+      "segments": 27,
+      "audio_sha256": "79647974b543210e5eaf5241eb80c598ea3f5200fb5960f78770dc1279d01012",
+      "duration": 4.766583333333333
+    },
+    {
+      "cue_id": "E01_SC04_L12",
+      "segments": 36,
+      "audio_sha256": "d2b8b03ae5f8a1b07d2d3bcb22a279cf0186a2e2ea020255656a78527a78272f",
+      "duration": 5.590375
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "shots": 11,
+  "audible_cues": 12,
+  "frames": 1484,
+  "seconds": 61.833333333333336,
+  "video": "1280x720 / 24 fps / H.264",
+  "audio": "mono AAC / synthetic Hindi scratch",
+  "L03_cross_cut": true,
+  "no_dialogue_overlap": true,
+  "no_truncated_cues": true
+}

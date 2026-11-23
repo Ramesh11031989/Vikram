@@ -299,9 +299,14 @@ def eyebrows(character, fibers, rand):
 
 
 def groom(character):
+    # Supporting characters keep the hair authored by their dress module until
+    # an explicit strand style is defined for them.
+    style = STYLES.get(character.name)
+    if style is None:
+        return
     head = separate_surface(character)
     clean_previous_groom(character)
-    seed, scalp_count, beard_count, moustache_count, dark, highlights = STYLES[character.name]
+    seed, scalp_count, beard_count, moustache_count, dark, highlights = style
     rand = random.Random(seed)
     fibers = FiberGroup(character,dark,highlights)
     scalp(character,head,rand,fibers,scalp_count)
