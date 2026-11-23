@@ -802,14 +802,14 @@ def face(c) -> None:
         mesh = neck.data
         bpy.data.objects.remove(neck, do_unlink=True)
         bpy.data.meshes.remove(mesh)
-    head = sf.head_mesh(c, sf.head_sculpt(), c.m['skin'])
-    c.face_tree = sf.head_tree(head)
-    sf.build_eyes(c, head)
+    c.sculpted = sf.SculptedFace(c, sf.NEIGHBOUR)
+    head = c.sculpted.head_mesh(c.m['skin'])
+    c.sculpted.build_eyes(head)
     sf.skin_shading(c)
-    sf.paint_head(c, head)
+    c.sculpted.paint_head(head)
     ears(c)
-    sf.brow_strips(c, c.face_tree, material(c, 'Brow skin shadow', tuple(v*.70 for v in c.spec['skin']), .7))
-    sf.mouth_lining(c, material(c, 'Mouth interior', (.045, .010, .009), .55))
+    c.sculpted.brow_strips(material(c, 'Brow skin shadow', tuple(v*.70 for v in c.spec['skin']), .7))
+    c.sculpted.mouth_lining(material(c, 'Mouth interior', (.045, .010, .009), .55))
     skin_tint(c)
 
 
@@ -825,10 +825,12 @@ def ears(c) -> None:
         co = [v.co for v in parts[0].data.vertices]
         low = min(sign*p.x for p in co)
         centre = sum(co, Vector())/len(co)
-        target = Vector((0, .006, 1.4255))
-        hit, _, _, _ = c.face_tree.ray_cast(Vector((sign*.2, target.y, target.z)), Vector((-sign, 0, 0)), .3)
-        surface = abs(hit.x) if hit is not None else .066
-        shift = Vector((sign*(surface - .0035 - low), target.y - centre.y, target.z - centre.z))
+        face = c.sculpted
+        target = Vector((0, .006, 1.4255))              # canonical, on the sculpted skull
+        hit, _, _, _ = face.tree.ray_cast(Vector((sign*.2, target.y, target.z)), Vector((-sign, 0, 0)), .3)
+        surface = (abs(hit.x) if hit is not None else .066)*face.size
+        target = face.final(target)
+        shift = Vector((sign*(surface - .0035*face.size - low), target.y - centre.y, target.z - centre.z))
         for obj in parts:
             for v in obj.data.vertices:
                 v.co += shift
@@ -1016,10 +1018,10 @@ def hair(c) -> None:
     for sign, side in ((1,'L'), (-1,'R')):
         for _ in range(270):
             u = rand.random()**.9
-            x, z = sf.brow_curve(u, sign)
+            x, z = c.sculpted.brow_curve(u, sign)
             band = .0021*math.sin(math.pi*(.1 + .85*u))**.7
             z += rand.uniform(-1, 1)*band
-            root_point, normal = sf.on_skin(c.face_tree, x, z, .0002)
+            root_point, normal = c.sculpted.on_skin(x, z, .0002)
             # hairs at the head of the brow stand up, the rest sweep out toward the tail
             lateral = Vector((sign, 0, 0))
             rise = .9*(1 - smooth(.05, .3, u)) + .18
@@ -1030,7 +1032,7 @@ def hair(c) -> None:
                 t = k/3
                 p = root_point + sweep*length*t + normal*(.0007*math.sin(math.pi*t*.8))
                 p.z -= .0006*t*t*u
-                points.append(p/c.scale)
+                points.append(p*c.sculpted.to_scene)
             brow_fibers.add(points, rand.uniform(.000085, .000130), rand.randrange(0,3), 3)
         merge_fibers(c, brow_fibers, f'Brow.{side}')
     lashes(c, rand)
@@ -1068,9 +1070,10 @@ def merge_fibers(c, group: FiberGroup, target_label: str) -> None:
 def lashes(c, rand: random.Random) -> None:
     for sign, side in ((1,'L'), (-1,'R')):
         group = FiberGroup(c, (.006,.004,.003), (.016,.011,.008))
-        centre = Vector(sf.eye_centre(sign))
+        face = c.sculpted
+        centre = face.eye_centre(sign)
         for lid, count, base_length in (('upper', 96, .0090), ('lower', 40, .0045)):
-            roots = sf.margin_curve(sign, lid, .32, (sf.UPPER_LID_T if lid == 'upper' else sf.LOWER_LID_T)*.86, count)
+            roots = face.margin_curve(sign, lid, .32, (sf.UPPER_LID_T if lid == 'upper' else sf.LOWER_LID_T)*.86, count)
             for k, root in enumerate(roots):
                 u = k/(count-1)
                 root = Vector(root)
@@ -1083,7 +1086,7 @@ def lashes(c, rand: random.Random) -> None:
                 for s_ in range(5):
                     t = s_/4
                     p = root + start*length*(.85*t) + up*length*(.45*t*t) + Vector((sign*outer*.30*length*t, 0, 0))
-                    points.append(p/c.scale)
+                    points.append(p*face.to_scene)
                 group.add(points, rand.uniform(.000085, .000115), 0, 1)
         merge_fibers(c, group, f'Eyelids.{side}')
 
@@ -1632,11 +1635,12 @@ def jewellery(c) -> None:
         c.tube(f'Ear hoop {side}', [tuple(lobe + Vector((sign*.0015, .006*math.cos(math.tau*j/20) - .003, -.006 + .006*math.sin(math.tau*j/20))))
                for j in range(20)], .0009, gold, 'head', cyclic=True)
         c.ovoid(f'Ear drop {side}', tuple(lobe + Vector((sign*.0015, -.003, -.0135))), (.0028,.0028,.0042), gold, 'head')
-    ala = Vector((.0106, -.0856, 1.3980))
+    face = c.sculpted
+    ala = Vector(face.nose((.0106, -.0856, 1.3980)))   # canonical
     start = ala + Vector((.030, -.018, .002))
-    hit, normal, _, _ = c.face_tree.ray_cast(start, (ala - start).normalized(), .06)
+    hit, normal, _, _ = face.tree.ray_cast(start, (ala - start).normalized(), .06)
     stud = (hit + normal*.0006) if hit is not None else ala + Vector((.006, -.003, 0))
-    c.ovoid('Nose stud', tuple(stud/c.scale), (.0019/c.scale, .0011/c.scale, .0019/c.scale), gold, 'head')
+    c.ovoid('Nose stud', tuple(stud*face.to_scene), (.0019/c.scale, .0011/c.scale, .0019/c.scale), gold, 'head')
     cord = [torso_point(math.tau*k/40, 1.478 - .055*max(0, -math.sin(math.tau*k/40))**1.6, .002) for k in range(40)]
     c.tube('Amulet cord', [tuple(p) for p in cord], .0011, thread, [torso_weight(p.x, p.z) for p in cord], cyclic=True)
     low = min(cord, key=lambda p: p.z)
@@ -1667,8 +1671,8 @@ def dress(c) -> None:
 
 def fix_blinks(c) -> None:
     """Blinks for the sculpted lids, and her own teeth and tongue in place of the shared placeholders."""
-    sf.eyelid_blinks(c)
-    sf.head_blinks(c, bpy.data.objects[f'{c.name}_Head'])
+    c.sculpted.eyelid_blinks()
+    c.sculpted.head_blinks(bpy.data.objects[f'{c.name}_Head'])
     for label in ('Upper teeth', 'Tongue'):
         obj = bpy.data.objects.get(f'{c.name}_{label}')
         if obj is not None:
@@ -1676,7 +1680,8 @@ def fix_blinks(c) -> None:
             mesh = obj.data
             bpy.data.objects.remove(obj, do_unlink=True)
             bpy.data.meshes.remove(mesh)
-    sf.teeth_and_tongue(c)
+    c.sculpted.teeth_and_tongue()
+    c.sculpted.speech_shapes(bpy.data.objects[f'{c.name}_Head'])
 
 
 def build():
