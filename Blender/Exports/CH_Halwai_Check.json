@@ -1,0 +1,40 @@
+{
+  "status": "PASS",
+  "character": "Halwai",
+  "file": "CH_Halwai.fbx",
+  "bytes": 25678060,
+  "bones": 52,
+  "shared_cast_bones_present": true,
+  "finger_joints": [
+    "finger_01_mid.R",
+    "finger_01_tip.R",
+    "finger_02_mid.R",
+    "finger_02_tip.R",
+    "finger_03_mid.R",
+    "finger_03_tip.R",
+    "finger_04_mid.R",
+    "finger_04_tip.R",
+    "thumb_tip.R"
+  ],
+  "meshes": 177,
+  "mouth_shapes": [
+    "Basis",
+    "Mouth_Ah",
+    "Mouth_O",
+    "Mouth_Ee",
+    "Mouth_MBP",
+    "Mouth_FV",
+    "Mouth_U",
+    "Mouth_L",
+    "Mouth_Consonant",
+    "Worry",
+    "Smile"
+  ],
+  "groom_strands": {
+    "scalp": 7000,
+    "moustache": 6500,
+    "brows": 460,
+    "lashes": 148
+  },
+  "limits": "Neutral rest pose. Blender custom-property drivers, procedural textile, check and skin-tint shaders need rebinding or baking in the destination."
+}
