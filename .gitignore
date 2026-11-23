@@ -2,6 +2,8 @@ __pycache__/
 *.pyc
 *.blend[0-9]*
 /Renders/
+/Production/E01/Animatic/
+/Production/E01/Audio/
 /Unity/[Ll]ibrary/
 /Unity/[Tt]emp/
 /Unity/[Oo]bj/

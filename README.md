@@ -8,6 +8,7 @@ Hindi animated series made with Blender and Unity. The first chapter is **सा
 | [Chapter 2](अध्याय%2002%20-%20जिस%20मुहल्ले%20में%20कोई%20नहीं%20मरा.md) | Original Hindi story |
 | [Pilot shooting script](Production/E01/E01_SC04_Pilot_Shooting_Script.md) | Gopal's testimony, 11 shots at 24 fps |
 | [Dialogue cue sheet](Production/E01/E01_SC04_Dialogue_Cues.csv) | Hindi dialogue IDs, provisional timing, performance notes and WAV filenames |
+| [Interrogation animatic](Production/E01/ANIMATIC_README.md) | Eleven staged shots, synthetic Hindi scratch dialogue, audio-measured timing and editable Blender scene |
 | [Blender cast library](Blender/Vikram_Betal_Cast.blend) | Editable Vikram, Betal and Gopal models and rigs |
 | [FBX exports](Blender/Exports/) | Rest-pose models with skeletons, skinning and mouth shapes |
 
