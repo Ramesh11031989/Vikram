@@ -1,8 +1,8 @@
 {
   "character": "Nandu",
-  "rig_bones": 39,
+  "rig_bones": 37,
   "shared_bones_with_Gopal": 34,
-  "skinned_meshes": 133,
+  "skinned_meshes": 135,
   "head_top_cm": 170.3,
   "gopal_head_top_cm": 181.2,
   "daughter_height_cm_placeholder": 110.00000000000001,

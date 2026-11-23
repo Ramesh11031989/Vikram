@@ -95,6 +95,13 @@ def kurta(c, cloth, patch, dark_patch) -> None:
         c.ring_mesh(f'Kurta sleeve {side}', sleeve, cloth,
                     ['chest',{'chest':.40,upper:.60},upper,upper,{upper:.72,lower:.28},
                      {upper:.26,lower:.74},lower], cap=False)
+        # Shoulder yoke: half chest, half upper arm, so the shoulder never shows through
+        # where the arm skin rotates out of the sleeve's first ring.
+        yoke = c.ovoid(f'Kurta shoulder yoke {side}', (sign*.200,.002,1.388), (.072,.080,.060), cloth, 'chest')
+        group = yoke.vertex_groups['chest']
+        indices = list(range(len(yoke.data.vertices)))
+        group.add(indices, .55, 'REPLACE')
+        yoke.vertex_groups.new(name=upper).add(indices, .45, 'REPLACE')
         for x, r, extra in ((.528,.047,.010),(.547,.049,.012)):
             radius = r*1.20 + .006 + extra*.5
             c.tube(f'Rolled sleeve fold {side} {x}',

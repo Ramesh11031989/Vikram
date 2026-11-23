@@ -51,17 +51,12 @@ def add_wrist_rig(c) -> None:
     bind.use_deform = True
     for side, sign in (('L', 1), ('R', -1)):
         item = bones.new(f'wrist_bind.{side}')
-        head = centre + Vector((sign*.036, 0, 0))
+        head = centre + Vector((sign*.05, 0, 0))
         item.head, item.tail = head*s, (head+Vector((0, -.11, 0)))*s
         # Bone Z points away from the centre, so the palm (-Z of the hand) faces in.
         item.align_roll(Vector((sign, 0, 0)))
         item.parent = bind
         item.use_deform = True
-        pole = bones.new(f'elbow_pole.{side}')
-        pole.head = Vector((sign*.34, .18, .72))*s
-        pole.tail = Vector((sign*.34, .18, .77))*s
-        pole.parent = bones['chest']
-        pole.use_deform = False
     bpy.ops.object.mode_set(mode='OBJECT')
 
     property_control(rig, TIED, '1 = wrists bound with jute rope in front of the body, 0 = free hands')
@@ -70,8 +65,8 @@ def add_wrist_rig(c) -> None:
         ik = forearm.constraints.new('IK')
         ik.name = 'Tied wrists IK'
         ik.target, ik.subtarget = rig, f'wrist_bind.{side}'
-        ik.pole_target, ik.pole_subtarget = rig, f'elbow_pole.{side}'
-        ik.pole_angle = math.radians(-90)
+        # No pole target: with one the legacy solver stopped ~6 cm short of the wrists;
+        # without it the bound hands meet exactly and the elbows fall naturally outward.
         ik.chain_count = 2
         ik.use_stretch = False
         prop_driver(ik, 'influence', rig, TIED)
@@ -81,7 +76,7 @@ def add_wrist_rig(c) -> None:
         rotation.target, rotation.subtarget = rig, f'wrist_bind.{side}'
         prop_driver(rotation, 'influence', rig, TIED)
     rig['Wrist_states'] = ('Set wrists_tied to 1 for the bound state. Move the wrist_bind bone to place '
-                           'both hands; elbow_pole.L/R aim the elbows. 0 frees the hands with no rebuild.')
+                           'both hands; rotate the upper arms to adjust the elbows. 0 frees the hands with no rebuild.')
 
 
 def wrist_rope(c, rope) -> None:
@@ -89,7 +84,7 @@ def wrist_rope(c, rope) -> None:
     centre = Vector((0, -.25, 1.08))
     parts = []
     for side, sign in (('L', 1), ('R', -1)):
-        wrist = centre + Vector((sign*.036, 0, 0))
+        wrist = centre + Vector((sign*.05, 0, 0))
         for index, (dy, radius) in enumerate(((.012, .033), (.026, .034), (.040, .032))):
             loop = [(wrist.x + radius*math.cos(math.tau*j/28), wrist.y + dy + .003*math.sin(3*math.tau*j/28),
                      wrist.z + radius*.88*math.sin(math.tau*j/28)) for j in range(28)]
@@ -98,7 +93,7 @@ def wrist_rope(c, rope) -> None:
     # Figure-eight binding between the wrists, a knot and the lead end a guard can hold.
     for index, z in enumerate((.026, -.026)):
         parts.append(c.tube(f'Jute rope crossing {index+1}',
-                            [(-.040, -.224, 1.08+z), (0, -.236, 1.08+z*.25), (.040, -.224, 1.08-z)],
+                            [(-.054, -.224, 1.08+z), (0, -.236, 1.08+z*.25), (.054, -.224, 1.08-z)],
                             .0055, rope, 'wrist_bind'))
     parts.append(c.ovoid('Jute rope knot', (0, -.236, 1.050), (.016, .013, .014), rope, 'wrist_bind'))
     parts.append(c.tube('Jute rope lead end', [(0, -.236, 1.040), (.006, -.240, .97), (-.004, -.232, .88),
@@ -318,7 +313,7 @@ def add_expressions(c) -> None:
 
         def inner(point: Vector) -> Vector:
             weight = max(0, min(1, (centre+.02*s - abs(point.x))/(.05*s)))
-            point.z += .009*s*weight
+            point.z += .013*s*weight
             point.x -= sign*.002*s*weight
             return point
         key = shape_from_delta(brow, 'Inner raise', inner)
