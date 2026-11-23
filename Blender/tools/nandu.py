@@ -10,20 +10,14 @@ from __future__ import annotations
 from math import cos, pi, sin, tau
 from typing import Sequence
 
-from proportions import height_for
+from mathutils import Vector
+
+from nandu_body import ARM_RINGS, ARM_Z, arm_weight, head_surface
 
 
-# (z, center x, center y, radius x, radius y): a small, loosely tied cloth wrap.
-HEAD_WRAP_RINGS: tuple[tuple[float, float, float, float, float], ...] = (
-    (1.728, 0, .002, .128, .114), (1.743, 0, .001, .131, .116),
-    (1.762, 0, .002, .126, .112), (1.779, 0, .004, .114, .102),
-    (1.791, 0, .006, .096, .088),
-)
-
-# Realistic proportion (about 7.3 heads, see proportions.py) with the crown at 170 cm.
-SPEC = dict(name='Nandu', height=round(height_for(1.70), 4), skin=(.300,.158,.082), hair=(.022,.016,.013),
-            iris=(.062,.036,.019), face_width=.99, nose_width=1.04, brow_lift=-.003,
-            head_wrap=HEAD_WRAP_RINGS)
+# Realistic body and sculpted head (nandu_body.py): 170 cm, about 7.3 heads.
+SPEC = dict(name='Nandu', height=.958, skin=(.300,.158,.082), hair=(.022,.016,.013),
+            iris=(.062,.036,.019), face_width=.99, nose_width=1.04, brow_lift=-.003)
 
 
 Point = tuple[float, float, float]
@@ -67,8 +61,10 @@ def kurta(c, cloth, patch, dark_patch) -> None:
                 (.820,0,.004,.204,.138,.018),(.914,0,.003,.186,.118,.012),
                 (.980,0,.004,.168,.113,.006),(1.091,0,.008,.156,.108,.004),
                 (1.191,0,.005,.182,.114,.004),(1.283,0,.001,.204,.111,.003),
-                (1.358,0,.003,.204,.088,.002),(1.411,0,.007,.094,.064,0),
-                (1.425,0,.008,.058,.050,0))
+                (1.358,0,.003,.204,.090,.002),(1.400,0,.006,.150,.090,0),
+                (1.425,0,.006,.096,.082,0))
+    # Authored on the shared torso; Nandu's character stretches it to his realistic torso.
+    c.morphing = True
     rings = [ellipse(z, x, y, rx, ry, 40, ripple, 7, index*.4)
              for index, (z, x, y, rx, ry, ripple) in enumerate(sections)]
     c.ring_mesh('Coarse kurta', rings, cloth,
@@ -76,7 +72,7 @@ def kurta(c, cloth, patch, dark_patch) -> None:
                  'chest','chest','chest','chest'])
     hem = [(x, y, z+.006) for x, y, z in rings[0]]
     c.tube('Kurta hem', hem, .004, c.m['seam'], 'hips', cyclic=True)
-    c.tube('Kurta neck placket', [(0,-.050,1.420),(0,-.083,1.385),(0,-.104,1.338),
+    c.tube('Kurta neck placket', [(0,-.080,1.423),(0,-.094,1.395),(0,-.104,1.345),
            (0,-.112,1.282)], .0032, c.m['seam'], 'chest')
     for index, z in enumerate((1.372, 1.322)):
         c.ovoid(f'Kurta wooden toggle {index+1}', (.008,-.100-.006*index,z), (.009,.005,.004),
@@ -87,27 +83,31 @@ def kurta(c, cloth, patch, dark_patch) -> None:
     surface_patch(c, 'Kurta patch | left back', (1.16,0,.006,.176,.113), .95, .5, .07, dark_patch, 'spine')
     surface_patch(c, 'Kurta patch | front hem', (.66,0,.006,.224,.158), -1.3, .32, .06, dark_patch, 'hips')
 
+    c.morphing = False
+
     for sign, side in ((1,'L'),(-1,'R')):
         upper, lower = f'upper_arm.{side}', f'forearm.{side}'
-        # Sleeves follow the arm's own rings and weights, rolled up to mid-forearm.
-        form = ((.183,.051),(.239,.061),(.312,.06),(.397,.048),(.46,.042),(.49,.044),(.545,.049))
-        sleeve = [[(sign*x, sign*(r*1.20+.006)*cos(tau*i/24),
-                    1.375+(r*1.18+.006)*sin(tau*i/24) - .004*max(0,-sin(tau*i/24)))
-                   for i in range(24)] for x, r in form]
-        c.ring_mesh(f'Kurta sleeve {side}', sleeve, cloth,
-                    ['chest',{'chest':.40,upper:.60},upper,upper,{upper:.72,lower:.28},
-                     {upper:.26,lower:.74},lower], cap=False)
-        # Shoulder yoke: half chest, half upper arm, so the shoulder never shows through
-        # where the arm skin rotates out of the sleeve's first ring.
-        yoke = c.ovoid(f'Kurta shoulder yoke {side}', (sign*.205,.002,1.384), (.060,.074,.052), cloth, 'chest')
+        # Sleeves follow Nandu's arm rings and weights, rolled up to mid-forearm.
+        sleeve, weights = [], []
+        for x, ry, rz in ARM_RINGS:
+            if x > .60:
+                break
+            sleeve.append([(sign*x, sign*(ry*1.22+.007)*cos(tau*i/24),
+                            ARM_Z+(rz*1.18+.007)*sin(tau*i/24) - .005*max(0,-sin(tau*i/24)))
+                           for i in range(24)])
+            weights.append(arm_weight(x, side))
+        c.ring_mesh(f'Kurta sleeve {side}', sleeve, cloth, weights, cap=False)
+        # Shoulder yoke: half chest, half upper arm, so the shoulder rolls round when the arm hangs.
+        yoke = c.ovoid(f'Kurta shoulder yoke {side}', (sign*.180,.002,ARM_Z-.008), (.050,.068,.048), cloth, 'chest')
         group = yoke.vertex_groups['chest']
         indices = list(range(len(yoke.data.vertices)))
         group.add(indices, .55, 'REPLACE')
         yoke.vertex_groups.new(name=upper).add(indices, .45, 'REPLACE')
-        for x, r, extra in ((.528,.047,.010),(.547,.049,.012)):
-            radius = r*1.20 + .006 + extra*.5
+        for x, extra in ((.572,.010),(.592,.012)):
+            ry, rz = .038, .038
+            radius = ry*1.22 + .007 + extra*.5
             c.tube(f'Rolled sleeve fold {side} {x}',
-                   [(sign*x, radius*cos(tau*i/24), 1.375+radius*sin(tau*i/24)) for i in range(24)],
+                   [(sign*x, radius*cos(tau*i/24), ARM_Z+radius*sin(tau*i/24)) for i in range(24)],
                    extra, cloth, lower, cyclic=True)
 
 
@@ -157,18 +157,38 @@ def rope_belt(c, rope) -> None:
 
 
 def head_wrap(c, wrap, seam) -> None:
-    c.loft('Faded head wrap', HEAD_WRAP_RINGS, wrap, 'head', segments=48, cap=False)
-    # Loose folds where the cloth has slipped; tilted so the wrap sits a little unevenly.
-    for index, (z, tilt, radius) in enumerate(((1.736,.008,.0055),(1.766,-.007,.006),(1.784,.005,.0045))):
-        rx, ry = (.131, .117) if index < 2 else (.112, .101)
-        c.tube(f'Head wrap loose fold {index+1}',
-               [(rx*cos(tau*j/48), .002+ry*sin(tau*j/48), z+tilt*cos(tau*j/48))
-                for j in range(48)], radius, wrap, 'head', cyclic=True)
-    c.tube('Head wrap frayed edge', [(.096*cos(tau*j/48), .006+.088*sin(tau*j/48), 1.791)
-           for j in range(48)], .0022, seam, 'head', cyclic=True)
-    c.ovoid('Head wrap rear knot', (-.070,.106,1.752), (.030,.024,.020), wrap, 'head', (0,-.25,-.2))
-    c.tube('Head wrap tail', [(-.074,.120,1.746),(-.080,.138,1.712),(-.072,.144,1.678)],
-           [.012,.010,.007], wrap, 'head')
+    """A loose band fitted to the sculpted skull from above the brow to below the crown."""
+    tree = head_surface(c)
+    ratio = c.sculpted.size/c.scale
+    segments = 56
+    # canonical height at the front, drop toward the back, offset from the skin (design m)
+    bands = ((1.481, .020, .0050), (1.494, .018, .0072), (1.508, .016, .0085),
+             (1.521, .013, .0080), (1.530, .010, .0060))
+    rings = []
+    for z0, drop, offset in bands:
+        ring = []
+        for j in range(segments):
+            a = tau*j/segments
+            theta = a - pi/2                       # j=0 at the left side, front at a = 3π/2
+            direction = Vector((cos(a), sin(a), 0))
+            z = (z0 - drop*(.5 - .5*sin(-a)))*ratio
+            origin = Vector((0, .008*ratio, z))
+            hit, _, _, _ = tree.ray_cast(origin + direction*.3, -direction, .4)
+            radius = (hit - origin).length if hit is not None else .09
+            wobble = .0018*sin(3*a + z0*40)
+            ring.append(tuple(origin + direction*(radius + offset + wobble)))
+        rings.append(ring)
+    c.ring_mesh('Faded head wrap', rings, wrap, 'head', cap=False)
+    for index in (1, 3):
+        c.tube(f'Head wrap loose fold {index}', [tuple(Vector(p)*1.0 + Vector((0, 0, .001)))
+               for p in rings[index]], .0042, wrap, 'head', cyclic=True)
+    c.tube('Head wrap frayed edge', rings[-1], .0020, seam, 'head', cyclic=True)
+    back = Vector(rings[2][segments//4])       # a = π/2: the back of the head
+    side = Vector(rings[2][(segments*3)//8])
+    knot = back*.55 + side*.45 + Vector((0, .012, 0))
+    c.ovoid('Head wrap rear knot', tuple(knot), (.026, .022, .018), wrap, 'head', (0,-.25,-.2))
+    c.tube('Head wrap tail', [tuple(knot + Vector((0, .006, -.004))), tuple(knot + Vector((-.006, .018, -.036))),
+           tuple(knot + Vector((.002, .022, -.070)))], [.011, .009, .006], wrap, 'head')
 
 
 def dress(c) -> None:

@@ -20,7 +20,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import build_cast as stage
 from character import Character
 import facial_controls as face
-from groom import groom
+import nandu_body as body
+import nandu_groom as hair
 import gopal
 import nandu
 import nandu_rig as kit
@@ -37,17 +38,17 @@ VIDEO = '--no-video' not in sys.argv
 
 
 def build_nandu() -> tuple[Character, object, object]:
-    c = Character(nandu.SPEC)
-    c.body()
-    c.face()
+    c = body.NanduCharacter(nandu.SPEC)
+    body.body(c)                  # shared legs, realistic arms, sculpted 20-joint hands
+    body.face(c)                  # sculpted head, eyes, ears, brows, mouth
     nandu.dress(c)
-    groom(c)
+    hair.groom(c)
     apply_textiles(c)
     face.add_facial_controls(c)
+    body.finish_face(c)           # sculpted blinks, teeth, tongue and speech shapes
     kit.add_wrist_rig(c)
     kit.wrist_rope(c, c.mat('Jute rope', (.28, .21, .11), .96))
     kit.add_expressions(c)
-    proportions.realistic_head(c)
     c.validate()
     cloth = kit.red_cloth(c)
     boat = kit.reed_boat(c)
@@ -191,7 +192,7 @@ def tied_test(c, cloth, boat):
     # Each target is placed from the leaning shoulders, inside the arms' 44 cm reach,
     # so the bound wrists stay together; the lean carries the hands toward the boat.
     keys = ((1, 0, None, 'Hold'), (18, 12, (-.20, -.26), 'Hold'),
-            (34, 30, (-.26, -.21), 'Reach'), (48, 34, (-.28, -.22), 'Reach'))
+            (34, 30, (-.36, -.28), 'Reach'), (48, 34, (-.40, -.30), 'Reach'))
     for frame, lean, offset, grip in keys:
         scene.frame_set(frame)
         stage.turn(rig, 'spine', (1, 0, 0), lean*.45)
@@ -299,8 +300,8 @@ def expressions_sheet(c) -> Path:
     scene = c.scene
     stage.setup_stage(scene, 640, 720, 24, .18)
     stage.review_floor((.027, .039, .048))
-    face_z = proportions.head_z(1.64)*c.scale
-    camera = stage.stage_camera(scene, 'Portrait camera', (-.9, -4.7, face_z-.02), (0, 0, face_z), .30)
+    face_z = c.sculpted.final((0, 0, 1.42)).z
+    camera = stage.stage_camera(scene, 'Portrait camera', (-.9, -4.7, face_z-.02), (0, 0, face_z), .32)
     stage.light(scene, 'Portrait key', (-1.7, -2.0, 3.3), (0, 0, 1.53), (1, .84, .71), 168, 1.45)
     stage.light(scene, 'Portrait fill', (1.8, -2.2, 2.2), (0, 0, 1.54), (.65, .79, 1), 68, 2.0)
     stage.light(scene, 'Hair rim', (1.2, 1.8, 2.6), (0, 0, 1.62), (1, .78, .56), 195, 1.45)
@@ -326,30 +327,29 @@ def checks(c, cloth, boat) -> dict:
     depsgraph = bpy.context.evaluated_depsgraph_get()
     tops = [max((part.matrix_world @ v.co).z for v in part.evaluated_get(depsgraph).data.vertices)
             for part in c.parts if part.name.endswith('_Head')]
-    palm = next(p for p in c.parts if p.name.endswith('_Palm.R'))
-    xs = [v.co.x for v in palm.data.vertices]
-    ys = [v.co.y for v in palm.data.vertices]
-    finger = c.rig.data.bones['finger_02.R'].length
+    hand = next(p for p in c.parts if p.name.endswith('_Hand.R'))
+    xs = [v.co.x for v in hand.data.vertices]
+    ys = [v.co.y for v in hand.data.vertices]
     boat_dims = boat.dimensions
     report = {
         'character': 'Nandu', 'rig_bones': len(c.rig.data.bones), 'shared_bones_with_Gopal': 34,
         'skinned_meshes': len(c.parts), 'head_top_cm': round(max(tops)*100, 1),
-        'heads_tall': round(proportions.heads_tall(), 2),
+        'face': 'sculpted_face.SculptedFace with nandu_body.NANDU_FACE',
+        'hand_length_cm': round((max(xs)-min(xs))*100, 1),
         'gopal_head_top_cm': round(1.812*gopal.SPEC['height']*100, 1),
         'daughter_height_cm_placeholder': DAUGHTER_HEIGHT*100,
         'boat_length_cm': round(boat_dims.x*100, 1), 'boat_beam_cm': round(boat_dims.y*100, 1),
         'boat_height_cm': round(boat_dims.z*100, 1),
         'child_palm_width_cm': kit.CHILD_PALM_WIDTH*100, 'child_hand_length_cm': kit.CHILD_HAND_LENGTH*100,
-        'nandu_palm_plus_finger_cm': round(((max(xs)-min(xs))+finger)*100, 1),
-        'nandu_palm_width_cm': round((max(ys)-min(ys))*100, 1),
-        'mouth_shapes': list(bpy.data.objects['Nandu_Mouth'].data.shape_keys.key_blocks.keys()),
+        'nandu_hand_width_cm': round((max(ys)-min(ys))*100, 1),
+        'head_shapes': list(bpy.data.objects['Nandu_Head'].data.shape_keys.key_blocks.keys()),
         'grip_poses': list(kit.GRIPS), 'expressions': list(kit.EXPRESSIONS),
         'red_cloth': {'object': cloth.name, 'constraint': 'Child Of → chest, influence from "attached"',
                       'cloth_modifier': 'Gamchha cotton (disabled until baked per shot)'},
     }
     # Lies across her palm: longer than the palm is wide, shorter than her whole hand plus a margin.
     report['boat_fits_child_palm'] = report['child_palm_width_cm'] < report['boat_length_cm'] <= report['child_hand_length_cm'] + 3
-    report['boat_fits_nandu_grip'] = report['boat_length_cm'] <= report['nandu_palm_plus_finger_cm']
+    report['boat_fits_nandu_grip'] = report['boat_length_cm'] <= report['hand_length_cm']
     return report
 
 

@@ -13,6 +13,7 @@ from mathutils import Matrix, Quaternion, Vector
 
 from facial_controls import driver_from_property, property_control, shape_from_delta
 import reed_boat as reed_boat_prop
+from nandu_body import morph
 from textile import finish_fabric, store_rest_positions
 
 
@@ -85,7 +86,7 @@ def wrist_rope(c, rope) -> None:
     parts = []
     for side, sign in (('L', 1), ('R', -1)):
         wrist = centre + Vector((sign*.05, 0, 0))
-        for index, (dy, radius) in enumerate(((.012, .033), (.026, .034), (.040, .032))):
+        for index, (dy, radius) in enumerate(((.012, .029), (.026, .030), (.040, .029))):
             loop = [(wrist.x + radius*math.cos(math.tau*j/28), wrist.y + dy + .003*math.sin(3*math.tau*j/28),
                      wrist.z + radius*.88*math.sin(math.tau*j/28)) for j in range(28)]
             parts.append(c.tube(f'Jute wrist rope {side} {index+1}', loop, .0052, rope,
@@ -132,7 +133,8 @@ def red_cloth(c):
     for z, x, y, width in rows:
         for k in range(across):
             t = k/(across-1)
-            verts.append(Vector((x+(t-.5)*width*2, y-.004*math.cos(t*math.tau*2), z+(t-.5)*.016))*s)
+            point = (x+(t-.5)*width*2, y-.004*math.cos(t*math.tau*2), z+(t-.5)*.016)
+            verts.append(Vector(morph(point) if getattr(c, 'morphing', None) is not None else point)*s)
     for r in range(len(rows)-1):
         for k in range(across-1):
             i = r*across+k
@@ -230,15 +232,18 @@ def turn(rig, joint: str, axis: Vec3, degrees: float) -> None:
     bone.rotation_quaternion = rest.inverted() @ Quaternion(axis, math.radians(degrees)) @ rest
 
 
-# finger curls (index..little), thumb fold, thumb oppose, wrist bend
+# finger curls at the knuckle (index..little), thumb fold, thumb oppose, wrist bend.
+# The middle and end joints follow the knuckle (x1.1 and x0.7), as real fingers do.
 GRIPS: dict[str, tuple[tuple[float, float, float, float], float, float, float]] = {
     'Reach': ((6, 4, 8, 12), -10, 4, -14),
-    'Take toy boat': ((34, 40, 44, 48), 26, 22, 4),
-    'Hold': ((62, 70, 74, 76), 42, 34, 8),
-    'Return toy boat': ((14, 12, 14, 18), 4, 10, -6),
+    'Take toy boat': ((30, 34, 38, 42), 24, 22, 4),
+    'Hold': ((48, 54, 58, 62), 36, 32, 8),
+    'Return toy boat': ((12, 10, 12, 16), 4, 10, -6),
 }
+SEGMENTS = (('', 1.0), ('_mid', 1.1), ('_tip', .7))
 HAND_BONES = tuple(f'{name}.{side}' for side in ('L', 'R')
-                   for name in ('hand', 'thumb', 'finger_01', 'finger_02', 'finger_03', 'finger_04'))
+                   for name in ('hand', 'thumb', 'thumb_mid', 'thumb_tip',
+                                *(f'finger_{d:02d}{suffix}' for d in range(1, 5) for suffix, _ in SEGMENTS)))
 
 
 def apply_grip(rig, name: str, sides: tuple[str, ...] = ('L', 'R')) -> None:
@@ -246,12 +251,11 @@ def apply_grip(rig, name: str, sides: tuple[str, ...] = ('L', 'R')) -> None:
     for side in sides:
         sign = 1 if side == 'L' else -1
         for digit, curl in enumerate(curls, 1):
-            turn(rig, f'finger_{digit:02d}.{side}', (0, 1, 0), sign*curl)
-        thumb = rig.pose.bones[f'thumb.{side}']
-        rest = thumb.bone.matrix_local.to_quaternion()
-        thumb.rotation_mode = 'QUATERNION'
-        rotation = Quaternion((1, 0, 0), math.radians(fold)) @ Quaternion((0, 0, 1), math.radians(-sign*oppose))
-        thumb.rotation_quaternion = rest.inverted() @ rotation @ rest
+            for suffix, share in SEGMENTS:
+                turn(rig, f'finger_{digit:02d}{suffix}.{side}', (0, sign, 0), curl*share)
+        turn(rig, f'thumb.{side}', (1, 0, 0), fold)
+        turn(rig, f'thumb_mid.{side}', (0, 0, sign), oppose*.6)
+        turn(rig, f'thumb_tip.{side}', (0, 0, sign), oppose*.5)
         turn(rig, f'hand.{side}', (0, 1, 0), sign*wrist)
 
 
@@ -284,65 +288,47 @@ def grip_library(c) -> list:
 
 # ---------------------------------------------------------------- expressions
 
-def _mouth_shape(point: Vector, scale: float, corner: float, widen: float, part: float) -> Vector:
-    side = min(1, abs(point.x)/(.034*scale))**2
-    point.z += corner*scale*side
-    point.x *= widen
-    if point.z < 1.566*scale:
-        point.z -= part*scale*(1-side*.6)
-    return point
+# Each expression adds to the shared facial controls' own shape-key drivers, so it layers
+# with lip sync: control -> (expression weights). Keys found on any mesh of the character.
+EXPRESSION_MIX: dict[str, dict[str, float]] = {
+    'mouth_worry': {'fear': .9, 'pleading': .8},
+    'mouth_smile': {'relief': .55, 'tenderness': .6},
+    'Mouth_Ah': {'fear': .22, 'relief': .10},
+    'brow_raise': {'fear': .95, 'pleading': .6, 'relief': .25, 'tenderness': .2},
+    'brow_frown': {'pleading': .45},
+    'blink_L': {'relief': .22, 'tenderness': .28},
+    'blink_R': {'relief': .22, 'tenderness': .28},
+}
 
 
-def add_expressions(c) -> None:
-    """Fear, pleading, relief and tenderness, each one rig property driving several shapes."""
-    rig, s = c.rig, c.scale
+def add_expressions(c) -> int:
+    """Fear, pleading, relief and tenderness, layered into the existing control drivers."""
+    rig = c.rig
     for name in EXPRESSIONS:
         property_control(rig, name, f'Expression: {name[5:]}')
-    mouth = bpy.data.objects[f'{c.name}_Mouth']
-    shapes: dict[str, tuple[float, float, float]] = {
-        'Fear': (-.0065, 1.08, .0045), 'Pleading': (-.0055, .96, .0018),
-        'Relief': (.0040, 1.03, .0014), 'Tenderness': (.0048, .95, 0),
-    }
-    for label, (corner, widen, part) in shapes.items():
-        key = shape_from_delta(mouth, f'Expr_{label}',
-                               lambda p, a=corner, b=widen, d=part: _mouth_shape(p, s, a, b, d))
-        driver_from_property(key, rig, f'expr_{label.lower()}')
-    for side, sign in (('L', 1), ('R', -1)):
-        brow = bpy.data.objects[f'{c.name}_Brow.{side}']
-        centre = .053*c.spec['face_width']*s
-
-        def inner(point: Vector) -> Vector:
-            weight = max(0, min(1, (centre+.02*s - abs(point.x))/(.05*s)))
-            point.z += .013*s*weight
-            point.x -= sign*.002*s*weight
-            return point
-        key = shape_from_delta(brow, 'Inner raise', inner)
-        _multi_driver(key, rig, 'min(1, fear + pleading*.9 + relief*.25 + tenderness*.35)')
-        for label in ('Eye', 'Iris', 'Eyelids'):
-            obj = bpy.data.objects[f'{c.name}_{label}.{side}']
-
-            def wide(point: Vector) -> Vector:
-                point.z = 1.675*s + (point.z-1.675*s)*1.16 if point.z > 1.675*s else point.z
-                return point
-
-            def soft(point: Vector) -> Vector:
-                point.z = 1.675*s + (point.z-1.675*s)*(.74 if point.z > 1.675*s else .9)
-                return point
-            _multi_driver(shape_from_delta(obj, 'Wide', wide), rig, 'min(1, fear)')
-            _multi_driver(shape_from_delta(obj, 'Soft', soft), rig, 'min(1, relief*.8 + tenderness)')
-    rig['Expressions'] = ('expr_fear, expr_pleading, expr_relief and expr_tenderness drive mouth, brow and eye '
-                          'shapes together. They layer with the eight viseme controls for Hindi lip sync.')
-
-
-def _multi_driver(block, rig, expression: str) -> None:
-    curve = block.driver_add('value')
-    driver = curve.driver
-    driver.type = 'SCRIPTED'
-    for name in EXPRESSIONS:
-        variable = driver.variables.new()
-        variable.name = name[5:]
-        variable.type = 'SINGLE_PROP'
-        variable.targets[0].id = rig
-        variable.targets[0].data_path = f'["{name}"]'
-    driver.expression = expression
-
+    changed = 0
+    for obj in c.collection.objects:
+        keys = obj.data.shape_keys if obj.type == 'MESH' else None
+        if keys is None or keys.animation_data is None:
+            continue
+        for curve in keys.animation_data.drivers:
+            driver = curve.driver
+            variable = driver.variables.get('value')
+            if variable is None or variable.targets[0].id != rig:
+                continue
+            control = variable.targets[0].data_path.strip('["]')
+            mix = EXPRESSION_MIX.get(control)
+            if not mix:
+                continue
+            terms = []
+            for label, amount in mix.items():
+                extra = driver.variables.new()
+                extra.name, extra.type = label, 'SINGLE_PROP'
+                extra.targets[0].id = rig
+                extra.targets[0].data_path = f'["expr_{label}"]'
+                terms.append(f'{label}*{amount}')
+            driver.expression = f'min(1, max(0, value + {" + ".join(terms)}))'
+            changed += 1
+    rig['Expressions'] = ('expr_fear, expr_pleading, expr_relief and expr_tenderness add to the worry, smile, '
+                          'jaw, brow and blink shapes, layering with the speech controls for Hindi lip sync.')
+    return changed
