@@ -168,14 +168,17 @@ def head_sculpt() -> Sculpt:
     for sign in (1, -1):
         s.union(ellipsoid((sign*.042, -.051, 1.417), (.014, .017, .012), (0, 0, sign*-32)), .020)   # zygoma
         s.union(ellipsoid((sign*.032, -.0555, 1.4045), (.020, .017, .018)), .018)                 # malar fat
-        s.subtract(ellipsoid((sign*.052, -.030, 1.378), (.008, .016, .012)), .020)             # buccal hollow
+        # buccal fat pad: fills the lower cheek between the malar fat and the jaw (no dent or dimple)
+        s.union(ellipsoid((sign*.0445, -.0405, 1.3800), (.0120, .0200, .0190)), .022)
         s.subtract(ellipsoid((sign*.070, -.034, 1.456), (.006, .018, .015)), .022)             # temple
     # Jaw and chin
     for sign in (1, -1):
         gonion = (sign*.0372, -.004, 1.3690)
         s.union(capsule(gonion, (sign*.0140, -.0605, 1.3470), .0110, .0095), .022)
         s.union(capsule(gonion, (sign*.0450, .0080, 1.4150), .0100, .0095), .022)
-    s.union(ellipsoid((0, -.0650, 1.3500), (.0155, .0128, .0130)), .012)
+    s.union(ellipsoid((0, -.0650, 1.3500), (.0155, .0128, .0130)), .018)
+    for sign in (1, -1):            # soft tissue over the chin-jaw junction, so no crease runs from the mouth
+        s.union(ellipsoid((sign*.0270, -.0560, 1.3520), (.0120, .0110, .0110)), .016)
     # Brow ridge, soft
     for sign in (1, -1):
         s.union(capsule((sign*.010, -.0728, 1.4545), (sign*.040, -.0650, 1.4580), .0050, .0046), .014)
@@ -189,7 +192,7 @@ def head_sculpt() -> Sculpt:
         s.union(ellipsoid(centre, radii, bend=bend), k)
     for sign in (1, -1):
         s.union(capsule((sign*.0036, -.0848, 1.3918), (sign*.0050, -.0852, 1.3848), .0012, .0014), .0022)  # philtral columns
-        s.subtract(ellipsoid((sign*.0224, -.0712, 1.3742), (.0024, .0034, .0020)), .0025)  # mouth corners
+        s.subtract(ellipsoid((sign*.0224, -.0712, 1.3742), (.0016, .0024, .0014)), .0022)  # mouth corners, shallow
         s.subtract(capsule((sign*.0200, -.0790, 1.3985), (sign*.0280, -.0718, 1.3720), .0006, .0005), .0040)  # nasolabial
     s.subtract(ellipsoid((0, -.0860, 1.3880), (.0028, .0015, .0036)), .0018)            # philtrum
     s.subtract(ellipsoid((0, -.0830, 1.3578), (.0145, .0040, .0030), bend=ARCH), .0050)  # mentolabial sulcus
@@ -303,12 +306,83 @@ def head_mesh(c, sculpt: Sculpt, material):
     bmesh.ops.delete(bm, geom=bottom, context='FACES')
     bm.to_mesh(obj.data)
     bm.free()
+    decimate_away_from_face(obj)
     co = np.array([v.co for v in obj.data.vertices])
     z, y = co[:, 2], co[:, 1]
     head = smooth(1.300, 1.352, z + .25*np.maximum(0, -y - .03))
     chest = smooth(1.282, 1.250, z)*(1 - head)
     set_weights(obj, {'head': head, 'neck': (1 - head)*(1 - chest), 'chest': chest})
     return obj
+
+
+def decimate_away_from_face(obj, ratio: float = .38) -> None:
+    """Thin out the skull, nape and neck (under hair and odhni) and keep the face at full density."""
+    co = np.array([v.co for v in obj.data.vertices])
+    x, y, z = co[:, 0], co[:, 1], co[:, 2]
+    keep = smooth(.000, -.030, y)*smooth(1.318, 1.335, z)*smooth(1.500, 1.480, z)*smooth(.068, .056, np.abs(x))
+    group = obj.vertex_groups.new(name='Face detail')
+    set_group = group
+    q = np.round(keep*32).astype(int)
+    for level in np.unique(q):
+        if level > 0:
+            set_group.add(np.nonzero(q == level)[0].tolist(), float(level)/32, 'REPLACE')
+    skin = obj.modifiers.get('Character Skinning')
+    if skin:
+        skin.show_viewport = False
+    modifier = obj.modifiers.new('Decimate away from face', 'DECIMATE')
+    modifier.ratio = ratio
+    modifier.vertex_group = group.name
+    modifier.vertex_group_factor = 200
+    modifier.invert_vertex_group = True     # weight 1 = keep; Blender collapses high weights first
+    modifier.use_symmetry = True
+    modifier.symmetry_axis = 'X'
+    depsgraph = bpy.context.evaluated_depsgraph_get()
+    mesh = bpy.data.meshes.new_from_object(obj.evaluated_get(depsgraph))
+    old = obj.data
+    obj.modifiers.remove(modifier)
+    obj.data = mesh
+    mesh.name = old.name
+    bpy.data.meshes.remove(old)
+    if skin:
+        skin.show_viewport = True
+    obj.vertex_groups.remove(obj.vertex_groups['Face detail'])
+    relax_decimated(mesh)
+    for polygon in mesh.polygons:
+        polygon.use_smooth = True
+
+
+def _folded(bm: bmesh.types.BMesh) -> List[bmesh.types.BMFace]:
+    """Faces turned against their own corner normals: folds left by edge collapse."""
+    bm.normal_update()
+    return [f for f in bm.faces
+            if f.normal.dot(sum((v.normal for v in f.verts), Vector())) < 0]
+
+
+def relax_decimated(mesh) -> None:
+    """Even out the collapsed region and merge any triangle that folded over, so SSS shows no dark specks."""
+    bm = bmesh.new()
+    bm.from_mesh(mesh)
+    co = np.array([v.co for v in bm.verts])
+    x, y, z = co[:, 0], co[:, 1], co[:, 2]
+    keep = smooth(.000, -.030, y)*smooth(1.318, 1.335, z)*smooth(1.500, 1.480, z)*smooth(.068, .056, np.abs(x))
+    loose = [v for v, k in zip(bm.verts, keep) if k < .5 and not v.is_boundary]
+    for _ in range(4):
+        bmesh.ops.smooth_vert(bm, verts=loose, factor=.5, use_axis_x=True, use_axis_y=True, use_axis_z=True)
+    for _ in range(6):
+        folds = _folded(bm)
+        if not folds:
+            break
+        for face in folds:
+            if face.is_valid:
+                corners = list(face.verts)
+                centre = sum((v.co for v in corners), Vector())/len(corners)
+                bmesh.ops.pointmerge(bm, verts=corners, merge_co=centre)
+        bmesh.ops.dissolve_degenerate(bm, dist=1e-7, edges=bm.edges)
+    folds = _folded(bm)
+    if folds:                       # a sliver around a fan hub: turning it is enough for shading
+        bmesh.ops.reverse_faces(bm, faces=folds)
+    bm.to_mesh(mesh)
+    bm.free()
 
 
 # ------------------------------------------------------------- materials
