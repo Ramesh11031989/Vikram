@@ -24,7 +24,7 @@ import bpy
 from mathutils import Quaternion, Vector
 from mathutils.bvhtree import BVHTree
 
-from civilian import Civilian, Weights, gaussian, profile, smoothstep
+from civilian import SHOULDER_RINGS, Civilian, Weights, gaussian, profile, shoulder_blend, smoothstep
 import facial_controls as face_controls
 from groom import FiberGroup, surface
 from textile import finish_fabric, store_rest_positions
@@ -33,16 +33,17 @@ from textile import finish_fabric, store_rest_positions
 HALWAI_PROFILE = (
     (1.478, -.026, .048, .050), (1.490, -.024, .080, .084), (1.512, -.019, .102, .101),
     (1.545, -.014, .115, .110), (1.585, -.012, .121, .112), (1.630, -.010, .126, .112),
-    (1.675, -.008, .122, .108), (1.722, -.003, .119, .105), (1.758, .003, .112, .099),
-    (1.786, .006, .091, .082), (1.802, .007, .052, .050), (1.810, .007, .010, .010),
+    (1.675, -.008, .122, .108), (1.722, -.003, .119, .105), (1.758, .003, .113, .100),
+    (1.786, .006, .100, .089), (1.806, .007, .080, .072), (1.820, .007, .052, .048),
+    (1.828, .007, .014, .014),
 )
 
 SPEC = dict(
     name='Halwai', height=.945, skin=(.255, .142, .088), hair=(.022, .019, .017),
     iris=(.040, .020, .009), face_width=1.10, nose_width=1.26, brow_lift=.0025,
     # head_scale .76 matches proportions.REALISTIC_HEAD (Nandu thread) so the new cast shares one
-    # realistic head-to-body ratio; height .945 puts his crown at about 1.64 m.
-    build=1.12, belly=1.0, neck=1.15, head_profile=HALWAI_PROFILE, head_scale=.76,
+    # realistic head-to-body ratio; height .945 puts his crown at about 1.65 m.
+    build=1.12, belly=1.0, neck=1.24, shoulder_drop=.047, head_profile=HALWAI_PROFILE, head_scale=.76,
     face=dict(eye_x=.0475, eye_radius=.0226, upper_lid=.0072, lower_lid=.0061, iris=.90, nose_tip=.029,
               tip_width=1.40, nose_wing=.023, nose_drop=.004, bridge=.018, cheek=.0075, cheek_fat=.0150,
               jowl=.0085, chin=.0095, double_chin=.0090, hood=.0055, eye_bag=.0042, nasolabial=.0060,
@@ -55,8 +56,8 @@ KURTA_ROWS = (
     (.600, .252, .200, .160, 0), (.700, .244, .196, .155, 0), (.800, .234, .194, .149, 0),
     (.900, .222, .197, .140, 0), (.980, .217, .205, .133, 0), (1.060, .214, .210, .130, 0),
     (1.140, .208, .193, .129, 0), (1.220, .204, .156, .124, 0), (1.290, .204, .128, .119, .002),
-    (1.335, .198, .115, .110, .004), (1.368, .182, .103, .100, .004), (1.398, .152, .091, .090, .003),
-    (1.422, .122, .079, .081, .001), (1.446, .086, .070, .072, -.005),
+    (1.335, .198, .115, .110, .004), (1.368, .182, .103, .100, .004), (1.398, .152, .094, .092, .003),
+    (1.422, .124, .090, .088, .001), (1.446, .092, .084, .082, -.005),
 )
 HEM_Z = .600
 SLIT_TOP = .760
@@ -214,18 +215,22 @@ def kurta(c: Civilian, cloth, binding, button) -> None:
 
     for side, sign in (('L', 1), ('R', -1)):
         upper, lower = f'upper_arm.{side}', f'forearm.{side}'
-        form = [(.170, .064, 'chest'), (.200, .068, {'chest': .80, upper: .20}),
-                (.239, .075, {'chest': .45, upper: .55}), (.312, .077, upper), (.397, .072, upper),
-                (.455, .069, {upper: .72, lower: .28}), (.500, .068, {upper: .38, lower: .62})]
+        # Same ramp around the shoulder joint as the arm, so the sleeve cap rolls round with it.
+        form: list[tuple[float, float, Weights]] = [
+            (.170, .066, 'chest'),
+            *((x, r + .016, shoulder_blend(upper, x)) for x, r in SHOULDER_RINGS),
+            (.312, .078, upper), (.397, .072, upper),
+            (.455, .069, {upper: .72, lower: .28}), (.500, .068, {upper: .38, lower: .62})]
         rings, ring_weights = [], []
-        for index, (x, radius, weight) in enumerate(form):
+        for x, radius, weight in form:
+            along = (x - .170) / (.500 - .170)
             ring = []
             for i in range(40):
                 angle = math.tau * i / 40
                 c_, s_ = math.cos(angle), math.sin(angle)
-                fold = 1 + .045 * math.sin(6 * angle + 2.1 * index) * (index / 6)
-                drape = 1 + .12 * max(0, -s_) * (1 - index / 6)  # loose cloth hangs under the arm
-                top = 1 - (.40, .28, .12, 0, 0, 0, 0)[index] * max(0, s_)
+                fold = 1 + .045 * math.sin(6 * angle + 12.6 * along) * along
+                drape = 1 + .12 * max(0, -s_) * (1 - along)  # loose cloth hangs under the arm
+                top = 1 - .30 * max(0, s_) * smoothstep(.25, .17, x)
                 ring.append((sign * x, sign * radius * c_ * fold, 1.375 + radius * s_ * fold * drape * top))
             rings.append(ring)
             ring_weights.append(weight)
@@ -274,8 +279,9 @@ def dhoti(c: Civilian, cotton, border) -> None:
             u = col / (columns - 1)
             width = .042 + .020 * t
             x = (u - .5) * 2 * width
-            pleat = (.007 + .004 * t) * (1 if col % 2 else -1)
-            y = -.126 - .004 * t + pleat - .016 * math.sin(math.pi * u)
+            pleat = (.008 + .006 * t) * (1 if col % 2 else -1)
+            # Falls back toward the shins so it hangs with the legs, not like a board in front of them.
+            y = -.128 + .034 * t * t + pleat - .012 * math.sin(math.pi * u)
             k = .30 * t
             left = smoothstep(-.03, .03, x)
             verts.append((x, y, z - .015 * t * math.sin(math.pi * u * 2)))
@@ -804,6 +810,15 @@ def dress(c: Civilian) -> dict[str, int]:
     return {'garments': 4}
 
 
+def homespun_weave(material) -> None:
+    """Everyday cotton is finer than the cast's open weave, which reads as waffle in close-ups."""
+    for node in material.node_tree.nodes:
+        if node.type == 'GROUP' and 'Thread pitch (mm)' in node.inputs:
+            node.inputs['Thread pitch (mm)'].default_value = 2.2
+            node.inputs['Yarn contrast'].default_value = .20
+            node.inputs['Relief (mm)'].default_value = .10
+
+
 def finish(c: Civilian) -> None:
     fabrics = {'Turmeric cotton kurta', 'Kurta self binding', 'Cloth-covered buttons', 'Unbleached dhoti cotton',
                'Dhoti brown border', 'Green checked gamchha', 'Gamchha fringe'}
@@ -816,6 +831,7 @@ def finish(c: Civilian) -> None:
                 uses = True
                 if material.name not in finished:
                     finish_fabric(material, fine=False)
+                    homespun_weave(material)
                     finished.add(material.name)
         if uses:
             store_rest_positions(part.data)

@@ -18,7 +18,7 @@ Chapter 1 witness who saw the oil pot float from his roof and who points across 
 
 He has to read as the same man on the rooftop, on the refuge slope and in the interrogation, wet or dry. So he's recognised by features he can't lose:
 
-* **Silhouette:** short (about 1.64 m), broad and round-bellied, with a bald crown and a grey-black horseshoe fringe.
+* **Silhouette:** short (about 1.65 m), broad and round-bellied, with a bald crown and a grey-black horseshoe fringe.
 * **Face:** wide and jowly, with a double chin, a broad bulbous nose and heavy hooded eyes. He has a thick salt-and-pepper handlebar moustache with upturned ends and a mole on his left cheek.
 * **Costume:** a faded turmeric kurta with sweet-shop stains on the belly, an off-white ankle-length dhoti with a brown border, a green-checked gamchha over the left shoulder, leather chappals, a brass tabeez on a black thread and a brass ring on his right ring finger.
 
@@ -29,6 +29,8 @@ Proportions are realistic, like the Vikram reference: head scale 0.76, the same 
 ## Rig
 
 The rig keeps all 34 bones of the shared cast skeleton, so existing clips apply. It adds `finger_0N_mid`/`finger_0N_tip` and `thumb_tip` on both hands, for 52 bones. Facial controls are the rig custom properties used by the main cast: `Mouth_*` visemes, `blink_L/R`, `brow_raise`, `brow_frown`, `mouth_worry` and `mouth_smile`. They also drive the strand brows and lashes, and lift the moustache with open-mouth shapes.
+
+Arms and kurta sleeves share a short weight ramp at the shoulder joint (`civilian.SHOULDER_RINGS`), so when the arms hang down the shoulder rolls round instead of folding into a square corner. His spec sets `shoulder_drop` lower than the default for sloping, round shoulders.
 
 To pose him in another file, append the `CH_Halwai` collection. Then, from a Python console with `Blender/tools` on `sys.path`:
 

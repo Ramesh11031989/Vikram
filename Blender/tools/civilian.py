@@ -103,6 +103,22 @@ def smoothstep(edge0: float, edge1: float, value: float) -> float:
     return t * t * (3 - 2 * t)
 
 
+# Cast coordinates (before the civilian shoulder shift) of the rings around the shoulder joint,
+# which sits at x = .235. Sleeves reuse the same ramp so cloth and arm roll together.
+SHOULDER_RINGS: tuple[tuple[float, float], ...] = (
+    (.214, .058), (.226, .061), (.236, .063), (.246, .063), (.258, .063), (.276, .063))
+
+
+def shoulder_blend(upper: str, x: float) -> Weights:
+    """Chest-to-upper-arm weight for a ring at x: a short ramp centred on the shoulder joint."""
+    share = smoothstep(.210, .264, x)
+    if share < .001:
+        return 'chest'
+    if share > .999:
+        return upper
+    return {'chest': 1 - share, upper: share}
+
+
 class Civilian(Character):
     """An adult townsperson on the shared skeleton, with finger joints and a sculpted face."""
 
@@ -219,18 +235,21 @@ class Civilian(Character):
                   'chest', 'chest', 'chest', {'chest': .55, 'neck': .45}])
         for side, sign in (('L', 1), ('R', -1)):
             upper, lower, hand = (f'{bone}.{side}' for bone in ('upper_arm', 'forearm', 'hand'))
-            form = [(.183, .053), (.239, .063), (.312, .062), (.397, .050), (.46, .044), (.49, .045),
-                    (.545, .049), (.61, .040), (.668, .030), (.705, .027)]
+            # The shoulder joint sits at x = .235. Rings crowd around it with a quick weight ramp, so
+            # when the arm hangs down the top of the arm rolls around the joint into a round
+            # deltoid instead of folding into a square corner.
+            form: list[tuple[float, float, Weights]] = [
+                (.183, .053, 'chest'), *((x, r, shoulder_blend(upper, x)) for x, r in SHOULDER_RINGS),
+                (.312, .062, upper), (.397, .050, upper), (.46, .044, {upper: .72, lower: .28}),
+                (.49, .045, {upper: .26, lower: .74}), (.545, .049, lower), (.61, .040, lower),
+                (.668, .030, {lower: .7, hand: .3}), (.705, .027, {lower: .35, hand: .65})]
             def top(x: float, s: float) -> float:
-                return 1 - .30 * max(0., s) * smoothstep(.26, .17, x)
+                return 1 - .24 * max(0., s) * smoothstep(.26, .17, x)
             rings = [[(sign * x, sign * r * build * math.cos(math.tau * i / 24),
                        1.375 + r * build * .93 * math.sin(math.tau * i / 24) * top(x, math.sin(math.tau * i / 24)))
-                      for i in range(24)] for x, r in form]
+                      for i in range(24)] for x, r, _ in form]
             with self.arm_space(sign):
-                self.ring_mesh(f'Arm.{side}', rings, skin,
-                               [{'chest': .85, upper: .15}, {'chest': .45, upper: .55}, upper, upper,
-                                {upper: .72, lower: .28}, {upper: .26, lower: .74}, lower, lower,
-                                {lower: .7, hand: .3}, {lower: .35, hand: .65}])
+                self.ring_mesh(f'Arm.{side}', rings, skin, [weight for _, _, weight in form])
                 self.hand(side, sign, skin)
             thigh, shin, foot = (f'{bone}.{side}' for bone in ('thigh', 'shin', 'foot'))
             g = build
