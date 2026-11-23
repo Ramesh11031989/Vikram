@@ -270,7 +270,7 @@ def pose_keys(character, timeline, is_gopal):
         shape.keyframe_insert('value',frame=end)
 
 
-def main(selected_shots=None):
+def main(selected_shots=None, render_panels=True, output_filename='E01_SC04_Animatic.blend'):
     OUTPUT.mkdir(parents=True,exist_ok=True)
     frames=OUTPUT/'Frames'
     frames.mkdir(exist_ok=True)
@@ -350,7 +350,9 @@ def main(selected_shots=None):
     scene.frame_set(0)
     build_cast.configure_view(scene,camera=True)
     bpy.context.preferences.filepaths.save_version=0
-    bpy.ops.wm.save_as_mainfile(filepath=str(OUTPUT/'E01_SC04_Animatic.blend'),compress=True)
+    bpy.ops.wm.save_as_mainfile(filepath=str(OUTPUT/output_filename),compress=True)
+    if not render_panels:
+        return scene, characters, timeline
     # Render a composed panel per shot. The editable scene retains the pose keys.
     for shot,cam in zip(timeline['shots'],cameras):
         output=frames/f"{shot['id']}.png"

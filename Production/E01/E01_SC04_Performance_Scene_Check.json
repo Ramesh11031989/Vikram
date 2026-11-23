@@ -1,0 +1,21 @@
+{
+  "status": "PASS",
+  "unchanged_original_meshes": 273,
+  "camera_cuts": 11,
+  "facial_control_rigs": [
+    "Vikram",
+    "Gopal",
+    "Betal",
+    "CourtClerk"
+  ],
+  "speech_viseme_segments": 271,
+  "valid_driver_samples": 640,
+  "speech_shapes_closed_before_cues": true,
+  "head_acting": true,
+  "blink_close_reopen": true,
+  "writing_ik": true,
+  "anonymous_face_hidden": true,
+  "court_river_isolation": true,
+  "relative_audio": true,
+  "lip_sync_limit": "Automatic acoustic viseme estimates; no claim of verified Hindi phoneme accuracy"
+}

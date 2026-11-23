@@ -1,0 +1,327 @@
+{
+  "status": "PASS",
+  "mode": "Neutral rest pose, no baked performance clips",
+  "exports": [
+    {
+      "character": "Vikram",
+      "file": "CHR_Vikram_Facial_v0_2.fbx",
+      "bytes": 6898396,
+      "deform_bones": 34,
+      "shape_meshes": {
+        "Vikram_Eye.L": [
+          "Basis",
+          "Blink"
+        ],
+        "Vikram_Iris.L": [
+          "Basis",
+          "Blink"
+        ],
+        "Vikram_Pupil.L": [
+          "Basis",
+          "Blink"
+        ],
+        "Vikram_Eye glint.L": [
+          "Basis",
+          "Blink"
+        ],
+        "Vikram_Upper lid.L": [
+          "Basis",
+          "Blink"
+        ],
+        "Vikram_Brow.L": [
+          "Basis",
+          "Raise",
+          "Frown"
+        ],
+        "Vikram_Eye.R": [
+          "Basis",
+          "Blink"
+        ],
+        "Vikram_Iris.R": [
+          "Basis",
+          "Blink"
+        ],
+        "Vikram_Pupil.R": [
+          "Basis",
+          "Blink"
+        ],
+        "Vikram_Eye glint.R": [
+          "Basis",
+          "Blink"
+        ],
+        "Vikram_Upper lid.R": [
+          "Basis",
+          "Blink"
+        ],
+        "Vikram_Brow.R": [
+          "Basis",
+          "Raise",
+          "Frown"
+        ],
+        "Vikram_Mouth": [
+          "Basis",
+          "Mouth_Ah",
+          "Mouth_O",
+          "Mouth_Ee",
+          "Mouth_MBP",
+          "Mouth_FV",
+          "Mouth_U",
+          "Mouth_L",
+          "Mouth_Consonant",
+          "Worry",
+          "Smile"
+        ],
+        "Vikram_Upper teeth": [
+          "Basis",
+          "Show"
+        ],
+        "Vikram_Tongue": [
+          "Basis",
+          "Show"
+        ]
+      },
+      "round_trip_import": "PASS"
+    },
+    {
+      "character": "Gopal",
+      "file": "CHR_Gopal_Facial_v0_2.fbx",
+      "bytes": 5628620,
+      "deform_bones": 34,
+      "shape_meshes": {
+        "Gopal_Eye.L": [
+          "Basis",
+          "Blink"
+        ],
+        "Gopal_Iris.L": [
+          "Basis",
+          "Blink"
+        ],
+        "Gopal_Pupil.L": [
+          "Basis",
+          "Blink"
+        ],
+        "Gopal_Eye glint.L": [
+          "Basis",
+          "Blink"
+        ],
+        "Gopal_Upper lid.L": [
+          "Basis",
+          "Blink"
+        ],
+        "Gopal_Brow.L": [
+          "Basis",
+          "Raise",
+          "Frown"
+        ],
+        "Gopal_Eye.R": [
+          "Basis",
+          "Blink"
+        ],
+        "Gopal_Iris.R": [
+          "Basis",
+          "Blink"
+        ],
+        "Gopal_Pupil.R": [
+          "Basis",
+          "Blink"
+        ],
+        "Gopal_Eye glint.R": [
+          "Basis",
+          "Blink"
+        ],
+        "Gopal_Upper lid.R": [
+          "Basis",
+          "Blink"
+        ],
+        "Gopal_Brow.R": [
+          "Basis",
+          "Raise",
+          "Frown"
+        ],
+        "Gopal_Mouth": [
+          "Basis",
+          "Mouth_Ah",
+          "Mouth_O",
+          "Mouth_Ee",
+          "Mouth_MBP",
+          "Mouth_FV",
+          "Mouth_U",
+          "Mouth_L",
+          "Mouth_Consonant",
+          "Worry",
+          "Smile"
+        ],
+        "Gopal_Upper teeth": [
+          "Basis",
+          "Show"
+        ],
+        "Gopal_Tongue": [
+          "Basis",
+          "Show"
+        ]
+      },
+      "round_trip_import": "PASS"
+    },
+    {
+      "character": "Betal",
+      "file": "CHR_Betal_Facial_v0_2.fbx",
+      "bytes": 4092892,
+      "deform_bones": 34,
+      "shape_meshes": {
+        "Betal_Eye.L": [
+          "Basis",
+          "Blink"
+        ],
+        "Betal_Iris.L": [
+          "Basis",
+          "Blink"
+        ],
+        "Betal_Pupil.L": [
+          "Basis",
+          "Blink"
+        ],
+        "Betal_Eye glint.L": [
+          "Basis",
+          "Blink"
+        ],
+        "Betal_Upper lid.L": [
+          "Basis",
+          "Blink"
+        ],
+        "Betal_Brow.L": [
+          "Basis",
+          "Raise",
+          "Frown"
+        ],
+        "Betal_Eye.R": [
+          "Basis",
+          "Blink"
+        ],
+        "Betal_Iris.R": [
+          "Basis",
+          "Blink"
+        ],
+        "Betal_Pupil.R": [
+          "Basis",
+          "Blink"
+        ],
+        "Betal_Eye glint.R": [
+          "Basis",
+          "Blink"
+        ],
+        "Betal_Upper lid.R": [
+          "Basis",
+          "Blink"
+        ],
+        "Betal_Brow.R": [
+          "Basis",
+          "Raise",
+          "Frown"
+        ],
+        "Betal_Mouth": [
+          "Basis",
+          "Mouth_Ah",
+          "Mouth_O",
+          "Mouth_Ee",
+          "Mouth_MBP",
+          "Mouth_FV",
+          "Mouth_U",
+          "Mouth_L",
+          "Mouth_Consonant",
+          "Worry",
+          "Smile"
+        ],
+        "Betal_Upper teeth": [
+          "Basis",
+          "Show"
+        ],
+        "Betal_Tongue": [
+          "Basis",
+          "Show"
+        ]
+      },
+      "round_trip_import": "PASS"
+    },
+    {
+      "character": "CourtClerk",
+      "file": "CHR_CourtClerk_Facial_v0_2.fbx",
+      "bytes": 3549100,
+      "deform_bones": 34,
+      "shape_meshes": {
+        "CourtClerk_Eye.L": [
+          "Basis",
+          "Blink"
+        ],
+        "CourtClerk_Iris.L": [
+          "Basis",
+          "Blink"
+        ],
+        "CourtClerk_Pupil.L": [
+          "Basis",
+          "Blink"
+        ],
+        "CourtClerk_Eye glint.L": [
+          "Basis",
+          "Blink"
+        ],
+        "CourtClerk_Upper lid.L": [
+          "Basis",
+          "Blink"
+        ],
+        "CourtClerk_Brow.L": [
+          "Basis",
+          "Raise",
+          "Frown"
+        ],
+        "CourtClerk_Eye.R": [
+          "Basis",
+          "Blink"
+        ],
+        "CourtClerk_Iris.R": [
+          "Basis",
+          "Blink"
+        ],
+        "CourtClerk_Pupil.R": [
+          "Basis",
+          "Blink"
+        ],
+        "CourtClerk_Eye glint.R": [
+          "Basis",
+          "Blink"
+        ],
+        "CourtClerk_Upper lid.R": [
+          "Basis",
+          "Blink"
+        ],
+        "CourtClerk_Brow.R": [
+          "Basis",
+          "Raise",
+          "Frown"
+        ],
+        "CourtClerk_Mouth": [
+          "Basis",
+          "Mouth_Ah",
+          "Mouth_O",
+          "Mouth_Ee",
+          "Mouth_MBP",
+          "Mouth_FV",
+          "Mouth_U",
+          "Mouth_L",
+          "Mouth_Consonant",
+          "Worry",
+          "Smile"
+        ],
+        "CourtClerk_Upper teeth": [
+          "Basis",
+          "Show"
+        ],
+        "CourtClerk_Tongue": [
+          "Basis",
+          "Show"
+        ]
+      },
+      "round_trip_import": "PASS"
+    }
+  ],
+  "limits": "FBX retains the deformation rig and blend shapes. Blender custom-property drivers and hand IK require rebinding or baking in the destination."
+}
