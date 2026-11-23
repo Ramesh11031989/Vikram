@@ -10,6 +10,8 @@ from __future__ import annotations
 from math import cos, pi, sin, tau
 from typing import Sequence
 
+from proportions import height_for
+
 
 # (z, center x, center y, radius x, radius y): a small, loosely tied cloth wrap.
 HEAD_WRAP_RINGS: tuple[tuple[float, float, float, float, float], ...] = (
@@ -18,8 +20,8 @@ HEAD_WRAP_RINGS: tuple[tuple[float, float, float, float, float], ...] = (
     (1.791, 0, .006, .096, .088),
 )
 
-# Height .94 gives roughly 170 cm against Gopal's 181 cm (both on the shared adult rig).
-SPEC = dict(name='Nandu', height=.94, skin=(.300,.158,.082), hair=(.022,.016,.013),
+# Realistic proportion (about 7.3 heads, see proportions.py) with the crown at 170 cm.
+SPEC = dict(name='Nandu', height=round(height_for(1.70), 4), skin=(.300,.158,.082), hair=(.022,.016,.013),
             iris=(.062,.036,.019), face_width=.99, nose_width=1.04, brow_lift=-.003,
             head_wrap=HEAD_WRAP_RINGS)
 
@@ -97,7 +99,7 @@ def kurta(c, cloth, patch, dark_patch) -> None:
                      {upper:.26,lower:.74},lower], cap=False)
         # Shoulder yoke: half chest, half upper arm, so the shoulder never shows through
         # where the arm skin rotates out of the sleeve's first ring.
-        yoke = c.ovoid(f'Kurta shoulder yoke {side}', (sign*.200,.002,1.388), (.072,.080,.060), cloth, 'chest')
+        yoke = c.ovoid(f'Kurta shoulder yoke {side}', (sign*.205,.002,1.384), (.060,.074,.052), cloth, 'chest')
         group = yoke.vertex_groups['chest']
         indices = list(range(len(yoke.data.vertices)))
         group.add(indices, .55, 'REPLACE')

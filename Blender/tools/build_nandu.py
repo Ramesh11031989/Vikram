@@ -24,6 +24,7 @@ from groom import groom
 import gopal
 import nandu
 import nandu_rig as kit
+import proportions
 from textile import apply_textiles
 
 
@@ -46,6 +47,7 @@ def build_nandu() -> tuple[Character, object, object]:
     kit.add_wrist_rig(c)
     kit.wrist_rope(c, c.mat('Jute rope', (.28, .21, .11), .96))
     kit.add_expressions(c)
+    proportions.realistic_head(c)
     c.validate()
     cloth = kit.red_cloth(c)
     boat = kit.reed_boat(c)
@@ -221,7 +223,7 @@ def tied_test(c, cloth, boat):
 def chauki_test(cloth):
     """Red gamchha re-targeted to an anonymous rig: back and shoulder only, as Gopal sees it."""
     scene = studio('Nandu • Chauki red cloth on anonymous rig', 1280, 720, 24, (.03, .03, .035))
-    spec = dict(name='ChaukiFigure', height=.94, skin=(.07, .05, .035), hair=(.02, .016, .013),
+    spec = dict(name='ChaukiFigure', height=nandu.SPEC['height'], skin=(.07, .05, .035), hair=(.02, .016, .013),
                 iris=(.05, .03, .02), face_width=1.0, nose_width=1.0, brow_lift=0)
     figure = Character(spec)
     figure.body()
@@ -230,6 +232,7 @@ def chauki_test(cloth):
     figure.loft('Dark wrap', [(.60, 0, .004, .23, .16), (.98, 0, .004, .17, .115), (1.2, 0, .005, .185, .115),
                               (1.36, 0, .003, .205, .09), (1.42, 0, .008, .06, .05)], dark, 'chest')
     figure.ovoid('Covered head', (0, .01, 1.70), (.125, .125, .13), dark, 'head')
+    proportions.realistic_head(figure)
     scene.collection.children.link(figure.collection)
     bpy.context.window.scene = scene
     # Back three-quarters to Gopal's boat: only the back and the cloth on the shoulder read.
@@ -296,7 +299,8 @@ def expressions_sheet(c) -> Path:
     scene = c.scene
     stage.setup_stage(scene, 640, 720, 24, .18)
     stage.review_floor((.027, .039, .048))
-    camera = stage.stage_camera(scene, 'Portrait camera', (-.9, -4.7, 1.58*c.scale), (0, 0, 1.6*c.scale), .36)
+    face_z = proportions.head_z(1.64)*c.scale
+    camera = stage.stage_camera(scene, 'Portrait camera', (-.9, -4.7, face_z-.02), (0, 0, face_z), .30)
     stage.light(scene, 'Portrait key', (-1.7, -2.0, 3.3), (0, 0, 1.53), (1, .84, .71), 168, 1.45)
     stage.light(scene, 'Portrait fill', (1.8, -2.2, 2.2), (0, 0, 1.54), (.65, .79, 1), 68, 2.0)
     stage.light(scene, 'Hair rim', (1.2, 1.8, 2.6), (0, 0, 1.62), (1, .78, .56), 195, 1.45)
@@ -330,6 +334,7 @@ def checks(c, cloth, boat) -> dict:
     report = {
         'character': 'Nandu', 'rig_bones': len(c.rig.data.bones), 'shared_bones_with_Gopal': 34,
         'skinned_meshes': len(c.parts), 'head_top_cm': round(max(tops)*100, 1),
+        'heads_tall': round(proportions.heads_tall(), 2),
         'gopal_head_top_cm': round(1.812*gopal.SPEC['height']*100, 1),
         'daughter_height_cm_placeholder': DAUGHTER_HEIGHT*100,
         'boat_length_cm': round(boat_dims.x*100, 1), 'boat_beam_cm': round(boat_dims.y*100, 1),
