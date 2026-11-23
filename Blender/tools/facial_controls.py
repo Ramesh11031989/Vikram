@@ -79,9 +79,15 @@ def add_facial_controls(character) -> None:
         property_control(rig, name, name.replace('_', ' '))
 
     for side in ('L', 'R'):
-        for label in ('Eye', 'Iris', 'Pupil', 'Eye glint', 'Upper lid'):
+        # The refined cast combines pupil pigment with the iris and replaces
+        # the separate upper lid with a continuous eyelid mesh. Keep the older
+        # scene layout supported as well; require every part in either layout.
+        refined_eye = f'{character.name}_Eyelids.{side}' in bpy.data.objects
+        labels = ('Eye', 'Iris', 'Eyelids') if refined_eye else (
+            'Eye', 'Iris', 'Pupil', 'Eye glint', 'Upper lid')
+        for label in labels:
             obj = bpy.data.objects[f'{character.name}_{label}.{side}']
-            def blink(point, eyelid=label == 'Upper lid'):
+            def blink(point, eyelid=label in ('Upper lid', 'Eyelids')):
                 point.z = 1.675*scale + (point.z-1.675*scale)*.035
                 point.y += (-.003 if eyelid else .028)*scale
                 return point

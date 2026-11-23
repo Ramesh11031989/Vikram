@@ -26,6 +26,11 @@ way to open the same deliverables: extract it at the repository root, keeping
 `Production/E01/Performance` beside `Production/E01/Audio`. Temporary frame/video
 caches and the intermediate v0.2 scene are ignored.
 
+The included v0.3 scene and movie keep the cast geometry used for this performance
+pass. The separate cast library also contains later surface and groom work.
+Rebuilding the performance uses the current cast generator; render the rebuilt
+scene and export its FBX assets together to refresh those deliverables.
+
 ## What changed
 
 - **Acting:** continuous breath and weight movement; an opening step, Gopal's

@@ -1,8 +1,14 @@
 from math import cos, pi, sin, tau
 
 
+HEAD_WRAP_RINGS = (
+    (1.727,0,.001,.133,.113), (1.737,0,.001,.140,.117),
+    (1.756,0,.001,.140,.117), (1.767,0,.001,.136,.112),
+)
+
 SPEC = dict(name='Gopal', height=1.0, skin=(.402,.205,.103), hair=(.048,.027,.016),
-            iris=(.085,.048,.024), face_width=1.11, nose_width=1.15, brow_lift=-.002)
+            iris=(.085,.048,.024), face_width=1.11, nose_width=1.15, brow_lift=-.002,
+            head_wrap=HEAD_WRAP_RINGS)
 
 
 def vest(c, cloth, edge):
@@ -20,9 +26,13 @@ def vest(c, cloth, edge):
         c.ovoid(f'Tied vest closure {index+1}', (.012+index*.019,-.121,z),(.013,.008,.008),edge,'chest')
     for sign, side in ((1,'L'),(-1,'R')):
         upper = f'upper_arm.{side}'
-        rings = [[(sign*x, sign*r*cos(tau*j/28), 1.375+r*sin(tau*j/28)) for j in range(28)]
-                 for x,r in ((.158,.07),(.221,.081),(.255,.077),(.28,.073))]
-        c.ring_mesh(f'Vest arm gusset {side}',rings,cloth,['chest',{'chest':.6,upper:.4},upper,upper])
+        sections = ((.140,1.365,.055,.037),(.165,1.366,.067,.068),
+                    (.197,1.369,.074,.076),(.222,1.372,.076,.074),
+                    (.252,1.374,.072,.068),(.280,1.375,.068,.066))
+        rings = [[(sign*x, sign*depth*cos(tau*j/28), z+height*sin(tau*j/28)) for j in range(28)]
+                 for x,z,depth,height in sections]
+        c.ring_mesh(f'Vest arm gusset {side}',rings,cloth,
+                    ['chest','chest',{'chest':.73,upper:.27},{'chest':.44,upper:.56},upper,upper])
         c.tube(f'Woven shoulder binding {side}', rings[-1],.005,edge,upper,cyclic=True)
 
 
@@ -68,9 +78,11 @@ def dress(c):
            for j in range(40)],.005,cotton,'hips',cyclic=True)
     c.ovoid('Wrap knot',(-.101,-.12,.949),(.038,.028,.023),belt,'hips',(0,-.28,.1))
     rows = [(.683,.134,-.141,.041),(.799,.131,-.152,.047),(.952,.145,-.146,.046),
-            (1.138,.158,-.113,.048),(1.29,.167,-.111,.055),(1.398,.155,-.073,.056),
-            (1.452,.146,.011,.056),(1.343,.151,.102,.06),(1.18,.139,.133,.06),(1.014,.134,.127,.054)]
-    weights = ['thigh.L',{'thigh.L':.57,'hips':.43},'hips','spine','chest','chest','chest','chest','spine','hips']
+            (1.138,.158,-.119,.048),(1.29,.162,-.127,.055),(1.390,.148,-.108,.056),
+            (1.449,.145,-.068,.056),(1.465,.142,.006,.055),(1.435,.144,.068,.058),
+            (1.348,.151,.112,.06),(1.18,.139,.133,.06),(1.014,.134,.127,.054)]
+    weights = ['thigh.L',{'thigh.L':.57,'hips':.43},'hips','spine','chest','chest',
+               'chest','chest','chest','chest','spine','hips']
     verts = [(x+(t-.5)*width*2,y-.005*cos(t*tau*2),z + (t-.5)*.017)
              for z,x,y,width in rows for t in (0,.25,.5,.75,1)]
     faces = [(i+j,i+j+1,i+5+j+1,i+5+j) for i in range(0,len(verts)-5,5) for j in range(4)]
@@ -86,12 +98,11 @@ def dress(c):
         c.tube(f'Brushed hair ridge {k+1}',[(x,-.083,1.749+.015*sin(k*.52)),
                (x-.009,-.093,1.776+.012*sin(k*.55)),(x-.022,-.054,1.796+.017*sin(k*.55)),
                (x-.024,.016,1.801+.010*sin(k*.54))], [.004,.007,.009,.004],hair,'head')
-    c.loft('Indigo head wrap',[(1.727,0,.001,.119,.102),(1.739,0,.001,.135,.108),
-           (1.756,0,.001,.137,.113),(1.767,0,.001,.134,.108)],river,'head',segments=48,cap=False)
-    for z in (1.733,1.759):
-        c.tube(f'Head wrap seam {z}',[(.136*cos(tau*j/48),.111*sin(tau*j/48),z+.003*sin(tau*j/48))
+    c.loft('Indigo head wrap',HEAD_WRAP_RINGS,river,'head',segments=48,cap=False)
+    for z,x,y,rx,ry in (HEAD_WRAP_RINGS[0],HEAD_WRAP_RINGS[-1]):
+        c.tube(f'Head wrap seam {z}',[(x+rx*cos(tau*j/48),y+ry*sin(tau*j/48),z)
                for j in range(48)],.0025,trim,'head',cyclic=True)
-    c.ovoid('Head wrap rear knot',(.093,.094,1.742),(.038,.029,.022),river,'head',(0,.28,.15))
+    c.ovoid('Head wrap rear knot',(.094,.100,1.745),(.038,.029,.022),river,'head',(0,.28,.15))
     for sign, side in ((1,'L'),(-1,'R')):
         c.tube(f'Weathered moustache {side}',[(sign*.008,-.130,1.59),(sign*.025,-.136,1.588),
                (sign*.041,-.131,1.581),(sign*.055,-.121,1.575)], [.004,.0065,.006,.0025],hair,'head')
