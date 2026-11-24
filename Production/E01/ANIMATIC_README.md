@@ -46,10 +46,12 @@ performance or phoneme-accurate lip sync. Sets, water, the court clerk and river
 inserts are production stand-ins. Placeholder room/water ambience is synthesized
 locally, and there is no music.
 
-Both speaking roles currently use `hi-IN-MadhurNeural`, with different rate and
-pitch settings. These are stock synthetic scratch performances, not actor
-recordings or approved final voices. Replace the individual WAV files with the
-approved readings and rebuild the timeline before final animation.
+The optional voice generator uses `ai4bharat/indic-parler-tts`. Set the named
+voice and its performance description per character in `PROFILES` in
+`Production/tools/prepare_sc04.py`. The current WAVs are legacy Microsoft Edge
+scratch readings. `--generate-speech` prepares and validates the complete set
+before replacing those readings and rebuilding cue timings. Individual WAVs
+can also be replaced by hand.
 
 ## Rebuild
 
@@ -68,8 +70,9 @@ python -m pip install -r Production/requirements.txt
 # The committed WAV files can be retimed entirely offline.
 python Production/tools/prepare_sc04.py
 
-# Optional: regenerate synthetic scratch readings. This sends the twelve lines
-# to the Microsoft Edge speech service and requires an internet connection.
+# Optional dialogue generation. Install the CUDA build of PyTorch first if
+# you are using an NVIDIA GPU. First use downloads the model weights.
+python -m pip install -r Production/requirements-voice.txt
 python Production/tools/prepare_sc04.py --generate-speech
 
 blender --background --factory-startup --python-exit-code 1 --python Blender/tools/build_sc04_animatic.py
@@ -82,10 +85,8 @@ python Production/tools/validate_sc04.py
 blender --background Production/E01/Animatic/E01_SC04_Animatic.blend --python-exit-code 1 --python Production/tools/validate_sc04_scene.py
 ```
 
-Use a full executable path if Blender or FFmpeg is not on PATH. On Windows,
-pass `--font C:/Windows/Fonts/arial.ttf` to the compose command. To trust an
-organization's additional certificate bundle for speech generation, provide
-`--ca-bundle path/to/trusted-ca.pem`; TLS certificate verification stays enabled.
+Add FFmpeg and ffprobe to PATH. On Windows, use
+`--font C:/Windows/Fonts/arial.ttf` for the compose command when needed.
 
 The Blender builder overwrites its derived scene and rendered panels under
 `Animatic/`. Run it in a separate checkout when experimenting. It does not write

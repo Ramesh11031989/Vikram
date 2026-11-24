@@ -1,15 +1,16 @@
-"""Generate replaceable Hindi scratch speech and an audio-measured shot timeline."""
+"""Generate replaceable Hindi speech offline with Indic Parler-TTS and build an audio-measured shot timeline."""
 
 from __future__ import annotations
 
 import argparse
-import asyncio
 import csv
 import hashlib
 import json
 import math
 from pathlib import Path
+import shutil
 import subprocess
+from tempfile import TemporaryDirectory
 import wave
 
 
@@ -30,9 +31,22 @@ SHOTS = (
     ('SH10', 954, 1070, 'I thought I knew', 'court'),
     ('SH11', 1070, 1428, 'Record what was observed', 'court'),
 )
+MODEL_ID = 'ai4bharat/indic-parler-tts'
+# One entry per speaker_id in the cue sheet. Each character gets a different named
+# speaker and a plain-English voice description. Edit `description` to change the
+# voice; `seed` keeps every re-run reproducible. Add Betal etc. here for new scenes.
 PROFILES = {
-    'Vikram': {'voice': 'hi-IN-MadhurNeural', 'rate': '-6%', 'pitch': '-10Hz'},
-    'Gopal': {'voice': 'hi-IN-MadhurNeural', 'rate': '+0%', 'pitch': '+4Hz'},
+    'Vikram': {
+        'speaker': 'Aman', 'seed': 11,
+        'description': ("Aman speaks in Hindi with a deep, calm, authoritative male voice at a slow, "
+                        "measured pace. Very clear, close-up studio recording with no background noise."),
+    },
+    'Gopal': {
+        'speaker': 'Rohit', 'seed': 23,
+        'description': ("Rohit speaks in Hindi with a slightly higher, tired, older working man's voice, "
+                        "at a moderate pace with some hesitation. Very clear, close-up studio recording "
+                        "with no background noise."),
+    },
 }
 
 
@@ -47,52 +61,128 @@ def read_cues() -> list[dict[str, str]]:
 
 def samples_in(path: Path) -> int:
     with wave.open(str(path), 'rb') as stream:
-        if stream.getframerate() != SAMPLE_RATE or stream.getnchannels() != 1:
-            raise ValueError(f'Expected mono {SAMPLE_RATE} Hz PCM: {path}')
+        if (stream.getframerate() != SAMPLE_RATE or stream.getnchannels() != 1
+                or stream.getsampwidth() != 2 or stream.getnframes() == 0):
+            raise ValueError(f'Expected nonempty mono {SAMPLE_RATE} Hz 16-bit PCM: {path}')
         return stream.getnframes()
 
 
-async def generate_speech(ca_bundle: str | None) -> None:
-    import edge_tts
+def load_model():
+    """Load Indic Parler-TTS once (downloads ~3.8 GB on first use, then runs offline)."""
+    import torch
+    from parler_tts import ParlerTTSForConditionalGeneration
+    from transformers import AutoTokenizer
 
-    if ca_bundle:
-        # Add the execution environment's trusted CA; keep verification enabled.
-        import edge_tts.communicate
-        edge_tts.communicate._SSL_CTX.load_verify_locations(cafile=ca_bundle)
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    dtype = torch.float16 if device == 'cuda' else torch.float32
+    model = ParlerTTSForConditionalGeneration.from_pretrained(MODEL_ID, torch_dtype=dtype).to(device)
+    prompt_tokenizer = AutoTokenizer.from_pretrained(MODEL_ID)
+    description_tokenizer = AutoTokenizer.from_pretrained(model.config.text_encoder._name_or_path)
+    print(f'Loaded {MODEL_ID} on {device}', flush=True)
+    return torch, model, prompt_tokenizer, description_tokenizer, device
 
+
+def synthesize(engine, text: str, profile: dict[str, object], target: Path) -> None:
+    """Render one line to a raw WAV at the model's native sample rate."""
+    import numpy as np
+
+    torch, model, prompt_tokenizer, description_tokenizer, device = engine
+    torch.manual_seed(int(profile['seed']))
+    description = description_tokenizer(str(profile['description']), return_tensors='pt').to(device)
+    prompt = prompt_tokenizer(text, return_tensors='pt').to(device)
+    with torch.no_grad():
+        generation = model.generate(
+            input_ids=description.input_ids, attention_mask=description.attention_mask,
+            prompt_input_ids=prompt.input_ids, prompt_attention_mask=prompt.attention_mask)
+    audio = generation.float().cpu().numpy().squeeze()
+    pcm = (np.clip(audio, -1.0, 1.0) * 32767).astype('<i2')
+    with wave.open(str(target), 'wb') as stream:
+        stream.setnchannels(1)
+        stream.setsampwidth(2)
+        stream.setframerate(int(model.config.sampling_rate))
+        stream.writeframes(pcm.tobytes())
+
+
+def cached_samples(output: Path, fingerprint: str) -> int | None:
+    try:
+        metadata = json.loads(output.with_suffix('.json').read_text(encoding='utf-8'))
+        if isinstance(metadata, dict) and metadata.get('fingerprint') == fingerprint:
+            return samples_in(output)
+    except (OSError, ValueError, wave.Error, EOFError):
+        return None
+    return None
+
+
+def publish_speech(staged: list[Path], destination: Path, work: Path) -> None:
+    backup = work / 'previous'
+    backup.mkdir()
+    for source in staged:
+        target = destination / source.name
+        if target.exists():
+            shutil.copy2(target, backup / source.name)
+
+    published = []
+    try:
+        for source in staged:
+            target = destination / source.name
+            source.replace(target)
+            published.append(target)
+    except (OSError, KeyboardInterrupt):
+        for target in reversed(published):
+            saved = backup / target.name
+            if saved.exists():
+                saved.replace(target)
+            else:
+                target.unlink()
+        raise
+
+
+def generate_speech() -> None:
     destination = EPISODE / 'Audio' / 'Scratch'
     destination.mkdir(parents=True, exist_ok=True)
     manifest: list[dict[str, object]] = []
-    for cue in read_cues():
-        profile = PROFILES[cue['speaker_id']]
-        output = destination / cue['wav_filename']
-        fingerprint = hashlib.sha256(json.dumps(
-            {'text': cue['dialogue_hi'], **profile}, ensure_ascii=False, sort_keys=True
-        ).encode()).hexdigest()
-        metadata = output.with_suffix('.json')
-        cached = metadata.exists() and output.exists()
-        if cached:
-            cached = json.loads(metadata.read_text(encoding='utf-8')).get('fingerprint') == fingerprint
-        if not cached:
-            compressed = output.with_suffix('.mp3')
-            speech = edge_tts.Communicate(cue['dialogue_hi'], **profile)
-            await asyncio.wait_for(speech.save(str(compressed)), timeout=50)
-            run(['ffmpeg', '-hide_banner', '-loglevel', 'error', '-y', '-i', str(compressed),
-                 '-af', 'silenceremove=start_periods=1:start_duration=0.02:start_threshold=-48dB,'
-                 'areverse,silenceremove=start_periods=1:start_duration=0.02:start_threshold=-48dB,'
-                 'areverse,loudnorm=I=-20:TP=-2:LRA=8',
-                 '-ar', str(SAMPLE_RATE), '-ac', '1', '-c:a', 'pcm_s16le', str(output)])
-            compressed.unlink()
-            metadata.write_text(json.dumps({'fingerprint': fingerprint, **profile}, indent=2))
-        manifest.append({'cue_id': cue['cue_id'], 'speaker': cue['speaker_id'],
-                         'file': output.name, 'samples': samples_in(output), **profile})
-        print(f"Prepared {cue['cue_id']}: {samples_in(output) / SAMPLE_RATE:.2f}s", flush=True)
-    (destination / 'voice_manifest.json').write_text(json.dumps({
-        'status': 'SYNTHETIC SCRATCH DIALOGUE — replace before final production',
-        'provider': 'Microsoft Edge online TTS through edge-tts',
-        'note': 'Both roles use a stock male Hindi voice with different pitch/rate settings.',
-        'sample_rate': SAMPLE_RATE, 'cues': manifest,
-    }, ensure_ascii=False, indent=2), encoding='utf-8')
+    engine = None
+    with TemporaryDirectory(prefix='sc04-speech-', dir=destination.parent) as temporary:
+        work = Path(temporary)
+        staged = []
+        for cue in read_cues():
+            profile = PROFILES[cue['speaker_id']]
+            filename = cue['wav_filename']
+            fingerprint = hashlib.sha256(json.dumps(
+                {'text': cue['dialogue_hi'], 'model': MODEL_ID, **profile}, ensure_ascii=False, sort_keys=True
+            ).encode()).hexdigest()
+            count = cached_samples(destination / filename, fingerprint)
+            provenance = {'speaker': cue['speaker_id'], 'voice': profile['speaker'],
+                          'seed': profile['seed'], 'description': profile['description']}
+            if count is None:
+                if engine is None:
+                    if shutil.which('ffmpeg') is None:
+                        raise RuntimeError('Add FFmpeg to PATH before generating speech.')
+                    engine = load_model()
+                output = work / filename
+                raw = output.with_suffix('.raw.wav')
+                synthesize(engine, cue['dialogue_hi'], profile, raw)
+                run(['ffmpeg', '-hide_banner', '-loglevel', 'error', '-y', '-i', str(raw),
+                     '-af', 'silenceremove=start_periods=1:start_duration=0.02:start_threshold=-48dB,'
+                     'areverse,silenceremove=start_periods=1:start_duration=0.02:start_threshold=-48dB,'
+                     'areverse,loudnorm=I=-20:TP=-2:LRA=8',
+                     '-ar', str(SAMPLE_RATE), '-ac', '1', '-c:a', 'pcm_s16le', str(output)])
+                count = samples_in(output)
+                raw.unlink()
+                metadata = output.with_suffix('.json')
+                metadata.write_text(json.dumps({'fingerprint': fingerprint, **provenance}, indent=2),
+                                    encoding='utf-8')
+                staged.extend((output, metadata))
+            manifest.append({'cue_id': cue['cue_id'], 'file': filename, 'samples': count, **provenance})
+            print(f"Prepared {cue['cue_id']}: {count / SAMPLE_RATE:.2f}s", flush=True)
+        voice_manifest = work / 'voice_manifest.json'
+        voice_manifest.write_text(json.dumps({
+            'status': 'AI-GENERATED DIALOGUE — review pronunciation before final production',
+            'provider': MODEL_ID,
+            'note': 'Generated locally with role-specific voice descriptions and fixed seeds.',
+            'sample_rate': SAMPLE_RATE, 'cues': manifest,
+        }, ensure_ascii=False, indent=2), encoding='utf-8')
+        publish_speech([*staged, voice_manifest], destination, work)
 
 
 def timestamp(frame: int) -> str:
@@ -172,8 +262,7 @@ def build_timeline() -> None:
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--generate-speech', action='store_true')
-    parser.add_argument('--ca-bundle', help='Optional additional trusted PEM CA bundle')
     args = parser.parse_args()
     if args.generate_speech:
-        asyncio.run(generate_speech(args.ca_bundle))
+        generate_speech()
     build_timeline()

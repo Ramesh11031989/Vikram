@@ -1,0 +1,6 @@
+# Optional dependencies for generating Hindi dialogue with Indic Parler-TTS.
+-r requirements.txt
+importlib-resources
+torch
+transformers
+git+https://github.com/huggingface/parler-tts.git
