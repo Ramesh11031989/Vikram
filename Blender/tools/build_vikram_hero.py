@@ -354,7 +354,7 @@ class VikramHero(AdultHero):
         self.fit_covered_skin((.064,.150,.985,1.525),visible,refine)
 
 
-def export_fbx(hero, target=None):
+def export_fbx(hero, target=None, *, prioritize_active_color=False):
     bpy.context.window.scene = hero.scene
     bpy.ops.object.select_all(action='DESELECT')
     hero.rig.select_set(True)
@@ -364,7 +364,7 @@ def export_fbx(hero, target=None):
     result = bpy.ops.export_scene.fbx(filepath=str(target or OUTPUT/'Vikram_Hero.fbx'), use_selection=True,
         object_types={'ARMATURE','MESH'}, axis_forward='-Z', axis_up='Y',
         apply_scale_options='FBX_SCALE_UNITS', use_mesh_modifiers=False, add_leaf_bones=False,
-        bake_anim=False, mesh_smooth_type='FACE')
+        bake_anim=False, mesh_smooth_type='FACE', prioritize_active_color=prioritize_active_color)
     if 'FINISHED' not in result:
         raise RuntimeError(f'Could not export {hero.display_name} hero')
 
