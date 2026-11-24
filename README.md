@@ -9,6 +9,7 @@ Hindi animated series made with Blender and Unity. The first chapter is **सा
 | [गोपाल, नाविक](Blender/Characters/Gopal/README.md) | Adult boatman, dry-silt foot material, and three editable Chapter 1 poses |
 | [Chapter 1 sightlines and asset screenshots](Production/E01/Sightlines/README.md) | Shared Palace, Ghat and Town scene, five camera proofs and a visual review of the Chapter 1 assets |
 | [Chapter 1 Unity project](Unity/README.md) | Imported ghat scene, three cameras, water and boat animation, and the Blender-to-Unity rebuild |
+| [Local instrumental score](Production/E01/Audio/Music/README.md) | Quantized local music generation and editable cue prompts for Chapter 1 |
 | [नंदू](Blender/Nandu.blend) · [नंदू की बेटी](Blender/Nandu_Daughter_README.md) | Gatekeeper, bound hands, daughter and the shared reed boat |
 | [हलवाई](Blender/Halwai_README.md) · [पड़ोसन](Blender/Previews/HalwaiNeighbour/HalwaiNeighbour_Notes.md) | Rooftop witness and the tether-cutting scene |
 | [बाकी गवाह](Blender/Characters/Citizen_Witnesses/README.md) · [मौसी का ब्लॉकआउट](mausi_witness_both.blend) | Reusable citizen rigs and the aunt’s two staged scenes |

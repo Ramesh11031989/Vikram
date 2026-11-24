@@ -1,0 +1,29 @@
+{
+  "river_mystery": {
+    "label": "River at night",
+    "caption": "Original understated North Indian instrumental film underscore for a river mystery. A breathy low bansuri answers a quiet tanpura drone. Sparse soft pakhawaj strokes leave room for narration. Unhurried phrases, subtle tension, restrained dynamics and a clean ending. Pure acoustic instrumental.",
+    "bpm": 72,
+    "duration": 15,
+    "keyscale": "D minor",
+    "timesignature": "4",
+    "seed": 4516
+  },
+  "royal_court": {
+    "label": "Royal court testimony",
+    "caption": "Original low-key North Indian instrumental chamber music for a royal court hearing. A soft sarangi motif over a tanpura drone with occasional muted pakhawaj. Deliberate and restrained, with spaces between phrases for dialogue. Small acoustic room and a clean ending. Pure instrumental.",
+    "bpm": 76,
+    "duration": 18,
+    "keyscale": "C minor",
+    "timesignature": "4",
+    "seed": 4517
+  },
+  "quiet_refuge": {
+    "label": "Quiet refuge",
+    "caption": "Original gentle North Indian instrumental film cue for a quiet refuge. Use a warm tanpura drone, a few soft bansuri phrases and very light tabla. Suggest relief without a triumphant swell. Sparse acoustic arrangement under narration, with a clean ending. Pure instrumental.",
+    "bpm": 64,
+    "duration": 18,
+    "keyscale": "G major",
+    "timesignature": "4",
+    "seed": 4518
+  }
+}
