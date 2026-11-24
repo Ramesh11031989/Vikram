@@ -1,0 +1,104 @@
+{
+  "blend": "Blender/Sets/SET_Smashan.blend",
+  "all_passed": true,
+  "checks": [
+    {
+      "name": "Frame 1: cloth hides both heels from the path camera",
+      "passed": true,
+      "detail": {}
+    },
+    {
+      "name": "Cloth lifted: both heels are visible and nothing blocks the view",
+      "passed": true,
+      "detail": {
+        "blocked_by": [
+          null,
+          null
+        ]
+      }
+    },
+    {
+      "name": "Cloth returns down and hides the heels again",
+      "passed": true,
+      "detail": {}
+    },
+    {
+      "name": "Chabutra top is a low seat for Betal (0.40-0.55 m)",
+      "passed": true,
+      "detail": {
+        "top_z": 0.4500000476837158
+      }
+    },
+    {
+      "name": "Chabutra is big enough to sit on (>= 1.5 m each way)",
+      "passed": true,
+      "detail": {
+        "size": [
+          2.0,
+          2.0
+        ]
+      }
+    },
+    {
+      "name": "Low branch top lets Betal sit and be lifted (1.0-1.25 m) along the seat stretch",
+      "passed": true,
+      "detail": {
+        "tops": [
+          1.0996339321136475,
+          1.1150004863739014,
+          1.0499999523162842
+        ]
+      }
+    },
+    {
+      "name": "Low branch top is below Vikram shoulder height",
+      "passed": true,
+      "detail": {}
+    },
+    {
+      "name": "Root seat height is a sitting height (0.35-0.50 m)",
+      "passed": true,
+      "detail": {
+        "top_z": 0.4310314655303955
+      }
+    },
+    {
+      "name": "Space above the root seat is clear for a seated figure",
+      "passed": true,
+      "detail": {
+        "hits": [
+          null,
+          "Banyan | main trunk",
+          null
+        ]
+      }
+    },
+    {
+      "name": "Carry mark is within 2 m of the low branch tip and the chabutra",
+      "passed": true,
+      "detail": {}
+    },
+    {
+      "name": "Horse post is outside the gate, before the entrance",
+      "passed": true,
+      "detail": {}
+    },
+    {
+      "name": "Path is clear from the horse mark through the gate to the banyan",
+      "passed": true,
+      "detail": {}
+    },
+    {
+      "name": "Gate opening is wider than 2 m",
+      "passed": true,
+      "detail": {}
+    },
+    {
+      "name": "Cloth hangs from the upper branch",
+      "passed": true,
+      "detail": {
+        "top": 2.06
+      }
+    }
+  ]
+}

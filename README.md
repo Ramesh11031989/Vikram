@@ -8,6 +8,8 @@ Hindi animated series made with Blender and Unity. The first chapter is **सा
 | [श्याम मुंशी उर्फ़ बेताल](Blender/Characters/Betal/README.md) | Former royal clerk, with a right-ankle state control and four story poses |
 | [गोपाल, नाविक](Blender/Characters/Gopal/README.md) | Adult boatman, dry-silt foot material, and three editable Chapter 1 poses |
 | [Chapter 1 sightlines and asset screenshots](Production/E01/Sightlines/README.md) | Shared Palace, Ghat and Town scene, five camera proofs and a visual review of the Chapter 1 assets |
+| [सहायक: दो नाविक](Blender/Characters/Sailor_Assistants/README.md) | Two sailor assistants who write the refuge list on the slope, built on the citizen rig with boatman dress, for the previous-night scenes |
+| [Agent notes](AGENTS.md) | Blender 5.2.2 executable path (`D:\Tools\Blender\blender-5.2.2-windows-x64\blender.exe`) and scripting conventions |
 | [Art production gates](Production/ART_PASSES.md) | Modeling, palace kit, performance, reusable effects and export checks |
 | [Chapter 1](अध्याय%2001%20-%20सात%20गवाह,%20एक%20आवाज़.md) | Original Hindi story |
 | [Chapter 2](अध्याय%2002%20-%20जिस%20मुहल्ले%20में%20कोई%20नहीं%20मरा.md) | Original Hindi story |
@@ -18,6 +20,9 @@ Hindi animated series made with Blender and Unity. The first chapter is **सा
 | [Performance review video](Production/E01/Performance/E01_SC04_Performance_v0_3.mp4) | Completed v0.3 motion review with Hindi captions and synthetic scratch voices |
 | [Current cast performance scene](Production/E01/Performance/E01_SC04_Performance_Current_Cast.blend) | Working interrogation scene with the merged acting and latest hair, skin and fabric art |
 | [v0.3 review scene](Production/E01/Performance/E01_SC04_Performance_v0_3.blend) | Editable scene used for the existing review video |
+| [Set 3: निचली बस्ती और अनाज मंडी](Blender/Sets/SET_Town_README.md) | Halwai roof, front roof, neighbour's cattle place, tall grain-market shed, open refuge floor and modular houses, on the same map as the palace and ghat sets |
+| [Set 4: श्मशान, बरगद और चबूतरा](Blender/Sets/SET_Smashan_README.md) | Horse tie, banyan with a low climbing branch, hanging white cloth over two heels, entrance path, chabutra seat and a root seat for the last scene, on a local map |
+| [Set 5: शरण की ढलान और बेताल की झोपड़ी](Blender/Sets/SET_Sharan_README.md) | Refuge slope with 14 numbered seats (Gopal third, eleven after him), the sailors' list board, a footpath up the slope and the outside of Betal's hut, on a local map |
 | [Blender cast library](Blender/Vikram_Betal_Cast.blend) | Editable Vikram, Betal and Gopal models and rigs |
 | [Current cast facial FBX exports](Production/E01/Performance/Exports/Current_Cast/) | Neutral models for Vikram, Gopal, Betal and the court clerk, with extended speech and expression shapes |
 | [Cast-library FBX exports](Blender/Exports/) | Latest strand-groom geometry for Vikram, Gopal and Betal, with five speech shapes |
@@ -46,3 +51,15 @@ blender --background Blender/Vikram_Betal_Cast.blend --python-exit-code 1 --pyth
 ```
 
 For a portable install, use the full `blender.exe` path in the command.
+
+### Blender location on this machine
+
+Blender 5.2.2 LTS is installed at `D:\Tools\Blender\blender-5.2.2-windows-x64\`. `blender` is not on PATH, so replace `blender` in every command in this repository's docs with the full executable path:
+
+```powershell
+& 'D:\Tools\Blender\blender-5.2.2-windows-x64\blender.exe' --background --factory-startup --python-exit-code 1 --python Blender/tools/build_cast.py
+```
+
+From WSL the same file is `/mnt/d/Tools/Blender/blender-5.2.2-windows-x64/blender.exe`. See [AGENTS.md](AGENTS.md) for notes aimed at AI agents.
+
+use git from WSL

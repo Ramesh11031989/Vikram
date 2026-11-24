@@ -1,0 +1,362 @@
+{
+  "blend": "Blender/Sets/SET_Palace.blend",
+  "all_passed": true,
+  "checks": [
+    {
+      "name": "CAM | Chamber window — ghat steps (fixed) — frame 1: 5 dry steps",
+      "passed": true,
+      "detail": {
+        "water_z": -2.2,
+        "counted_steps": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "per_step": [
+          {
+            "step": 1,
+            "tread_z": -0.4,
+            "dry": true,
+            "samples_in_frame": 17,
+            "samples_seen": 12,
+            "counted": true
+          },
+          {
+            "step": 2,
+            "tread_z": -0.8,
+            "dry": true,
+            "samples_in_frame": 17,
+            "samples_seen": 13,
+            "counted": true
+          },
+          {
+            "step": 3,
+            "tread_z": -1.2,
+            "dry": true,
+            "samples_in_frame": 17,
+            "samples_seen": 12,
+            "counted": true
+          },
+          {
+            "step": 4,
+            "tread_z": -1.6,
+            "dry": true,
+            "samples_in_frame": 17,
+            "samples_seen": 12,
+            "counted": true
+          },
+          {
+            "step": 5,
+            "tread_z": -2.0,
+            "dry": true,
+            "samples_in_frame": 17,
+            "samples_seen": 10,
+            "counted": true
+          },
+          {
+            "step": 6,
+            "tread_z": -2.4,
+            "dry": false,
+            "samples_in_frame": 17,
+            "samples_seen": 0,
+            "counted": false
+          },
+          {
+            "step": 7,
+            "tread_z": -2.8,
+            "dry": false,
+            "samples_in_frame": 17,
+            "samples_seen": 0,
+            "counted": false
+          },
+          {
+            "step": 8,
+            "tread_z": -3.2,
+            "dry": false,
+            "samples_in_frame": 17,
+            "samples_seen": 0,
+            "counted": false
+          }
+        ]
+      }
+    },
+    {
+      "name": "CAM | Chamber window — ghat steps (fixed) — frame 2: 3 dry steps",
+      "passed": true,
+      "detail": {
+        "water_z": -1.4,
+        "counted_steps": [
+          1,
+          2,
+          3
+        ],
+        "per_step": [
+          {
+            "step": 1,
+            "tread_z": -0.4,
+            "dry": true,
+            "samples_in_frame": 17,
+            "samples_seen": 12,
+            "counted": true
+          },
+          {
+            "step": 2,
+            "tread_z": -0.8,
+            "dry": true,
+            "samples_in_frame": 17,
+            "samples_seen": 13,
+            "counted": true
+          },
+          {
+            "step": 3,
+            "tread_z": -1.2,
+            "dry": true,
+            "samples_in_frame": 17,
+            "samples_seen": 12,
+            "counted": true
+          },
+          {
+            "step": 4,
+            "tread_z": -1.6,
+            "dry": false,
+            "samples_in_frame": 17,
+            "samples_seen": 0,
+            "counted": false
+          },
+          {
+            "step": 5,
+            "tread_z": -2.0,
+            "dry": false,
+            "samples_in_frame": 17,
+            "samples_seen": 0,
+            "counted": false
+          },
+          {
+            "step": 6,
+            "tread_z": -2.4,
+            "dry": false,
+            "samples_in_frame": 17,
+            "samples_seen": 0,
+            "counted": false
+          },
+          {
+            "step": 7,
+            "tread_z": -2.8,
+            "dry": false,
+            "samples_in_frame": 17,
+            "samples_seen": 0,
+            "counted": false
+          },
+          {
+            "step": 8,
+            "tread_z": -3.2,
+            "dry": false,
+            "samples_in_frame": 17,
+            "samples_seen": 0,
+            "counted": false
+          }
+        ]
+      }
+    },
+    {
+      "name": "CAM | Chamber window — ghat steps (close) — frame 1: 5 dry steps",
+      "passed": true,
+      "detail": {
+        "water_z": -2.2,
+        "counted_steps": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "per_step": [
+          {
+            "step": 1,
+            "tread_z": -0.4,
+            "dry": true,
+            "samples_in_frame": 15,
+            "samples_seen": 14,
+            "counted": true
+          },
+          {
+            "step": 2,
+            "tread_z": -0.8,
+            "dry": true,
+            "samples_in_frame": 16,
+            "samples_seen": 14,
+            "counted": true
+          },
+          {
+            "step": 3,
+            "tread_z": -1.2,
+            "dry": true,
+            "samples_in_frame": 16,
+            "samples_seen": 13,
+            "counted": true
+          },
+          {
+            "step": 4,
+            "tread_z": -1.6,
+            "dry": true,
+            "samples_in_frame": 17,
+            "samples_seen": 13,
+            "counted": true
+          },
+          {
+            "step": 5,
+            "tread_z": -2.0,
+            "dry": true,
+            "samples_in_frame": 17,
+            "samples_seen": 12,
+            "counted": true
+          },
+          {
+            "step": 6,
+            "tread_z": -2.4,
+            "dry": false,
+            "samples_in_frame": 17,
+            "samples_seen": 0,
+            "counted": false
+          },
+          {
+            "step": 7,
+            "tread_z": -2.8,
+            "dry": false,
+            "samples_in_frame": 15,
+            "samples_seen": 0,
+            "counted": false
+          },
+          {
+            "step": 8,
+            "tread_z": -3.2,
+            "dry": false,
+            "samples_in_frame": 14,
+            "samples_seen": 0,
+            "counted": false
+          }
+        ]
+      }
+    },
+    {
+      "name": "CAM | Chamber window — ghat steps (close) — frame 2: 3 dry steps",
+      "passed": true,
+      "detail": {
+        "water_z": -1.4,
+        "counted_steps": [
+          1,
+          2,
+          3
+        ],
+        "per_step": [
+          {
+            "step": 1,
+            "tread_z": -0.4,
+            "dry": true,
+            "samples_in_frame": 15,
+            "samples_seen": 14,
+            "counted": true
+          },
+          {
+            "step": 2,
+            "tread_z": -0.8,
+            "dry": true,
+            "samples_in_frame": 16,
+            "samples_seen": 14,
+            "counted": true
+          },
+          {
+            "step": 3,
+            "tread_z": -1.2,
+            "dry": true,
+            "samples_in_frame": 16,
+            "samples_seen": 13,
+            "counted": true
+          },
+          {
+            "step": 4,
+            "tread_z": -1.6,
+            "dry": false,
+            "samples_in_frame": 17,
+            "samples_seen": 0,
+            "counted": false
+          },
+          {
+            "step": 5,
+            "tread_z": -2.0,
+            "dry": false,
+            "samples_in_frame": 17,
+            "samples_seen": 0,
+            "counted": false
+          },
+          {
+            "step": 6,
+            "tread_z": -2.4,
+            "dry": false,
+            "samples_in_frame": 17,
+            "samples_seen": 0,
+            "counted": false
+          },
+          {
+            "step": 7,
+            "tread_z": -2.8,
+            "dry": false,
+            "samples_in_frame": 15,
+            "samples_seen": 0,
+            "counted": false
+          },
+          {
+            "step": 8,
+            "tread_z": -3.2,
+            "dry": false,
+            "samples_in_frame": 14,
+            "samples_seen": 0,
+            "counted": false
+          }
+        ]
+      }
+    },
+    {
+      "name": "Next witness cannot see the interrogation floor",
+      "passed": true,
+      "detail": {
+        "sight_lines_tested": 153,
+        "sight_lines_open": 0
+      }
+    },
+    {
+      "name": "Chalk-map floor is empty and flat",
+      "passed": true,
+      "detail": {
+        "samples": 63,
+        "obstructions": [],
+        "floor_height_range_m": 0.0,
+        "zone_m": [
+          4.0,
+          3.2
+        ]
+      }
+    },
+    {
+      "name": "Darbar camera: daughter's entrance to Nandu's hands",
+      "passed": true,
+      "detail": {
+        "entrance_in_frame": true,
+        "entrance_clear": true,
+        "hands_in_frame": true,
+        "hands_clear": true,
+        "entrance_to_hands_clear": true,
+        "path_samples_seen": "60/60"
+      }
+    },
+    {
+      "name": "Reading spot sees the guard at the chamber door",
+      "passed": true,
+      "detail": {
+        "distance_m": 7.87
+      }
+    }
+  ]
+}

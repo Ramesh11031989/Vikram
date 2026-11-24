@@ -1,0 +1,213 @@
+{
+  "blend": "Blender/Sets/SET_Town.blend",
+  "all_passed": true,
+  "checks": [
+    {
+      "name": "Halwai roof eye sees the ghat (quay edge and mooring posts) with nothing in between",
+      "passed": true,
+      "detail": {
+        "blockers": {
+          "(10.0, -1.0, 0.84)": null,
+          "(16.0, -1.0, 0.84)": null,
+          "(5.0, -1.05, 0.85)": null,
+          "(6.2, -1.8, 0.6)": null
+        }
+      }
+    },
+    {
+      "name": "Every gate sample is hidden from the Halwai roof eye",
+      "passed": true,
+      "detail": {
+        "samples": 12,
+        "blockers": [
+          "Mandi thatch roof (tall shed)"
+        ]
+      }
+    },
+    {
+      "name": "The thing hiding the gate is the market shed, not a house",
+      "passed": true,
+      "detail": {}
+    },
+    {
+      "name": "Without the market shed most of the gate would be visible (the shed is what covers it)",
+      "passed": true,
+      "detail": {
+        "visible_without_shed": 12,
+        "samples": 12
+      }
+    },
+    {
+      "name": "Market ridge is at the palace map anchor",
+      "passed": true,
+      "detail": {
+        "location": [
+          -38.0,
+          34.0,
+          9.0
+        ]
+      }
+    },
+    {
+      "name": "Sight line to the gate crosses the shed inside its footprint and below the ridge",
+      "passed": true,
+      "detail": {
+        "crossing_x": -38.28,
+        "sight_line_z": 3.86,
+        "ridge_z": 9.0
+      }
+    },
+    {
+      "name": "Halwai roof is higher than the front roof, and the eye is 1.7 m above its floor",
+      "passed": true,
+      "detail": {
+        "halwai_roof_z": 4.5,
+        "front_roof_z": 3.35
+      }
+    },
+    {
+      "name": "Roof stair landing is level with the Halwai roof floor",
+      "passed": true,
+      "detail": {
+        "landing_z": 4.5,
+        "object": "Roof stair landing",
+        "roof_z": 4.5
+      }
+    },
+    {
+      "name": "A person on the stair landing can walk onto the roof through the parapet gap",
+      "passed": true,
+      "detail": {
+        "blocked_by": null
+      }
+    },
+    {
+      "name": "The boy on the front roof is in line of sight of the Halwai roof",
+      "passed": true,
+      "detail": {
+        "blocker": null
+      }
+    },
+    {
+      "name": "Front roof is well below the Halwai eye, so it does not hide the ghat",
+      "passed": true,
+      "detail": {
+        "front_roof_z": 3.35,
+        "eye_z": 6.2
+      }
+    },
+    {
+      "name": "From the Halwai west parapet the cattle place is visible (only its own props in between)",
+      "passed": true,
+      "detail": {
+        "blockers": {
+          "(-70.0, 80.0, 0.06)": null,
+          "(-72.0, 82.0, 1.0)": null,
+          "(-68.0, 82.0, 1.0)": null
+        }
+      }
+    },
+    {
+      "name": "Cattle place has a hitching rail and two tethered cows",
+      "passed": true,
+      "detail": {
+        "cows": 2
+      }
+    },
+    {
+      "name": "Neighbour house closes the yard on the west and the Halwai house on the east",
+      "passed": true,
+      "detail": {
+        "neighbour_east": -75.0,
+        "yard_west": -75.0,
+        "yard_east": -64.5,
+        "halwai_west": -64.5
+      }
+    },
+    {
+      "name": "Refuge floor is flat within 1 cm (joint relief), open to the sky, with nothing on it (42 samples)",
+      "passed": true,
+      "detail": {
+        "heights": [
+          0.2,
+          0.206
+        ],
+        "objects": [
+          "Flag joint.002",
+          "Refuge slab"
+        ]
+      }
+    },
+    {
+      "name": "No houses, cattle place, stair, refuge or shed overlap on the ground",
+      "passed": true,
+      "detail": {
+        "overlaps": []
+      }
+    },
+    {
+      "name": "Houses stay off lanes A and B",
+      "passed": true,
+      "detail": {
+        "houses_on_lane": []
+      }
+    },
+    {
+      "name": "Everything stands on the combined ghat-quay and town ground",
+      "passed": true,
+      "detail": {
+        "outside": []
+      }
+    },
+    {
+      "name": "9 modular houses plus the 3 story houses, built from solid, door and window wall modules",
+      "passed": true,
+      "detail": {
+        "houses": 12,
+        "wall_module_kinds": [
+          "Wall module door",
+          "Wall module door fittings",
+          "Wall module solid",
+          "Wall module window",
+          "Wall module window fittings"
+        ]
+      }
+    },
+    {
+      "name": "Every house is a whole number of 3 m bays, with flat, thatch and tile roofs in use",
+      "passed": true,
+      "detail": {
+        "roofs": [
+          "flat",
+          "thatch",
+          "tile"
+        ]
+      }
+    },
+    {
+      "name": "Gate in this scene is at the ghat-set position",
+      "passed": true,
+      "detail": {
+        "location": [
+          -21.0,
+          -1.0,
+          0.0
+        ]
+      }
+    },
+    {
+      "name": "Wide Halwai camera frames both the gate and the ghat centre",
+      "passed": true,
+      "detail": {
+        "gate": [
+          0.5,
+          0.478
+        ],
+        "ghat": [
+          0.394,
+          0.484
+        ]
+      }
+    }
+  ]
+}

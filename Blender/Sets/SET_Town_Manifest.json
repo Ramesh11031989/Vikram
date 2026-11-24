@@ -1,0 +1,177 @@
+{
+  "blend": "Blender/Sets/SET_Town.blend",
+  "generator": "Blender/tools/build_town_set.py",
+  "blender": "5.2.2 LTS",
+  "units": "metres; +X east, +Y north, +Z up; world Z 0 = ghat quay (same map as SET_Palace and SET_Ghat)",
+  "anchors": {
+    "halwai_roof_eye": [
+      -60.0,
+      78.0,
+      6.2
+    ],
+    "mandi_ridge": [
+      -38.0,
+      34.0,
+      9.0
+    ],
+    "gate": [
+      -21.0,
+      -1.0,
+      0.0
+    ],
+    "front_roof_boy": [
+      -58.0,
+      65.5,
+      5.05
+    ],
+    "cattle_place": [
+      -69.75,
+      80.5,
+      0
+    ],
+    "refuge_floor": [
+      -10.0,
+      46.0,
+      0.2
+    ]
+  },
+  "footprints": {
+    "Halwai house": [
+      -64.5,
+      76.5,
+      -55.5,
+      82.5
+    ],
+    "Front house": [
+      -62.5,
+      62.5,
+      -53.5,
+      68.5
+    ],
+    "Neighbour house": [
+      -81.0,
+      76.5,
+      -75.0,
+      82.5
+    ],
+    "Module house 1": [
+      -73.0,
+      62.5,
+      -67.0,
+      68.5
+    ],
+    "Module house 2": [
+      -89.0,
+      62.5,
+      -83.0,
+      68.5
+    ],
+    "Module house 3": [
+      -42.5,
+      62.5,
+      -33.5,
+      68.5
+    ],
+    "Module house 4": [
+      -17.0,
+      62.5,
+      -11.0,
+      68.5
+    ],
+    "Module house 5": [
+      -52.5,
+      76.5,
+      -43.5,
+      82.5
+    ],
+    "Module house 6": [
+      -35.0,
+      76.5,
+      -29.0,
+      82.5
+    ],
+    "Module house 7": [
+      -20.5,
+      76.5,
+      -11.5,
+      82.5
+    ],
+    "Module house 8": [
+      -15.0,
+      56.0,
+      -9.0,
+      62.0
+    ],
+    "Module house 9": [
+      -37.0,
+      53.0,
+      -31.0,
+      59.0
+    ],
+    "Halwai roof stair": [
+      -55.5,
+      76.5,
+      -54.5,
+      82.5
+    ],
+    "Cattle place": [
+      -75.0,
+      76.5,
+      -64.5,
+      84.5
+    ],
+    "Refuge floor": [
+      -19.0,
+      39.0,
+      -1.0,
+      53.0
+    ],
+    "Mandi platform": [
+      -43.8,
+      29.5,
+      -32.2,
+      38.5
+    ],
+    "Mandi roof": [
+      -44.15,
+      28.4,
+      -31.85,
+      39.6
+    ]
+  },
+  "cameras": [
+    "CAM | Cattle place",
+    "CAM | Front roof to the Halwai roof",
+    "CAM | Halwai roof eye to the ghat",
+    "CAM | Halwai roof eye to the ghat (wide)",
+    "CAM | Halwai west parapet to the cattle place",
+    "CAM | Lane A looking west",
+    "CAM | Mandi shed from lane B",
+    "CAM | Refuge floor",
+    "CAM | Top map (town, market, ghat)"
+  ],
+  "collections": {
+    "Ghat context (from SET_Ghat)": 0,
+    "Ghat | Chowki & lamp place (चौकी, दीये की जगह)": 9,
+    "Ghat | Lifting gate (उठने वाला फाटक)": 27,
+    "Ghat | River bend & banks": 6,
+    "Ghat | Riverside low wall (किनारे की नीची दीवार)": 85,
+    "Ghat | Stone steps & quay": 27,
+    "Town | Cameras": 9,
+    "Town | Front house roof (सामने की छत)": 27,
+    "Town | Grain market shed (अनाज मंडी का ऊँचा छप्पर)": 40,
+    "Town | Ground & lanes": 3,
+    "Town | Halwai house & roof (हलवाई की छत)": 56,
+    "Town | Lights": 1,
+    "Town | Modular houses (मॉड्यूलर मकान)": 213,
+    "Town | Neighbour house & cattle place (पड़ोसन का मवेशी बाँधने का स्थान)": 30,
+    "Town | Refuge floor (शरण के लिए खुला फ़र्श)": 17,
+    "Town | Trees": 74
+  },
+  "mesh_objects": 591,
+  "guesses": [
+    "All positions are guesses that satisfy the story: the roof-to-ghat sight line and the market roof covering the gate.",
+    "The ghat is rebuilt here only as context; SET_Ghat.blend remains the source for the gate and chowki.",
+    "House styles (mud, lime, ochre; thatch, tile, flat) follow an early-Indian village idiom and copy no real place."
+  ]
+}

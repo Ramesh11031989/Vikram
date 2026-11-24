@@ -59,6 +59,9 @@ still specifies Blender 5.2.2 and is not rewritten by this workflow.
 
 Run from the repository root:
 
+In the commands below, replace `blender` with `D:\Tools\Blender\blender-5.2.2-windows-x64\blender.exe` (see [AGENTS.md](../../AGENTS.md)).
+
+
 ```powershell
 python -m pip install -r Production/requirements.txt
 

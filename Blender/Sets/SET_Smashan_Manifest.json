@@ -1,0 +1,88 @@
+{
+  "blend": "Blender/Sets/SET_Smashan.blend",
+  "generator": "Blender/tools/build_smashan_set.py",
+  "blender": "5.2.2 LTS",
+  "units": "metres; local map, +X east, +Y north, +Z up; origin on the entrance path",
+  "heights": {
+    "low_branch_seat_top_z": [
+      1.1,
+      1.115,
+      1.17
+    ],
+    "chabutra_top_z": 0.45,
+    "root_seat_top_z": [
+      0.46,
+      0.41
+    ],
+    "vikram_height": 1.84,
+    "betal_height": 1.75
+  },
+  "anchors": {
+    "horse": [
+      -4.2,
+      -9.4,
+      0.0
+    ],
+    "trunk": [
+      4.5,
+      4.5
+    ],
+    "cloth": [
+      2.0206850706512314,
+      5.2829415566364535
+    ],
+    "heels": [
+      [
+        2.2406850706512316,
+        5.182941556636454,
+        0.05
+      ],
+      [
+        2.2406850706512316,
+        5.382941556636453,
+        0.05
+      ]
+    ],
+    "carry": [
+      1.15,
+      2.95,
+      0.0
+    ],
+    "root_seat": [
+      4.225437410806542,
+      3.127187054032712,
+      0.436
+    ]
+  },
+  "cloth_frames": {
+    "start": 1,
+    "lift_begin": 20,
+    "lift_full": 44,
+    "hold_until": 70,
+    "down": 96
+  },
+  "cameras": [
+    "CAM | Banyan, branch and chabutra",
+    "CAM | Cloth and heels from the path",
+    "CAM | Entrance and horse",
+    "CAM | Heels close",
+    "CAM | Root seat",
+    "CAM | Top map (smashan)"
+  ],
+  "collections": {
+    "Smashan | Banyan": 17,
+    "Smashan | Boundary and gate": 9,
+    "Smashan | Chabutra": 7,
+    "Smashan | Cremation ground": 10,
+    "Smashan | Ground and path": 25,
+    "Smashan | Hanging cloth and heels": 10,
+    "Smashan | Horse tie": 6,
+    "Smashan | Lights and cameras": 7
+  },
+  "mesh_objects": 76,
+  "guesses": [
+    "All positions and sizes are guesses; the story fixes only the order of horse, banyan, cloth, heels, branch, root.",
+    "The set is on a local map and is not yet placed on the palace/ghat/town map.",
+    "Heels are simple stand-ins; swap in the Betal rig at MARK | Heels if needed."
+  ]
+}

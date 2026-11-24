@@ -16,6 +16,9 @@ The first hero build is for modeling review. Expression shapes, Hindi lip sync, 
 
 The anatomical starting point is the realistic male body and eyes from the Blender Foundation's CC0 Human Base Meshes v1.4.1. Extract the source bundle and use the path to its included `.blend` file. The hero builder adds the project-specific face shaping, pigment, costume, groom, rig and review scenes. [Blender Foundation asset bundles](https://www.blender.org/download/demo-files/#assets) · [Official v1.4.1 bundle](https://mirror.blender.org/demo/asset-bundles/human-base-meshes/human-base-meshes-bundle-v1.4.1.zip)
 
+Replace `blender` with `D:\Tools\Blender\blender-5.2.2-windows-x64\blender.exe` (see [AGENTS.md](../../../AGENTS.md)).
+
+
 ```powershell
 blender --background --factory-startup --python-exit-code 1 --python Blender/tools/build_vikram_hero.py -- --base C:/path/to/human_base_meshes_bundle.blend
 ```

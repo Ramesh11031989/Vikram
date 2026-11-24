@@ -1,0 +1,16 @@
+{
+  "character": "AnonymousRedCloth",
+  "rig_bones": 34,
+  "skinned_meshes": 40,
+  "polygons": 14036,
+  "height_m": 1.7,
+  "facial_meshes": 0,
+  "shape_keys": 0,
+  "red_cloth": "Red cloth over shoulders",
+  "fbx": "CH_AnonymousRedCloth.fbx",
+  "renders": [
+    "Anonymous_Red_Cloth_Back_Shoulder.png",
+    "Anonymous_Red_Cloth_Three_Quarter.png",
+    "Anonymous_Red_Cloth_Front_Check.png"
+  ]
+}

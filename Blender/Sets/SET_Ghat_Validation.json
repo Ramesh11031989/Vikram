@@ -1,0 +1,122 @@
+{
+  "blend": "Blender/Sets/SET_Ghat.blend",
+  "all_passed": true,
+  "checks": [
+    {
+      "name": "Frame 1: lamp flame is in the boat camera frame",
+      "passed": true,
+      "detail": {
+        "position": [
+          0.469,
+          0.573
+        ]
+      }
+    },
+    {
+      "name": "Frame 1: red cloth is in frame and the boat sees it (nothing blocks it)",
+      "passed": true,
+      "detail": {
+        "position": [
+          0.541,
+          0.502
+        ]
+      }
+    },
+    {
+      "name": "Person shows an oblique back to the boat (neither flat back nor profile)",
+      "passed": true,
+      "detail": {
+        "angle_between_back_and_boat_degrees": 49.7
+      }
+    },
+    {
+      "name": "Lamp spot cone does not reach the gate below the lamp (stays dark)",
+      "passed": true,
+      "detail": {
+        "half_cone_degrees": 30.0,
+        "nearest_gate_sample_degrees": 121.5
+      }
+    },
+    {
+      "name": "Lamp spot cone covers the red cloth",
+      "passed": true,
+      "detail": {
+        "degrees_off_axis": 0.0
+      }
+    },
+    {
+      "name": "Gate stays down through frame 149 and rises after the testimony",
+      "passed": true,
+      "detail": {
+        "grille_lift_by_frame": {
+          "1": 0.0,
+          "60": 0.0,
+          "120": 0.0,
+          "149": 0.0,
+          "240": 2.6
+        }
+      }
+    },
+    {
+      "name": "Frame 1: chowki lamp and person in the boat camera frame",
+      "passed": true,
+      "detail": {
+        "lamp": [
+          0.469,
+          0.573
+        ],
+        "cloth": [
+          0.541,
+          0.502
+        ]
+      }
+    },
+    {
+      "name": "Frame 94: chowki lamp and person out of the boat camera frame",
+      "passed": true,
+      "detail": {
+        "lamp": [
+          -2.961,
+          -1.374
+        ],
+        "cloth": [
+          -2.438,
+          -0.903
+        ]
+      }
+    },
+    {
+      "name": "Frame 120: chowki lamp and person out of the boat camera frame",
+      "passed": true,
+      "detail": {
+        "lamp": [
+          -0.847,
+          -0.308
+        ],
+        "cloth": [
+          -0.822,
+          -0.21
+        ]
+      }
+    },
+    {
+      "name": "After the turn the boat looks away from the chowki",
+      "passed": true,
+      "detail": {
+        "turn_degrees": 83.4,
+        "angle_to_chowki_degrees": 129.7
+      }
+    },
+    {
+      "name": "Dry steps at night water level",
+      "passed": true,
+      "detail": {
+        "dry_treads": [
+          1,
+          2,
+          3
+        ]
+      }
+    }
+  ]
+}

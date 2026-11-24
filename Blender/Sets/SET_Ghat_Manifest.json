@@ -1,0 +1,96 @@
+{
+  "blend": "Blender/Sets/SET_Ghat.blend",
+  "generator": "Blender/tools/build_ghat_set.py",
+  "blender": "5.2.2 LTS",
+  "units": "metres; +X east, +Y north, +Z up; world Z 0 = ghat quay (same map as SET_Palace)",
+  "water_z": -1.4,
+  "dry_treads": [
+    1,
+    2,
+    3
+  ],
+  "bank_y": -1.3,
+  "anchors": {
+    "gate": [
+      -21.0,
+      -1.0,
+      0
+    ],
+    "lamp": [
+      -18.6,
+      0.4,
+      2.1
+    ],
+    "person": [
+      -18.15,
+      1.2,
+      0.3
+    ]
+  },
+  "boat_route": [
+    [
+      -6.0,
+      -8.0
+    ],
+    [
+      -11.0,
+      -8.3
+    ],
+    [
+      -16.5,
+      -8.6
+    ],
+    [
+      -21.0,
+      -9.6
+    ],
+    [
+      -26.0,
+      -11.8
+    ],
+    [
+      -31.0,
+      -14.5
+    ],
+    [
+      -40.0,
+      -19.0
+    ]
+  ],
+  "frames": {
+    "start": 1,
+    "end": 240,
+    "yaw_turn": [
+      36,
+      90
+    ],
+    "gate_raise": [
+      150,
+      210
+    ]
+  },
+  "cameras": [
+    "CAM | Boat POV — Gopal seated eye",
+    "CAM | Boat POV — wide",
+    "CAM | Gate and lamp from the river",
+    "CAM | Quay west — gate and chowki",
+    "CAM | Steps from the river",
+    "CAM | Top map (river bend, ghat, boat route)"
+  ],
+  "collections": {
+    "Ghat | Boat & route (नाव का रास्ता)": 16,
+    "Ghat | Cameras": 6,
+    "Ghat | Chowki & lamp place (चौकी, दीये की जगह)": 10,
+    "Ghat | Lifting gate (उठने वाला फाटक)": 27,
+    "Ghat | Lights": 2,
+    "Ghat | River bend & banks": 6,
+    "Ghat | Riverside low wall (किनारे की नीची दीवार)": 85,
+    "Ghat | Stone steps & quay": 27,
+    "Ghat | Unidentified person (back only)": 8
+  },
+  "mesh_objects": 164,
+  "guesses": [
+    "Gate, chowki, lamp and person positions are guesses from the palace map_anchors; the story fixes only their order.",
+    "The person is a back-only unidentified stand-in; swap in the Anonymous_Red_Cloth rig at MARK | Person."
+  ]
+}

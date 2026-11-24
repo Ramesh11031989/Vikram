@@ -23,6 +23,9 @@ Open the corresponding scene for the complete pose, contact points and placement
 
 The builder uses the realistic adult anatomy from [Blender Foundation Human Base Meshes v1.4.1](https://www.blender.org/download/demo-files/#assets), CC0, and the approved Vikram file at `Blender/Characters/Vikram/Vikram_Hero.blend`. The source geometry is appended into the built pose scenes.
 
+Replace `blender` with `D:\Tools\Blender\blender-5.2.2-windows-x64\blender.exe` (see [AGENTS.md](../../../AGENTS.md)).
+
+
 ```powershell
 blender --background --factory-startup --python-exit-code 1 --python Blender/tools/build_betal_hero.py -- --base C:/path/to/human_base_meshes_bundle.blend
 ```

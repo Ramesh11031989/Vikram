@@ -1,0 +1,207 @@
+{
+  "blend": "Blender/Sets/SET_Sharan.blend",
+  "all_passed": true,
+  "checks": [
+    {
+      "name": "Fourteen numbered seats exist as empties",
+      "passed": true,
+      "detail": {
+        "seats": 14
+      }
+    },
+    {
+      "name": "Gopal sits in the third place",
+      "passed": true,
+      "detail": {}
+    },
+    {
+      "name": "Every later seat (4-14) is within 9.0 m of Gopal with a clear line of sight",
+      "passed": true,
+      "detail": {
+        "seats": [
+          [
+            4,
+            1.32,
+            null
+          ],
+          [
+            5,
+            2.54,
+            null
+          ],
+          [
+            6,
+            3.57,
+            null
+          ],
+          [
+            7,
+            4.74,
+            null
+          ],
+          [
+            8,
+            3.67,
+            null
+          ],
+          [
+            9,
+            2.74,
+            null
+          ],
+          [
+            10,
+            2.41,
+            null
+          ],
+          [
+            11,
+            2.94,
+            null
+          ],
+          [
+            12,
+            3.93,
+            null
+          ],
+          [
+            13,
+            4.99,
+            null
+          ],
+          [
+            14,
+            5.93,
+            null
+          ]
+        ]
+      }
+    },
+    {
+      "name": "At least 8 people sit after Gopal and can hear him",
+      "passed": true,
+      "detail": {
+        "later": 11
+      }
+    },
+    {
+      "name": "Seating terrace is level (within 0.25 m)",
+      "passed": true,
+      "detail": {
+        "spread": 0.0
+      }
+    },
+    {
+      "name": "Terrace is above the cremation ground and well below the hut platform",
+      "passed": true,
+      "detail": {
+        "terrace": [
+          1.5,
+          1.5
+        ]
+      }
+    },
+    {
+      "name": "Every seat clears the footpath by at least 1.5 m",
+      "passed": true,
+      "detail": {}
+    },
+    {
+      "name": "Mausi sits beside Gopal (within 1 m)",
+      "passed": true,
+      "detail": {}
+    },
+    {
+      "name": "Betal and the sailors sit at the list board, inside the ring of seats",
+      "passed": true,
+      "detail": {}
+    },
+    {
+      "name": "Footpath never steeper than 20.0 degrees for a man carrying a person",
+      "passed": true,
+      "detail": {
+        "max_grade": 16.44
+      }
+    },
+    {
+      "name": "Footpath is wide enough for Vikram with Betal (>= 1.2 m)",
+      "passed": true,
+      "detail": {
+        "width": 1.5
+      }
+    },
+    {
+      "name": "Path starts in the cremation-ground gap and reaches the hut veranda",
+      "passed": true,
+      "detail": {}
+    },
+    {
+      "name": "The wall gap lets the walker through",
+      "passed": true,
+      "detail": {
+        "hit": null
+      }
+    },
+    {
+      "name": "Path surface follows the ground",
+      "passed": true,
+      "detail": {
+        "z": 1.5300025939941406,
+        "hit": "Path | pagdandi up the slope"
+      }
+    },
+    {
+      "name": "Veranda is open overhead: Vikram (1.84 m) stands upright carrying Betal",
+      "passed": true,
+      "detail": {
+        "hit": null
+      }
+    },
+    {
+      "name": "Hut door is high enough (>= 1.7 m) and wide enough (>= 0.9 m)",
+      "passed": true,
+      "detail": {}
+    },
+    {
+      "name": "Door opening is clear from the veranda",
+      "passed": true,
+      "detail": {
+        "hit": null
+      }
+    },
+    {
+      "name": "Hut roof is above the door and overhangs the front wall",
+      "passed": true,
+      "detail": {}
+    },
+    {
+      "name": "Veranda floor is the hut plinth",
+      "passed": true,
+      "detail": {
+        "z": 5.000000476837158,
+        "hit": "Hut | platform plinth"
+      }
+    },
+    {
+      "name": "Hut platform is more than 3 m above the seating terrace",
+      "passed": true,
+      "detail": {
+        "rise": 3.3
+      }
+    },
+    {
+      "name": "Six cameras and an active camera",
+      "passed": true,
+      "detail": {
+        "cameras": [
+          "CAM | Door close",
+          "CAM | Hut exterior",
+          "CAM | Path up to the hut",
+          "CAM | Seating and Gopal's place",
+          "CAM | Slope from the foot",
+          "CAM | Top map (sharan)"
+        ]
+      }
+    }
+  ]
+}

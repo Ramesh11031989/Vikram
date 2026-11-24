@@ -1,0 +1,458 @@
+{
+  "set": "Set 1 — Palace (महल): private chamber, interrogation room, open darbar",
+  "blend": "Blender/Sets/SET_Palace.blend",
+  "generator": "Blender/tools/build_palace_set.py",
+  "blender": "5.2.2 LTS",
+  "units": "metres; +X east, +Y north, +Z up; world Z 0 = ghat quay",
+  "palace_anchor": {
+    "world_location": [
+      83.77201987352049,
+      -30.61605835827126,
+      10.0
+    ],
+    "yaw_degrees": 54.0,
+    "local_axes": "+X toward the public gate, +Y toward the river façade and ghat window"
+  },
+  "time_of_day_frames": {
+    "morning": 1,
+    "evening": 2
+  },
+  "water_levels": {
+    "morning_z": -2.2,
+    "evening_z": -1.4000000000000001,
+    "morning_dry_steps": 5,
+    "evening_dry_steps": 3,
+    "step_rise": 0.4,
+    "step_tread": 0.7
+  },
+  "story_marks": {
+    "reading": {
+      "name": "MARK | Chamber — Vikram reads statements (by the ghat window)",
+      "palace_local": [
+        -27.0,
+        21.25,
+        0.7
+      ],
+      "world": [
+        50.71,
+        -39.969,
+        10.7
+      ]
+    },
+    "guard_door": {
+      "name": "MARK | Chamber — guard speaks from the door",
+      "palace_local": [
+        -21.0,
+        16.2,
+        0.6
+      ],
+      "world": [
+        58.322,
+        -38.083,
+        10.6
+      ]
+    },
+    "chalk": {
+      "name": "MARK | Interrogation — empty floor for the chalk map",
+      "palace_local": [
+        -26.2,
+        -18.2,
+        0.612
+      ],
+      "world": [
+        83.096,
+        -62.51,
+        10.612
+      ]
+    },
+    "clerk_iq": {
+      "name": "MARK | Interrogation — clerk writes (takht)",
+      "palace_local": [
+        -32.55,
+        -18.6,
+        0.96
+      ],
+      "world": [
+        79.687,
+        -67.882,
+        10.96
+      ]
+    },
+    "vikram_iq": {
+      "name": "MARK | Interrogation — Vikram stands (guess)",
+      "palace_local": [
+        -23.2,
+        -16.0,
+        0.6
+      ],
+      "world": [
+        83.08,
+        -58.79,
+        10.6
+      ]
+    },
+    "witness_door": {
+      "name": "MARK | Interrogation — witness enters",
+      "palace_local": [
+        -19.3,
+        -15.2,
+        0.6
+      ],
+      "world": [
+        84.725,
+        -55.164,
+        10.6
+      ]
+    },
+    "next_witness": {
+      "name": "MARK | Waiting hall — next witness waits",
+      "palace_local": [
+        -11.0,
+        -20.6,
+        1.05
+      ],
+      "world": [
+        93.972,
+        -51.624,
+        11.05
+      ]
+    },
+    "throne": {
+      "name": "MARK | Darbar — Vikram on the throne",
+      "palace_local": [
+        -7.2,
+        0.0,
+        2.15
+      ],
+      "world": [
+        79.54,
+        -36.441,
+        12.15
+      ]
+    },
+    "nandu": {
+      "name": "MARK | Darbar — Nandu stands (faces the throne)",
+      "palace_local": [
+        2.6,
+        0.0,
+        0.6
+      ],
+      "world": [
+        85.3,
+        -28.513,
+        10.6
+      ]
+    },
+    "nandu_hands": {
+      "name": "MARK | Darbar — Nandu's bound hands",
+      "palace_local": [
+        2.95,
+        0.0,
+        1.65
+      ],
+      "world": [
+        85.506,
+        -28.229,
+        11.65
+      ]
+    },
+    "daughter": {
+      "name": "MARK | Darbar — daughter enters (public steps)",
+      "palace_local": [
+        31.2,
+        0.4,
+        0.6
+      ],
+      "world": [
+        101.787,
+        -5.14,
+        10.6
+      ]
+    },
+    "clerk_darbar": {
+      "name": "MARK | Darbar — clerk writes beside the platform",
+      "palace_local": [
+        -0.6,
+        -6.9,
+        0.6
+      ],
+      "world": [
+        89.002,
+        -35.157,
+        10.6
+      ]
+    },
+    "crowd": {
+      "name": "MARK | Darbar — crowd standing zone",
+      "palace_local": [
+        18.5,
+        0.0,
+        1.5
+      ],
+      "world": [
+        94.646,
+        -15.649,
+        11.5
+      ]
+    },
+    "sc04_origin": {
+      "name": "MARK | Interrogation — SC04 staging origin (approximate)",
+      "palace_local": [
+        -26.2,
+        -18.2,
+        0.6
+      ],
+      "world": [
+        83.096,
+        -62.51,
+        10.6
+      ]
+    },
+    "daughter_path": {
+      "name": "PATH | Darbar — daughter to Nandu",
+      "palace_local": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "world": [
+        83.772,
+        -30.616,
+        10.0
+      ]
+    }
+  },
+  "cameras": {
+    "window": {
+      "name": "CAM | Chamber window — ghat steps (fixed)",
+      "lens_mm": 30.0,
+      "world": [
+        51.199,
+        -39.892,
+        12.5
+      ]
+    },
+    "window_tele": {
+      "name": "CAM | Chamber window — ghat steps (close)",
+      "lens_mm": 105.0,
+      "world": [
+        48.728,
+        -38.529,
+        12.15
+      ]
+    },
+    "guard": {
+      "name": "CAM | Chamber — guard at the door",
+      "lens_mm": 30.0,
+      "world": [
+        49.751,
+        -40.014,
+        11.85
+      ]
+    },
+    "chamber_wide": {
+      "name": "CAM | Chamber — wide to the ghat window",
+      "lens_mm": 18.0,
+      "world": [
+        59.654,
+        -40.163,
+        12.6
+      ]
+    },
+    "iq_wide": {
+      "name": "CAM | Interrogation — wide over the chalk floor",
+      "lens_mm": 18.0,
+      "world": [
+        83.28,
+        -54.856,
+        14.0
+      ]
+    },
+    "iq_top": {
+      "name": "CAM | Interrogation — overhead chalk floor",
+      "lens_mm": 22.0,
+      "world": [
+        83.096,
+        -62.51,
+        15.2
+      ]
+    },
+    "waiting": {
+      "name": "CAM | Waiting hall — next witness outside",
+      "lens_mm": 20.0,
+      "world": [
+        88.596,
+        -47.965,
+        12.15
+      ]
+    },
+    "darbar_story": {
+      "name": "CAM | Darbar — daughter's entrance to Nandu's hands",
+      "lens_mm": 28.0,
+      "world": [
+        83.458,
+        -34.961,
+        12.9
+      ]
+    },
+    "darbar_wide": {
+      "name": "CAM | Darbar — wide toward the throne",
+      "lens_mm": 22.0,
+      "world": [
+        101.17,
+        -6.669,
+        12.35
+      ]
+    },
+    "darbar_aisle": {
+      "name": "CAM | Darbar — from the side aisle",
+      "lens_mm": 24.0,
+      "world": [
+        106.94,
+        -17.783,
+        12.8
+      ]
+    },
+    "darbar_low": {
+      "name": "CAM | Darbar — daughter's eye line",
+      "lens_mm": 32.0,
+      "world": [
+        95.571,
+        -11.995,
+        11.55
+      ]
+    },
+    "courtyard": {
+      "name": "CAM | Courtyard — verandahs and throne jali",
+      "lens_mm": 18.0,
+      "world": [
+        71.229,
+        -60.81,
+        11.7
+      ]
+    },
+    "gate": {
+      "name": "CAM | Exterior — public gate and torana",
+      "lens_mm": 24.0,
+      "world": [
+        135.358,
+        23.373,
+        9.7
+      ]
+    },
+    "from_ghat": {
+      "name": "CAM | Exterior — palace from the ghat bastion",
+      "lens_mm": 28.0,
+      "world": [
+        18.4,
+        -10.6,
+        2.5
+      ]
+    },
+    "from_river": {
+      "name": "CAM | Exterior — palace from the river",
+      "lens_mm": 24.0,
+      "world": [
+        6.0,
+        -30.0,
+        -0.8
+      ]
+    },
+    "aerial": {
+      "name": "CAM | Exterior — aerial map (palace, river bend, ghat)",
+      "lens_mm": 30.0,
+      "world": [
+        -70.0,
+        58.0,
+        82.0
+      ]
+    }
+  },
+  "map_anchors": [
+    {
+      "name": "Ghat | top step centre",
+      "location": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "certainty": "FIXED",
+      "note": "Palace window camera counts treads below this edge."
+    },
+    {
+      "name": "Ghat | lifting gate (फाटक)",
+      "location": [
+        -21.0,
+        -1.0,
+        0.0
+      ],
+      "certainty": "GUESS",
+      "note": "West end of the ghat, set into the low riverside wall."
+    },
+    {
+      "name": "Ghat | chowki lamp",
+      "location": [
+        -18.6,
+        0.4,
+        2.1
+      ],
+      "certainty": "GUESS",
+      "note": "Lamp ledge beside the gate; Gopal sees it from the boat."
+    },
+    {
+      "name": "Market | tall thatched roof ridge",
+      "location": [
+        -38.0,
+        34.0,
+        9.0
+      ],
+      "certainty": "GUESS",
+      "note": "Must hide the gate from the Halwai roof; check in set 3."
+    },
+    {
+      "name": "Settlement | Halwai roof eye",
+      "location": [
+        -60.0,
+        78.0,
+        6.2
+      ],
+      "certainty": "GUESS",
+      "note": "Sees the ghat over the market; the market roof must block the gate."
+    },
+    {
+      "name": "Palace | ghat window bay",
+      "location": [
+        48.0,
+        -38.0,
+        10.0
+      ],
+      "certainty": "FIXED",
+      "note": "Private chamber jharokha; fixed camera shows 5 then 3 treads."
+    }
+  ],
+  "collections": {
+    "PLACEHOLDER | Ghat, river & town (replace with sets 2-3)": 82,
+    "Palace | Plinth, bastions & walls": 11,
+    "Palace | Roofs & pavilions": 114,
+    "Palace | Darbar (open court)": 195,
+    "Palace | Dressing": 78,
+    "Palace | Courtyard & verandahs": 48,
+    "Palace | Interrogation & waiting (पूछताछ)": 28,
+    "Palace | Private chamber (निजी कक्ष)": 18,
+    "Palace | Forecourt & public gate": 21,
+    "Palace | Story marks": 15,
+    "Palace | Cameras": 16,
+    "Palace | Lights": 21
+  },
+  "mesh_objects": 595,
+  "unique_meshes": 174,
+  "placeholders": [
+    "PLACEHOLDER | Ghat, river & town (replace with sets 2-3)"
+  ],
+  "guesses": [
+    "Architectural style: early Indian stone idiom (trabeated halls, rolled brackets, shala vaults, phamsana roofs); no specific historical palace is copied.",
+    "Palace sits on a river bluff at the bend, about 60 m from the ghat; the ghat, gate, market and Halwai roof positions are placeholders for sets 2 and 3.",
+    "Interrogation floor is dark basalt so the white chalk map reads clearly.",
+    "Vikram's standing mark in the interrogation room and the crowd zone in the darbar are suggestions."
+  ]
+}

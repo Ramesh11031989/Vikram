@@ -4,6 +4,8 @@ Use the Blender gates first on Vikram as the visual standard. Apply the same che
 
 ## Blender
 
+Run every Blender gate and build script with Blender 5.2.2 LTS at `D:\Tools\Blender\blender-5.2.2-windows-x64\blender.exe` (WSL: `/mnt/d/Tools/Blender/blender-5.2.2-windows-x64/blender.exe`). `blender` is not on PATH. See [AGENTS.md](../AGENTS.md).
+
 1. **Design reference.** Establish Vikram’s face, costume, palette and silhouette in front, side and three-quarter views. Carry the same material and proportion standards across the cast.
 2. **Adult proportions.** Check a neutral full-body view against the design at a consistent meter scale. Review head size, shoulder width, limb lengths, hand size and stance from front and side.
 3. **Face sculpt.** Review a close-up under neutral light. Check the brow, cheek, eyelids, nose, lips, jaw and ears from the front and profile.

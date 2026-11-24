@@ -1,0 +1,166 @@
+{
+  "blend": "Blender/Sets/SET_Sharan.blend",
+  "generator": "Blender/tools/build_sharan_set.py",
+  "blender": "5.2.2 LTS",
+  "units": "metres; local map, +X east, +Y north (uphill), +Z up; origin at the foot of the path",
+  "heights": {
+    "terrace_z": 1.5,
+    "platform_z": 4.8,
+    "hut_floor_z": 5.02,
+    "hut_eave_z": 7.05,
+    "hut_ridge_z": 8.12,
+    "vikram_height": 1.84,
+    "betal_height": 1.75
+  },
+  "path": {
+    "width": 1.5,
+    "max_grade_deg": 16.44,
+    "y_range": [
+      -4.0,
+      39.3
+    ]
+  },
+  "seating": {
+    "count": 14,
+    "gopal_seat": 3,
+    "hearing_radius": 9.0,
+    "seats": [
+      {
+        "n": 1,
+        "x": -6.417,
+        "y": 17.364,
+        "z": 1.5
+      },
+      {
+        "n": 2,
+        "x": -7.606,
+        "y": 16.784,
+        "z": 1.5
+      },
+      {
+        "n": 3,
+        "x": -8.307,
+        "y": 15.662,
+        "z": 1.5
+      },
+      {
+        "n": 4,
+        "x": -8.307,
+        "y": 14.338,
+        "z": 1.5
+      },
+      {
+        "n": 5,
+        "x": -7.606,
+        "y": 13.216,
+        "z": 1.5
+      },
+      {
+        "n": 6,
+        "x": -6.417,
+        "y": 12.636,
+        "z": 1.5
+      },
+      {
+        "n": 7,
+        "x": -6.0,
+        "y": 19.8,
+        "z": 1.5
+      },
+      {
+        "n": 8,
+        "x": -8.083,
+        "y": 19.325,
+        "z": 1.5
+      },
+      {
+        "n": 9,
+        "x": -9.753,
+        "y": 17.993,
+        "z": 1.5
+      },
+      {
+        "n": 10,
+        "x": -10.68,
+        "y": 16.068,
+        "z": 1.5
+      },
+      {
+        "n": 11,
+        "x": -10.68,
+        "y": 13.932,
+        "z": 1.5
+      },
+      {
+        "n": 12,
+        "x": -9.753,
+        "y": 12.007,
+        "z": 1.5
+      },
+      {
+        "n": 13,
+        "x": -8.083,
+        "y": 10.675,
+        "z": 1.5
+      },
+      {
+        "n": 14,
+        "x": -6.0,
+        "y": 10.2,
+        "z": 1.5
+      }
+    ],
+    "mausi": [
+      -7.538,
+      15.441,
+      1.5
+    ]
+  },
+  "anchors": {
+    "hut_door": [
+      -1.0,
+      41.6,
+      5.02
+    ],
+    "veranda": [
+      -0.8,
+      40.6,
+      5.02
+    ],
+    "board": [
+      -6.85,
+      15.0,
+      1.5
+    ],
+    "nandu": [
+      -0.5,
+      12.0,
+      1.5
+    ]
+  },
+  "cameras": [
+    "CAM | Door close",
+    "CAM | Hut exterior",
+    "CAM | Path up to the hut",
+    "CAM | Seating and Gopal's place",
+    "CAM | Slope from the foot",
+    "CAM | Top map (sharan)"
+  ],
+  "collections": {
+    "Sharan | Betal's hut": 25,
+    "Sharan | Cremation ground below": 8,
+    "Sharan | Hut yard props": 31,
+    "Sharan | Lights and cameras": 9,
+    "Sharan | Path up the slope": 48,
+    "Sharan | Seating": 61,
+    "Sharan | Slope ground": 1,
+    "Sharan | Trees and scatter": 108
+  },
+  "mesh_objects": 256,
+  "guesses": [
+    "All positions and sizes are guesses; the story fixes only the slope, the arrival-order list, Gopal's third place and the hut at the top of the slope.",
+    "The set is on a local map and is not yet placed on the palace/ghat/town map.",
+    "Only the outside of the hut is modelled; the inside is a dark box with a charpai.",
+    "People are not included; SEAT, MARK and Mausi empties give their places."
+  ]
+}
