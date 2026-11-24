@@ -12,6 +12,8 @@ LINEN = {
     'Unbleached cotton', 'Faded ivory shawl', 'Flax woven edge', 'Woodsmoke tunic',
     'Earth gray sash', 'Faded river blue', 'Sun-bleached binding', 'Hemp trouser cloth',
     'Dark umber waist wrap', 'Cinnamon shoulder cloth', 'Oat thread',
+    'Unbleached handloom kurta', 'Kurta patch cloth', 'Kurta dark patch cloth',
+    'Faded ochre dhoti', 'Faded head wrap', 'Madder red gamchha',
 }
 FINE_WEAVE = {
     'Indigo handloom jacket', 'Dark indigo border', 'Kingfisher court sash', 'Muted green silk folds',
