@@ -8,6 +8,11 @@ Hindi animated series made with Blender and Unity. The first chapter is **सा
 | [श्याम मुंशी उर्फ़ बेताल](Blender/Characters/Betal/README.md) | Former royal clerk, with a right-ankle state control and four story poses |
 | [गोपाल, नाविक](Blender/Characters/Gopal/README.md) | Adult boatman, dry-silt foot material, and three editable Chapter 1 poses |
 | [Chapter 1 sightlines and asset screenshots](Production/E01/Sightlines/README.md) | Shared Palace, Ghat and Town scene, five camera proofs and a visual review of the Chapter 1 assets |
+| [Chapter 1 Unity project](Unity/README.md) | Imported ghat scene, three cameras, water and boat animation, and the Blender-to-Unity rebuild |
+| [नंदू](Blender/Nandu.blend) · [नंदू की बेटी](Blender/Nandu_Daughter_README.md) | Gatekeeper, bound hands, daughter and the shared reed boat |
+| [हलवाई](Blender/Halwai_README.md) · [पड़ोसन](Blender/Previews/HalwaiNeighbour/HalwaiNeighbour_Notes.md) | Rooftop witness and the tether-cutting scene |
+| [बाकी गवाह](Blender/Characters/Citizen_Witnesses/README.md) · [मौसी का ब्लॉकआउट](mausi_witness_both.blend) | Reusable citizen rigs and the aunt’s two staged scenes |
+| [काग़ज़ और राजकीय सबूत](Blender/Props/Documents/Documents.blend) | Seven statements, arrival list, order, withdrawal, tally, decree and ledger |
 | [सहायक: दो नाविक](Blender/Characters/Sailor_Assistants/README.md) | Two sailor assistants who write the refuge list on the slope, built on the citizen rig with boatman dress, for the previous-night scenes |
 | [Agent notes](AGENTS.md) | Blender 5.2.2 executable path (`D:\Tools\Blender\blender-5.2.2-windows-x64\blender.exe`) and scripting conventions |
 | [Art production gates](Production/ART_PASSES.md) | Modeling, palace kit, performance, reusable effects and export checks |
@@ -20,6 +25,8 @@ Hindi animated series made with Blender and Unity. The first chapter is **सा
 | [Performance review video](Production/E01/Performance/E01_SC04_Performance_v0_3.mp4) | Completed v0.3 motion review with Hindi captions and synthetic scratch voices |
 | [Current cast performance scene](Production/E01/Performance/E01_SC04_Performance_Current_Cast.blend) | Working interrogation scene with the merged acting and latest hair, skin and fabric art |
 | [v0.3 review scene](Production/E01/Performance/E01_SC04_Performance_v0_3.blend) | Editable scene used for the existing review video |
+| [Set 1: महल](Blender/Sets/SET_Palace_README.md) | Private chamber, interrogation room and open court |
+| [Set 2: नदी, घाट और फाटक](Blender/Sets/SET_Ghat_README.md) | River bend, steps, gate, chowki and Gopal’s boat route |
 | [Set 3: निचली बस्ती और अनाज मंडी](Blender/Sets/SET_Town_README.md) | Halwai roof, front roof, neighbour's cattle place, tall grain-market shed, open refuge floor and modular houses, on the same map as the palace and ghat sets |
 | [Set 4: श्मशान, बरगद और चबूतरा](Blender/Sets/SET_Smashan_README.md) | Horse tie, banyan with a low climbing branch, hanging white cloth over two heels, entrance path, chabutra seat and a root seat for the last scene, on a local map |
 | [Set 5: शरण की ढलान और बेताल की झोपड़ी](Blender/Sets/SET_Sharan_README.md) | Refuge slope with 14 numbered seats (Gopal third, eleven after him), the sailors' list board, a footpath up the slope and the outside of Betal's hut, on a local map |

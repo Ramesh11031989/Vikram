@@ -2,6 +2,7 @@ __pycache__/
 *.pyc
 *.blend[0-9]*
 /Renders/
+/.tmp_voice/
 /Production/E01/Animatic/
 /Production/E01/Audio/E01_SC04_Review_Mix.wav
 /Production/E01/Performance/RenderCache/
@@ -17,3 +18,7 @@ __pycache__/
 /Unity/[Ll]ogs/
 /Unity/[Uu]ser[Ss]ettings/
 /Unity/[Bb]uilds/
+/Unity/.vs/
+/Unity/*.csproj
+/Unity/*.sln
+/Unity/*.slnx
