@@ -1,0 +1,482 @@
+{
+  "blend": "E01_Ghat_Sightlines.blend",
+  "scene": "E01 Ghat Sightlines",
+  "all_passed": true,
+  "checks": [
+    {
+      "name": "The combined scene contains the three witness cameras",
+      "passed": true,
+      "detail": {
+        "cameras": [
+          "CAM | Boat POV — Gopal seated eye",
+          "CAM | Chamber window — ghat steps (fixed)",
+          "CAM | Halwai roof eye to the ghat (wide)"
+        ]
+      }
+    },
+    {
+      "name": "Timeline review markers bind each witness camera",
+      "passed": true,
+      "detail": {
+        "missing": []
+      }
+    },
+    {
+      "name": "Frame 1: palace window sees exactly 5 dry ghat treads",
+      "passed": true,
+      "detail": {
+        "water_z": -2.2,
+        "dry_treads_seen": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "per_tread": [
+          {
+            "step": 1,
+            "tread_z": -0.4,
+            "dry": true,
+            "samples_in_frame": 17,
+            "samples_on_tread": 17
+          },
+          {
+            "step": 2,
+            "tread_z": -0.8,
+            "dry": true,
+            "samples_in_frame": 17,
+            "samples_on_tread": 17
+          },
+          {
+            "step": 3,
+            "tread_z": -1.2,
+            "dry": true,
+            "samples_in_frame": 17,
+            "samples_on_tread": 17
+          },
+          {
+            "step": 4,
+            "tread_z": -1.6,
+            "dry": true,
+            "samples_in_frame": 17,
+            "samples_on_tread": 17
+          },
+          {
+            "step": 5,
+            "tread_z": -2.0,
+            "dry": true,
+            "samples_in_frame": 17,
+            "samples_on_tread": 14
+          },
+          {
+            "step": 6,
+            "tread_z": -2.4,
+            "dry": false,
+            "samples_in_frame": 17,
+            "samples_on_tread": 0
+          },
+          {
+            "step": 7,
+            "tread_z": -2.8,
+            "dry": false,
+            "samples_in_frame": 17,
+            "samples_on_tread": 0
+          },
+          {
+            "step": 8,
+            "tread_z": -3.2,
+            "dry": false,
+            "samples_in_frame": 16,
+            "samples_on_tread": 0
+          }
+        ]
+      }
+    },
+    {
+      "name": "Frame 49: palace window sees exactly 3 dry ghat treads",
+      "passed": true,
+      "detail": {
+        "water_z": -1.4,
+        "dry_treads_seen": [
+          1,
+          2,
+          3
+        ],
+        "per_tread": [
+          {
+            "step": 1,
+            "tread_z": -0.4,
+            "dry": true,
+            "samples_in_frame": 17,
+            "samples_on_tread": 17
+          },
+          {
+            "step": 2,
+            "tread_z": -0.8,
+            "dry": true,
+            "samples_in_frame": 17,
+            "samples_on_tread": 17
+          },
+          {
+            "step": 3,
+            "tread_z": -1.2,
+            "dry": true,
+            "samples_in_frame": 17,
+            "samples_on_tread": 17
+          },
+          {
+            "step": 4,
+            "tread_z": -1.6,
+            "dry": false,
+            "samples_in_frame": 17,
+            "samples_on_tread": 0
+          },
+          {
+            "step": 5,
+            "tread_z": -2.0,
+            "dry": false,
+            "samples_in_frame": 17,
+            "samples_on_tread": 0
+          },
+          {
+            "step": 6,
+            "tread_z": -2.4,
+            "dry": false,
+            "samples_in_frame": 17,
+            "samples_on_tread": 0
+          },
+          {
+            "step": 7,
+            "tread_z": -2.8,
+            "dry": false,
+            "samples_in_frame": 17,
+            "samples_on_tread": 0
+          },
+          {
+            "step": 8,
+            "tread_z": -3.2,
+            "dry": false,
+            "samples_in_frame": 16,
+            "samples_on_tread": 0
+          }
+        ]
+      }
+    },
+    {
+      "name": "The palace window camera and lens stay fixed as the water rises",
+      "passed": true,
+      "detail": {
+        "position": [
+          51.199,
+          -39.892,
+          12.5
+        ],
+        "lens_mm": 67.0
+      }
+    },
+    {
+      "name": "Frame 97: the Halwai roof camera has an unobstructed view of the ghat",
+      "passed": true,
+      "detail": {
+        "samples": [
+          {
+            "world": [
+              10.0,
+              -1.0,
+              0.84
+            ],
+            "image": [
+              0.349,
+              0.495
+            ],
+            "in_frame": true,
+            "blocker": null
+          },
+          {
+            "world": [
+              16.0,
+              -1.0,
+              0.84
+            ],
+            "image": [
+              0.324,
+              0.496
+            ],
+            "in_frame": true,
+            "blocker": null
+          },
+          {
+            "world": [
+              5.0,
+              -1.05,
+              0.85
+            ],
+            "image": [
+              0.37,
+              0.494
+            ],
+            "in_frame": true,
+            "blocker": null
+          },
+          {
+            "world": [
+              6.2,
+              -1.8,
+              0.6
+            ],
+            "image": [
+              0.368,
+              0.492
+            ],
+            "in_frame": true,
+            "blocker": null
+          }
+        ]
+      }
+    },
+    {
+      "name": "Frame 97: the market roof blocks the gate from the same Halwai camera",
+      "passed": true,
+      "detail": {
+        "samples": [
+          {
+            "world": [
+              -21.8,
+              -0.55,
+              0.4
+            ],
+            "image": [
+              0.503,
+              0.482
+            ],
+            "in_frame": true,
+            "blocker": "Mandi thatch roof (tall shed)"
+          },
+          {
+            "world": [
+              -21.8,
+              -0.55,
+              2.0
+            ],
+            "image": [
+              0.503,
+              0.5
+            ],
+            "in_frame": true,
+            "blocker": "Mandi thatch roof (tall shed)"
+          },
+          {
+            "world": [
+              -21.8,
+              -0.55,
+              4.0
+            ],
+            "image": [
+              0.503,
+              0.522
+            ],
+            "in_frame": true,
+            "blocker": "Mandi thatch roof (tall shed)"
+          },
+          {
+            "world": [
+              -21.8,
+              -0.55,
+              5.6
+            ],
+            "image": [
+              0.503,
+              0.54
+            ],
+            "in_frame": true,
+            "blocker": "Mandi thatch roof (tall shed)"
+          },
+          {
+            "world": [
+              -21.0,
+              -0.55,
+              0.4
+            ],
+            "image": [
+              0.499,
+              0.482
+            ],
+            "in_frame": true,
+            "blocker": "Mandi thatch roof (tall shed)"
+          },
+          {
+            "world": [
+              -21.0,
+              -0.55,
+              2.0
+            ],
+            "image": [
+              0.499,
+              0.5
+            ],
+            "in_frame": true,
+            "blocker": "Mandi thatch roof (tall shed)"
+          },
+          {
+            "world": [
+              -21.0,
+              -0.55,
+              4.0
+            ],
+            "image": [
+              0.499,
+              0.522
+            ],
+            "in_frame": true,
+            "blocker": "Mandi thatch roof (tall shed)"
+          },
+          {
+            "world": [
+              -21.0,
+              -0.55,
+              5.6
+            ],
+            "image": [
+              0.499,
+              0.54
+            ],
+            "in_frame": true,
+            "blocker": "Mandi thatch roof (tall shed)"
+          },
+          {
+            "world": [
+              -20.2,
+              -0.55,
+              0.4
+            ],
+            "image": [
+              0.494,
+              0.482
+            ],
+            "in_frame": true,
+            "blocker": "Mandi thatch roof (tall shed)"
+          },
+          {
+            "world": [
+              -20.2,
+              -0.55,
+              2.0
+            ],
+            "image": [
+              0.494,
+              0.5
+            ],
+            "in_frame": true,
+            "blocker": "Mandi thatch roof (tall shed)"
+          },
+          {
+            "world": [
+              -20.2,
+              -0.55,
+              4.0
+            ],
+            "image": [
+              0.494,
+              0.522
+            ],
+            "in_frame": true,
+            "blocker": "Mandi thatch roof (tall shed)"
+          },
+          {
+            "world": [
+              -20.2,
+              -0.55,
+              5.6
+            ],
+            "image": [
+              0.494,
+              0.54
+            ],
+            "in_frame": true,
+            "blocker": "Mandi thatch roof (tall shed)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "The market shed is the determining gate obstruction",
+      "passed": true,
+      "detail": {
+        "rays_clear_without_shed": 12,
+        "rays_tested": 12
+      }
+    },
+    {
+      "name": "Frame 145: Gopal views the lamp from seated eye height",
+      "passed": true,
+      "detail": {
+        "below_eye_m": 0.849,
+        "lamp_image": [
+          0.474,
+          0.66
+        ],
+        "blocker": null
+      }
+    },
+    {
+      "name": "Frame 145: the red cloth itself is visible and lit by the lamp spot",
+      "passed": true,
+      "detail": {
+        "visible_samples": 66,
+        "directly_lit_samples": 35,
+        "cloth": [
+          "AnonymousRedCloth_Red cloth over shoulders"
+        ],
+        "lamp_energy": 62.0,
+        "shadow_blockers": {
+          "AnonymousRedCloth_Red cloth over shoulders": 31
+        }
+      }
+    },
+    {
+      "name": "Frame 145: Gopal faces the figure’s oblique back",
+      "passed": true,
+      "detail": {
+        "angle_deg": 49.74
+      }
+    },
+    {
+      "name": "Frame 145: the lamp’s direct cone excludes the lower gate",
+      "passed": true,
+      "detail": {
+        "nearest_gate_off_axis_deg": 95.19,
+        "cone_half_angle_deg": 30.0
+      }
+    },
+    {
+      "name": "Frame 238: the boat has swung its view away from the chowki",
+      "passed": true,
+      "detail": {
+        "camera_heading_change_deg": 85.6,
+        "boat_heading_change_deg": 85.0,
+        "chowki_off_axis_deg": 109.13,
+        "lamp_image": [
+          -4.172,
+          -1.484
+        ],
+        "cloth_image": [
+          -3.809,
+          -0.687
+        ]
+      }
+    },
+    {
+      "name": "The gate remains closed through the boat testimony and lifts later",
+      "passed": true,
+      "detail": {
+        "grille_root_z": {
+          "145": 0.0,
+          "238": 0.0,
+          "293": 0.0,
+          "354": 2.6
+        }
+      }
+    }
+  ]
+}
