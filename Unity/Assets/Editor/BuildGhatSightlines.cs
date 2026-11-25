@@ -255,7 +255,7 @@ namespace Vikram.Editor
             return tracks.ToArray();
         }
 
-        private static void Calibrate(Transform correction, Transform[] nodes)
+        internal static void Calibrate(Transform correction, Transform[] nodes)
         {
             Transform origin = Axis(nodes, "Origin");
             Transform x = Axis(nodes, "X");

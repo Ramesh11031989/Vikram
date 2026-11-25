@@ -20,6 +20,7 @@ import court_clerk
 import facial_controls as face
 import performance_props as props
 from character import Character
+from river_witness_head import build_witness_head
 
 
 ROOT=Path(__file__).resolve().parents[2]
@@ -164,7 +165,7 @@ def anonymous_figure(scene,timeline):
         figure.loft(f'Anonymous trouser {side}',[(.14,sign*.135,0,.055,.05),(.5,sign*.135,0,.075,.07),
                      (.75,sign*.125,0,.10,.10),(.92,sign*.1,0,.115,.12)],dark,
                      [f'shin.{side}',{f'shin.{side}':.5,f'thigh.{side}':.5},f'thigh.{side}','hips'])
-    figure.ovoid('Unidentified head without face',(0,0,1.67),(.12,.105,.15),dark,'head')
+    build_witness_head(figure)
     rows=[(-.25,.14,1.38),(-.22,.15,1.31),(-.14,.16,1.27),(0,.16,1.25),(.14,.15,1.29),(.25,.12,1.38)]
     vertices=[]
     for x,y,z in rows:

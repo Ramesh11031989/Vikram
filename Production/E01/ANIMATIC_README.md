@@ -53,6 +53,27 @@ scratch readings. `--generate-speech` prepares and validates the complete set
 before replacing those readings and rebuilding cue timings. Individual WAVs
 can also be replaced by hand.
 
+## Local dialogue for the locked Unity cut
+
+`prepare_sc04_locked_voice.py` renders the same 12 Hindi lines with two Kokoro
+voice profiles. It keeps the 1,484-frame shot edit and dialogue in-points.
+The generated directory includes normalized WAVs, a timed dialogue mix, Hindi
+subtitles, and clip-relative phoneme spans for the facial animation pass.
+
+Install `kokoro-onnx==0.6.1` into `Renders/Tools/Kokoro/packages`. Download
+`kokoro-v1.0.fp16.onnx` and `voices-v1.0.bin` from the timed model release.
+Place them in `Renders/Tools/Kokoro` and name the model file
+`kokoro-v1.0.timed.fp16.onnx`. [Kokoro ONNX timed models](https://github.com/thewh1teagle/kokoro-onnx/releases/tag/model-files-v1.1)
+
+```powershell
+$python = 'D:\Tools\Blender\blender-5.2.2-windows-x64\5.2\python\bin\python.exe'
+& $python -m pip install --target Renders/Tools/Kokoro/packages kokoro-onnx==0.6.1
+& $python -X utf8 Production/tools/prepare_sc04_locked_voice.py
+```
+
+The default output is `Renders/E01_SC04_Dialogue`. The `--runtime` and `--output`
+arguments override these folders.
+
 ## Rebuild
 
 Requirements: Python 3.10+, FFmpeg/ffprobe with libx264 and libass, and Blender.

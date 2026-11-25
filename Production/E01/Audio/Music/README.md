@@ -26,6 +26,8 @@ Use `--seed` to make another take. The script defaults to the CPU backend. On th
 
 [River at night](Review/E01_river_mystery_15s_4516.wav) is the first take from the `river_mystery` cue at seed `4516`. The engine wrote 15.04 seconds of stereo, 48 kHz, 16-bit audio. The first CPU run took about 9½ minutes, including weight loading. This is the raw model output for a listening review before placement and mixing against dialogue.
 
+[Royal court](Review/E01_royal_court_18s_4517.wav) is the `royal_court` cue at seed `4517`. The same model wrote the full 18-second stereo WAV using `--device Vulkan1` on the GTX 1650. Both cues are used in the Unity testimony cut, with score ducking during dialogue.
+
 ## Runtime files
 
 The default runtime directory is `Renders/Tools/ACE-Step.cpp`. The three model files belong in its `models` folder. The `ace-synth.exe` and GGML DLLs belong in the same directory under `build/Release`. The Python wrapper uses the command-line synthesizer directly and generates locally after the one-time download. The weights have public download links. [Upstream Windows binaries](https://www.serveurperso.com/temp/acestep.cpp-win64/build/Release/) · [CLI source](https://github.com/ServeurpersoCom/acestep.cpp/blob/973517be024ff8b6bbd50e0adc9e308ab2ed71b3/tools/ace-synth.cpp)

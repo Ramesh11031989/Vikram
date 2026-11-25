@@ -140,6 +140,30 @@ Rhubarb downloads: [official releases](https://github.com/DanielSWolf/rhubarb-li
 Use Noto Sans Devanagari for the Hindi captions and FFmpeg with libass/libx264.
 The existing scratch recordings can be analyzed offline once Rhubarb is installed.
 
+## Unity lip sync with a replacement dialogue mix
+
+Place the new per-line WAVs beside a copy of the timeline, under the paths in
+each cue's `audio_file`. The first rendered frame is time zero. Preserve
+`speaker_id` so the Unity driver can match the imported cast and update each
+`start_frame` to the same position used in the dialogue mix.
+
+```powershell
+$dialogue = 'Renders/E01_SC04_Dialogue'
+python Production/tools/prepare_sc04_lipsync.py --prefer-phonemes `
+  --timeline "$dialogue/E01_SC04_Animatic_Timeline.json" `
+  --unity-track "$dialogue/Unity_Visemes.json"
+```
+
+The command uses timed IPA from `cue_id.phonemes.json` beside each WAV. Supply
+`--rhubarb C:/Tools/Rhubarb/rhubarb.exe` for acoustic analysis of WAVs without
+timed phonemes. On Windows, use an ASCII install path so PocketSphinx can read
+its model files. Dialogue files can stay in the Devanagari workspace. The
+manifest records the source-audio hash and alignment method for each line.
+Unity samples the track after body animation and blends the eight speech shapes
+between timed cues.
+
+## Rendering
+
 Rendering caches complete PNG frames under a directory derived from the scene
 hash and sampling settings. Rerun the same render command after interruption to
 reuse complete frames. Rebuilding the scene changes its hash and starts a fresh

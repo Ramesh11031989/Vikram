@@ -1,0 +1,217 @@
+{
+  "fps": 24,
+  "total_frames": 1484,
+  "duration_seconds": 61.833333333333336,
+  "shots": [
+    {
+      "id": "E01_SC04_SH01",
+      "title": "Chalk map",
+      "set": "court",
+      "original_start_frame": 0,
+      "original_end_frame_exclusive": 84,
+      "start_frame": 0,
+      "end_frame_exclusive": 84
+    },
+    {
+      "id": "E01_SC04_SH02",
+      "title": "Gopal recalls the lamp",
+      "set": "court",
+      "original_start_frame": 84,
+      "original_end_frame_exclusive": 204,
+      "start_frame": 84,
+      "end_frame_exclusive": 207
+    },
+    {
+      "id": "E01_SC04_SH03",
+      "title": "Boat point of view",
+      "set": "river",
+      "original_start_frame": 204,
+      "original_end_frame_exclusive": 360,
+      "start_frame": 207,
+      "end_frame_exclusive": 363
+    },
+    {
+      "id": "E01_SC04_SH04",
+      "title": "Water on the steps",
+      "set": "river",
+      "original_start_frame": 360,
+      "original_end_frame_exclusive": 450,
+      "start_frame": 363,
+      "end_frame_exclusive": 453
+    },
+    {
+      "id": "E01_SC04_SH05",
+      "title": "How much of the face?",
+      "set": "court",
+      "original_start_frame": 450,
+      "original_end_frame_exclusive": 516,
+      "start_frame": 453,
+      "end_frame_exclusive": 519
+    },
+    {
+      "id": "E01_SC04_SH06",
+      "title": "Gopal demonstrates the angle",
+      "set": "court",
+      "original_start_frame": 516,
+      "original_end_frame_exclusive": 606,
+      "start_frame": 519,
+      "end_frame_exclusive": 620
+    },
+    {
+      "id": "E01_SC04_SH07",
+      "title": "How much of the gate?",
+      "set": "court",
+      "original_start_frame": 606,
+      "original_end_frame_exclusive": 685,
+      "start_frame": 620,
+      "end_frame_exclusive": 699
+    },
+    {
+      "id": "E01_SC04_SH08",
+      "title": "Shadow below the lamp",
+      "set": "river",
+      "original_start_frame": 685,
+      "original_end_frame_exclusive": 770,
+      "start_frame": 699,
+      "end_frame_exclusive": 784
+    },
+    {
+      "id": "E01_SC04_SH09",
+      "title": "Oar and the niece's hand",
+      "set": "river",
+      "original_start_frame": 770,
+      "original_end_frame_exclusive": 954,
+      "start_frame": 784,
+      "end_frame_exclusive": 1001
+    },
+    {
+      "id": "E01_SC04_SH10",
+      "title": "I thought I knew",
+      "set": "court",
+      "original_start_frame": 954,
+      "original_end_frame_exclusive": 1070,
+      "start_frame": 1001,
+      "end_frame_exclusive": 1117
+    },
+    {
+      "id": "E01_SC04_SH11",
+      "title": "Record what was observed",
+      "set": "court",
+      "original_start_frame": 1070,
+      "original_end_frame_exclusive": 1428,
+      "start_frame": 1117,
+      "end_frame_exclusive": 1484
+    }
+  ],
+  "cues": [
+    {
+      "cue_id": "E01_SC04_L01",
+      "shot_id": "E01_SC04_SH02",
+      "speaker_id": "Gopal",
+      "speaker_hi": "गोपाल",
+      "start_frame": 96,
+      "end_frame_exclusive": 179,
+      "dialogue_hi": "चौकी पर दीया था। उसके पास कोई खड़ा था।"
+    },
+    {
+      "cue_id": "E01_SC04_L02",
+      "shot_id": "E01_SC04_SH03",
+      "speaker_id": "Gopal",
+      "speaker_hi": "गोपाल",
+      "start_frame": 215,
+      "end_frame_exclusive": 311,
+      "dialogue_hi": "कंधे पर लाल कपड़ा था, जैसा नंदू ओढ़ता है।"
+    },
+    {
+      "cue_id": "E01_SC04_L03",
+      "shot_id": "E01_SC04_SH03",
+      "speaker_id": "Gopal",
+      "speaker_hi": "गोपाल",
+      "start_frame": 314,
+      "end_frame_exclusive": 363,
+      "dialogue_hi": "तब मेरी नाव नीचे की ओर घूम गई।"
+    },
+    {
+      "cue_id": "E01_SC04_L04",
+      "shot_id": "E01_SC04_SH04",
+      "speaker_id": "Gopal",
+      "speaker_hi": "गोपाल",
+      "start_frame": 375,
+      "end_frame_exclusive": 448,
+      "dialogue_hi": "अगली बार देखा तो पानी सीढ़ियों पर था।"
+    },
+    {
+      "cue_id": "E01_SC04_L05",
+      "shot_id": "E01_SC04_SH05",
+      "speaker_id": "Vikram",
+      "speaker_hi": "विक्रम",
+      "start_frame": 462,
+      "end_frame_exclusive": 509,
+      "dialogue_hi": "चेहरा कितना दिखा?"
+    },
+    {
+      "cue_id": "E01_SC04_L06",
+      "shot_id": "E01_SC04_SH06",
+      "speaker_id": "Gopal",
+      "speaker_hi": "गोपाल",
+      "start_frame": 535,
+      "end_frame_exclusive": 607,
+      "dialogue_hi": "इतनी पीठ। कपड़े पर रोशनी थी।"
+    },
+    {
+      "cue_id": "E01_SC04_L07",
+      "shot_id": "E01_SC04_SH07",
+      "speaker_id": "Vikram",
+      "speaker_hi": "विक्रम",
+      "start_frame": 635,
+      "end_frame_exclusive": 695,
+      "dialogue_hi": "फाटक का कितना हिस्सा दिखा?"
+    },
+    {
+      "cue_id": "E01_SC04_L08",
+      "shot_id": "E01_SC04_SH08",
+      "speaker_id": "Gopal",
+      "speaker_hi": "गोपाल",
+      "start_frame": 712,
+      "end_frame_exclusive": 770,
+      "dialogue_hi": "दीए से नीचे अँधेरा था।"
+    },
+    {
+      "cue_id": "E01_SC04_L09",
+      "shot_id": "E01_SC04_SH09",
+      "speaker_id": "Gopal",
+      "speaker_hi": "गोपाल",
+      "start_frame": 794,
+      "end_frame_exclusive": 959,
+      "dialogue_hi": "फिर मेरा ध्यान चप्पू पर चला गया। नाव में मेरी भतीजी थी। उसका हाथ पानी छू रहा था।"
+    },
+    {
+      "cue_id": "E01_SC04_L10",
+      "shot_id": "E01_SC04_SH10",
+      "speaker_id": "Gopal",
+      "speaker_hi": "गोपाल",
+      "start_frame": 1009,
+      "end_frame_exclusive": 1100,
+      "dialogue_hi": "महाराज, मुझे लगा मैं जानता हूँ वहाँ कौन था।"
+    },
+    {
+      "cue_id": "E01_SC04_L11",
+      "shot_id": "E01_SC04_SH11",
+      "speaker_id": "Vikram",
+      "speaker_hi": "विक्रम",
+      "start_frame": 1132,
+      "end_frame_exclusive": 1255,
+      "dialogue_hi": "मुंशीजी, लाल कपड़ा, चौकी का दीया और देखने की जगह लिखिए।"
+    },
+    {
+      "cue_id": "E01_SC04_L12",
+      "shot_id": "E01_SC04_SH11",
+      "speaker_id": "Vikram",
+      "speaker_hi": "विक्रम",
+      "start_frame": 1266,
+      "end_frame_exclusive": 1421,
+      "dialogue_hi": "नंदू का नाम वहीं लिखिए जहाँ गोपाल ने बताया है कि उसने पहचान कैसे की।"
+    }
+  ],
+  "dialogue_source": "Kokoro 82M timed Hindi, Gopal hm_psi and Vikram hm_omega"
+}
